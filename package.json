@@ -1,0 +1,35 @@
+{
+  "name": "num_to_word",
+  "version": "0.1.0",
+  "description": "Convert numbers to words in multiple languages (English, Japanese, SI prefixes)",
+  "keywords": [
+    "number",
+    "word",
+    "conversion",
+    "i18n",
+    "english",
+    "japanese",
+    "si-prefix",
+    "number-to-words"
+  ],
+  "homepage": "https://github.com/dak-ia/NumToWord.js#readme",
+  "bugs": {
+    "url": "https://github.com/dak-ia/NumToWord.js/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dak-ia/NumToWord.js.git"
+  },
+  "license": "MIT",
+  "author": "dak-ia",
+  "type": "commonjs",
+  "main": "NumToWord.js",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}
