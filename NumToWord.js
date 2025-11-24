@@ -37,7 +37,7 @@ class NumToWord {
     }
     #splitNum(num) {
         if (num == null || num == undefined || num == "") {
-            throw new TypeError("Cannot read property 'argument' of undefined");
+            throw new TypeError("Invalid argument: expected a number or string");
         }
         num = this.#convertToStrNum(num);
         try {
@@ -125,7 +125,7 @@ class NumToWord {
 
     static toLocaleString(locale, num) {
         if (locale == null || locale == undefined || locale == "" || num == null || num == undefined || num == "") {
-            throw new TypeError("Cannot read property 'argument' of undefined");
+            throw new TypeError("Invalid argument: expected a number or string");
         }
 
         const localeLower = locale.toLowerCase();
