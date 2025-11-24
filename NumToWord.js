@@ -23,11 +23,11 @@ class NumToWord {
         if (/^\.+$/.test(num)) {
             throw new Error("NaN");
         }
-        if (!RegExp(/[^0-9\.]/g, "").test(num) && (num.match(/\./g) || []).length <= 1) {
-            if (num.substr(0, 1) == ".") {
+        if (!RegExp(/[^0-9\.]/).test(num) && (num.match(/\./g) || []).length <= 1) {
+            if (num.slice(0, 1) == ".") {
                 num = "0" + num;
             }
-            if (num.substr(-1) == ".") {
+            if (num.slice(-1) == ".") {
                 num = num + "0";
             }
             return num;
@@ -60,7 +60,7 @@ class NumToWord {
         let result = [];
         let len = num.length;
         for (let i = 0; i < len; i = i + 3) {
-            result.unshift(num.substr(-3, 3));
+            result.unshift(num.slice(-3));
             num = num.slice(0, -3)
         }
         return result;
@@ -69,7 +69,7 @@ class NumToWord {
         let result = [];
         let len = num.length;
         for (let i = 0; i < len; i = i + 4) {
-            result.unshift(num.substr(-4, 4));
+            result.unshift(num.slice(-4));
             num = num.slice(0, -4)
         }
         return result;
