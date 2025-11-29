@@ -2,6 +2,8 @@ name: Jest with Coverage
 
 on:
   push:
+    branches:
+      - main
   pull_request:
 
 jobs:
