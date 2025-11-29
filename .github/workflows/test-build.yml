@@ -1,4 +1,4 @@
-name: Jest
+name: Test Build
 
 on:
   push:
