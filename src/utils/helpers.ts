@@ -1,6 +1,6 @@
 import type { NumArray } from "../types/index";
 
-export const convertToStrNum = (num: number | string): string => {
+const convertToStrNum = (num: number | string): string => {
   let result = num
     .toString()
     .replace(/[０-９]/g, function (s) {
