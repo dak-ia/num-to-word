@@ -1,50 +1,4 @@
-import { convertToStrNum, sliceTo1digitNum, sliceTo3digitNum, sliceTo4digitNum, splitNum } from "./helpers";
-
-describe("convertToStrNum", () => {
-  test("basic numbers", () => {
-    expect(convertToStrNum("123")).toBe("123");
-    expect(convertToStrNum("0")).toBe("0");
-    expect(convertToStrNum("999")).toBe("999");
-  });
-
-  test("full-width to half-width", () => {
-    expect(convertToStrNum("１２３")).toBe("123");
-    expect(convertToStrNum("０")).toBe("0");
-    expect(convertToStrNum("９９９")).toBe("999");
-  });
-
-  test("decimal numbers", () => {
-    expect(convertToStrNum("123.456")).toBe("123.456");
-    expect(convertToStrNum("0.5")).toBe("0.5");
-    expect(convertToStrNum(".5")).toBe("0.5");
-    expect(convertToStrNum("5.")).toBe("5.0");
-    expect(convertToStrNum("１２３．４５６")).toBe("123.456");
-  });
-
-  test("comma removal", () => {
-    expect(convertToStrNum("1,234")).toBe("1234");
-    expect(convertToStrNum("1,234,567")).toBe("1234567");
-    expect(convertToStrNum("１，２３４")).toBe("1234");
-  });
-
-  test("whitespace removal", () => {
-    expect(convertToStrNum(" 123 ")).toBe("123");
-    expect(convertToStrNum("1 2 3")).toBe("123");
-  });
-
-  test("number input", () => {
-    expect(convertToStrNum(123)).toBe("123");
-    expect(convertToStrNum(123.456)).toBe("123.456");
-  });
-
-  test("invalid input", () => {
-    expect(() => convertToStrNum("abc")).toThrow("NaN");
-    expect(() => convertToStrNum("12a34")).toThrow("NaN");
-    expect(() => convertToStrNum("1.2.3")).toThrow("NaN");
-    expect(() => convertToStrNum(".")).toThrow("NaN");
-    expect(() => convertToStrNum("..")).toThrow("NaN");
-  });
-});
+import { sliceTo1digitNum, sliceTo3digitNum, sliceTo4digitNum, splitNum } from "./helpers";
 
 describe("splitNum", () => {
   test("integer only", () => {
@@ -64,6 +18,28 @@ describe("splitNum", () => {
     expect(splitNum("5.")).toEqual({ integer: "5", decimal: "0" });
   });
 
+  test("full-width to half-width", () => {
+    expect(splitNum("１２３")).toEqual({ integer: "123", decimal: "" });
+    expect(splitNum("０")).toEqual({ integer: "0", decimal: "" });
+    expect(splitNum("１２３．４５６")).toEqual({ integer: "123", decimal: "456" });
+  });
+
+  test("comma removal", () => {
+    expect(splitNum("1,234")).toEqual({ integer: "1234", decimal: "" });
+    expect(splitNum("1,234,567")).toEqual({ integer: "1234567", decimal: "" });
+    expect(splitNum("１，２３４")).toEqual({ integer: "1234", decimal: "" });
+  });
+
+  test("whitespace removal", () => {
+    expect(splitNum(" 123 ")).toEqual({ integer: "123", decimal: "" });
+    expect(splitNum("1 2 3")).toEqual({ integer: "123", decimal: "" });
+  });
+
+  test("number input", () => {
+    expect(splitNum(123)).toEqual({ integer: "123", decimal: "" });
+    expect(splitNum(123.456)).toEqual({ integer: "123", decimal: "456" });
+  });
+
   test("invalid input", () => {
     expect(() => splitNum("")).toThrow("Invalid argument: expected a number or string");
     // @ts-expect-error - Testing invalid input
@@ -71,6 +47,10 @@ describe("splitNum", () => {
     // @ts-expect-error - Testing invalid input
     expect(() => splitNum(undefined)).toThrow("Invalid argument: expected a number or string");
     expect(() => splitNum("abc")).toThrow("NaN");
+    expect(() => splitNum("12a34")).toThrow("NaN");
+    expect(() => splitNum("1.2.3")).toThrow("NaN");
+    expect(() => splitNum(".")).toThrow("NaN");
+    expect(() => splitNum("..")).toThrow("NaN");
   });
 });
 

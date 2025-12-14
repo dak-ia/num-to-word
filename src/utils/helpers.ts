@@ -1,4 +1,6 @@
-export const convertToStrNum = (num: number | string): string => {
+import type { NumArray } from "../types/index";
+
+const convertToStrNum = (num: number | string): string => {
   let result = num
     .toString()
     .replace(/[０-９]/g, function (s) {
@@ -24,11 +26,6 @@ export const convertToStrNum = (num: number | string): string => {
   } else {
     throw new Error("NaN");
   }
-};
-
-export type NumArray = {
-  integer: string;
-  decimal: string;
 };
 
 export const splitNum = (num: number | string): NumArray => {
