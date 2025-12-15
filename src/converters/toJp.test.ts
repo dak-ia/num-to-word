@@ -146,6 +146,13 @@ describe("toJp", () => {
     expect(toJp("0.001")).toBe("〇・〇〇一");
   });
 
+  test("negative numbers", () => {
+    expect(toJp("-1")).toBe("負の一");
+    expect(toJp("-123")).toBe("負の百二十三");
+    expect(toJp("-1234.56")).toBe("負の千二百三十四・五六");
+    expect(toJp(-999)).toBe("負の九百九十九");
+  });
+
   test("invalid input", () => {
     expect(() => toJp("1" + "0".repeat(73))).toThrow("Overflow");
     expect(() => toJp("abc")).toThrow("NaN");
@@ -154,7 +161,5 @@ describe("toJp", () => {
     expect(() => toJp(null)).toThrow("Invalid argument");
     // @ts-expect-error - Testing invalid input
     expect(() => toJp(undefined)).toThrow("Invalid argument");
-    expect(() => toJp("-1")).toThrow();
-    expect(() => toJp("-123")).toThrow();
   });
 });

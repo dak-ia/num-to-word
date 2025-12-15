@@ -146,6 +146,12 @@ describe("toJpDaiji", () => {
     expect(toJpDaiji("0.001")).toBe("零・零零壱");
   });
 
+  test("negative numbers", () => {
+    expect(toJpDaiji("-1")).toBe("負の壱");
+    expect(toJpDaiji("-123")).toBe("負の壱陌弐拾参");
+    expect(toJpDaiji("-10000")).toBe("負の壱萬");
+  });
+
   test("invalid input", () => {
     expect(() => toJpDaiji("1" + "0".repeat(73))).toThrow("Overflow");
     expect(() => toJpDaiji("abc")).toThrow("NaN");
@@ -154,7 +160,5 @@ describe("toJpDaiji", () => {
     expect(() => toJpDaiji(null)).toThrow("Invalid argument");
     // @ts-expect-error - Testing invalid input
     expect(() => toJpDaiji(undefined)).toThrow("Invalid argument");
-    expect(() => toJpDaiji("-1")).toThrow();
-    expect(() => toJpDaiji("-123")).toThrow();
   });
 });

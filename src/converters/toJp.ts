@@ -23,6 +23,7 @@ export const toJp = (num: number | string): string => {
   if (/^0+$/.test(numArray.integer) && numArray.decimal == "") {
     return jpOnesPlace[0];
   }
+  const prefix = numArray.isNegative ? "負の" : "";
   let integerArray = sliceTo4digitNum(numArray.integer);
   let decimalArray = sliceTo1digitNum(numArray.decimal);
   integerArray = integerArray
@@ -46,8 +47,8 @@ export const toJp = (num: number | string): string => {
   }
 
   if (decimalArray.length > 0) {
-    return integerPart + "・" + decimalArray.join("");
+    return prefix + integerPart + "・" + decimalArray.join("");
   } else {
-    return integerPart;
+    return prefix + integerPart;
   }
 };

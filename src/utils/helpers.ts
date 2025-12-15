@@ -17,13 +17,17 @@ const convertToStrNum = (num: number | string): string => {
     .replace(/．/g, ".")
     .replace(/，/g, "")
     .replace(/,/g, "")
+    .replace(/'/g, "")
+    .replace(/’/g, "")
+    .replace(/＋/g, "")
+    .replace(/\+/g, "")
+    .replace(/−/g, "-")
     .replace(/\s/g, "")
     .trim();
-  // 小数点のみの入力をチェック
-  if (/^\.+$/.test(result)) {
+  if (/^[.-]+$/.test(result)) {
     throw new Error("NaN");
   }
-  if (!RegExp(/[^0-9.]/).test(result) && (result.match(/\./g) || []).length <= 1) {
+  if (!RegExp(/[^0-9.-]/).test(result) && (result.match(/\./g) || []).length <= 1) {
     if (result.slice(0, 1) == ".") {
       result = "0" + result;
     }
@@ -52,9 +56,11 @@ export const splitNum = (num: number | string): NumArray => {
     throw new TypeError("Invalid argument: expected a number or string");
   }
   const strNum = convertToStrNum(num);
-  const numArray: NumArray = { integer: "", decimal: "" };
-  numArray.integer = strNum.split(".")[0];
-  numArray.decimal = strNum.split(".")[1] || "";
+  const isNegative = strNum.startsWith("-");
+  const absNum = isNegative ? strNum.slice(1) : strNum;
+  const numArray: NumArray = { integer: "", decimal: "", isNegative };
+  numArray.integer = absNum.split(".")[0];
+  numArray.decimal = absNum.split(".")[1] || "";
   return numArray;
 };
 
