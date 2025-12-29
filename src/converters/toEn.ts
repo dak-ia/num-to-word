@@ -16,9 +16,10 @@ export const toEn = (num: number | string): string => {
     throw new Error("Overflow");
   }
   // 連続ゼロを単一の0として扱う（小数部がない場合のみ）
-  if (/^0+$/.test(numArray.integer) && numArray.decimal == "") {
+  if (/^0+$/.test(numArray.integer) && numArray.decimal === "") {
     return "Zero";
   }
+  const prefix = numArray.isNegative ? "Minus " : "";
   let integerArray = sliceTo3digitNum(numArray.integer);
   let decimalArray = sliceTo1digitNum(numArray.decimal);
   integerArray = integerArray
@@ -35,15 +36,16 @@ export const toEn = (num: number | string): string => {
       return num;
     });
   }
-  integerArray = integerArray.filter((num) => num != "");
+  integerArray = integerArray.filter((num) => num !== "");
   decimalArray = decimalArray.map((num) => {
     return enOnesPlace[Number(num)];
   });
+  let result = "";
   if (decimalArray.length > 0) {
-    const result = (integerArray.join(" ").trim() + " point " + decimalArray.join(" ").trim()).trim();
-    return result.slice(0, 1).toUpperCase() + result.slice(1);
+    result = (integerArray.join(" ").trim() + " point " + decimalArray.join(" ").trim()).trim();
   } else {
-    const result = integerArray.join(" ").trim();
-    return result.slice(0, 1).toUpperCase() + result.slice(1);
+    result = integerArray.join(" ").trim();
   }
+  result = (prefix + result).toLowerCase();
+  return result.slice(0, 1).toUpperCase() + result.slice(1);
 };

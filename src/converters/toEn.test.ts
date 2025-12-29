@@ -155,6 +155,13 @@ describe("toEn", () => {
     expect(toEn("0.001")).toBe("Zero point zero zero one");
   });
 
+  test("negative numbers", () => {
+    expect(toEn("-1")).toBe("Minus one");
+    expect(toEn("-123")).toBe("Minus one hundred twenty-three");
+    expect(toEn("-1234.56")).toBe("Minus one thousand two hundred thirty-four point five six");
+    expect(toEn(-999)).toBe("Minus nine hundred ninety-nine");
+  });
+
   test("invalid input", () => {
     expect(() => toEn("1" + "0".repeat(309))).toThrow("Overflow");
     expect(() => toEn("abc")).toThrow("NaN");
@@ -163,7 +170,5 @@ describe("toEn", () => {
     expect(() => toEn(null)).toThrow("Invalid argument");
     // @ts-expect-error - Testing invalid input
     expect(() => toEn(undefined)).toThrow("Invalid argument");
-    expect(() => toEn("-1")).toThrow();
-    expect(() => toEn("-123")).toThrow();
   });
 });

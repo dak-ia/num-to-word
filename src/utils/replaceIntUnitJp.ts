@@ -17,9 +17,9 @@ export const replaceIntUnitJp = (num: string): string => {
   }
   let result: string = "";
   for (let i = 0; i < numArray.length; i++) {
-    if ((i > 0 && numArray[i] == "0") || (i == 0 && numArray.length > 1 && numArray[i] == "0")) {
+    if ((i > 0 && numArray[i] === "0") || (i === 0 && numArray.length > 1 && numArray[i] === "0")) {
       continue;
-    } else if (i > 0 && numArray[i] == "1") {
+    } else if (i > 0 && numArray[i] === "1") {
       result = jpTHT[i] + result;
     } else {
       result = jpOnesPlace[Number(numArray[i])] + jpTHT[i] + result;

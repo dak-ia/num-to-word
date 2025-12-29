@@ -15,6 +15,7 @@ export const toSi = (num: number | string): string => {
   if (numArray.integer.length > (siSymbol.length + 1) * 3) {
     throw new Error("Overflow");
   }
+  const prefix = numArray.isNegative ? "-" : "";
   numArray.integer = numArray.integer.replace(/^0+/, "") || "0";
 
   let integerPart: string, decimalPart: string, suffix: string;
@@ -43,8 +44,8 @@ export const toSi = (num: number | string): string => {
   }
 
   if (decimalPart !== "") {
-    return integerPart + "." + decimalPart + suffix;
+    return prefix + integerPart + "." + decimalPart + suffix;
   } else {
-    return integerPart + suffix;
+    return prefix + integerPart + suffix;
   }
 };

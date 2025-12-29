@@ -41,6 +41,12 @@ describe("toSi", () => {
     expect(toSi("0.00010")).toBe("0.0001");
   });
 
+  test("negative numbers", () => {
+    expect(toSi("-1234")).toBe("-1.234K");
+    expect(toSi("-1234567")).toBe("-1.234567M");
+    expect(toSi(-999)).toBe("-999");
+  });
+
   test("invalid input", () => {
     expect(() => toSi("1" + "0".repeat(33))).toThrow("Overflow");
     expect(() => toSi("abc")).toThrow("NaN");
@@ -49,7 +55,5 @@ describe("toSi", () => {
     expect(() => toSi(null)).toThrow("Invalid argument");
     // @ts-expect-error - Testing invalid input
     expect(() => toSi(undefined)).toThrow("Invalid argument");
-    expect(() => toSi("-1")).toThrow();
-    expect(() => toSi("-123")).toThrow();
   });
 });
