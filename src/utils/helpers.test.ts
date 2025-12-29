@@ -18,6 +18,14 @@ describe("splitNum", () => {
   test("edge cases", () => {
     expect(splitNum(".5")).toEqual({ integer: "0", decimal: "5", isNegative: false });
     expect(splitNum("5.")).toEqual({ integer: "5", decimal: "0", isNegative: false });
+    expect(splitNum("-1513")).toEqual({ integer: "1513", decimal: "", isNegative: true });
+    expect(splitNum("-4163520.4651")).toEqual({ integer: "4163520", decimal: "4651", isNegative: true });
+    expect(splitNum("53.")).toEqual({ integer: "53", decimal: "0", isNegative: false });
+    expect(splitNum("216")).toEqual({ integer: "216", decimal: "", isNegative: false });
+    expect(splitNum(".113")).toEqual({ integer: "0", decimal: "113", isNegative: false });
+    expect(splitNum("-.1553")).toEqual({ integer: "0", decimal: "1553", isNegative: true });
+    expect(splitNum("465.145")).toEqual({ integer: "465", decimal: "145", isNegative: false });
+    expect(splitNum("5")).toEqual({ integer: "5", decimal: "", isNegative: false });
   });
 
   test("full-width to half-width", () => {
@@ -63,6 +71,21 @@ describe("splitNum", () => {
     expect(() => splitNum("1.2.3")).toThrow("NaN");
     expect(() => splitNum(".")).toThrow("NaN");
     expect(() => splitNum("..")).toThrow("NaN");
+    expect(() => splitNum("--1")).toThrow("NaN");
+    expect(() => splitNum("---1")).toThrow("NaN");
+    expect(() => splitNum("1-1")).toThrow("NaN");
+    expect(() => splitNum("1-1-1")).toThrow("NaN");
+    expect(() => splitNum("....1")).toThrow("NaN");
+    expect(() => splitNum("15201..411")).toThrow("NaN");
+    expect(() => splitNum("152.01.411")).toThrow("NaN");
+    expect(() => splitNum("--41561")).toThrow("NaN");
+    expect(() => splitNum("531.-4153")).toThrow("NaN");
+    expect(() => splitNum("--..4615")).toThrow("NaN");
+    expect(() => splitNum(".-415")).toThrow("NaN");
+    expect(() => splitNum("6465-")).toThrow("NaN");
+    expect(() => splitNum("45456--")).toThrow("NaN");
+    expect(() => splitNum("515-45")).toThrow("NaN");
+    expect(() => splitNum("5-15-45")).toThrow("NaN");
   });
 });
 

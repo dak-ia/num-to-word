@@ -1,46 +1,6 @@
 import type { NumArray } from "../types/index";
 
 /**
- * Normalizes number input to a standard string format.
- * Converts full-width characters to half-width, removes commas and whitespace.
- * @internal
- * @param num - The number to normalize (number or string)
- * @returns The normalized number string
- * @throws {Error} If the input is not a valid number (NaN)
- */
-const convertToStrNum = (num: number | string): string => {
-  let result = num
-    .toString()
-    .replace(/[０-９]/g, function (s) {
-      return String.fromCharCode(s.charCodeAt(0) - 0xfee0);
-    })
-    .replace(/．/g, ".")
-    .replace(/，/g, "")
-    .replace(/,/g, "")
-    .replace(/'/g, "")
-    .replace(/’/g, "")
-    .replace(/＋/g, "")
-    .replace(/\+/g, "")
-    .replace(/−/g, "-")
-    .replace(/\s/g, "")
-    .trim();
-  if (/^[.-]+$/.test(result)) {
-    throw new Error("NaN");
-  }
-  if (!RegExp(/[^0-9.-]/).test(result) && (result.match(/\./g) || []).length <= 1) {
-    if (result.slice(0, 1) == ".") {
-      result = "0" + result;
-    }
-    if (result.slice(-1) == ".") {
-      result = result + "0";
-    }
-    return result;
-  } else {
-    throw new Error("NaN");
-  }
-};
-
-/**
  * Splits a number into integer and decimal parts.
  * Handles full-width characters, commas, and whitespace normalization.
  * @param num - The number to split (number or string)
@@ -52,7 +12,7 @@ const convertToStrNum = (num: number | string): string => {
  * splitNum("１，２３４") // { integer: "1234", decimal: "" }
  */
 export const splitNum = (num: number | string): NumArray => {
-  if (num == null || num == undefined || num == "") {
+  if (num === null || num === undefined || num === "") {
     throw new TypeError("Invalid argument: expected a number or string");
   }
   const strNum = convertToStrNum(num);
@@ -107,4 +67,66 @@ export const sliceTo4digitNum = (num: string): string[] => {
     num = num.slice(0, -4);
   }
   return result;
+};
+
+/**
+ * Normalizes number input to a standard string format.
+ * Converts full-width characters to half-width, removes commas and whitespace.
+ * @internal
+ * @param num - The number to normalize (number or string)
+ * @returns The normalized number string
+ * @throws {Error} If the input is not a valid number (NaN)
+ */
+const convertToStrNum = (num: number | string): string => {
+  const result = num
+    .toString()
+    .replace(/[０-９]/g, function (s) {
+      return String.fromCharCode(s.charCodeAt(0) - 0xfee0);
+    })
+    .replace(/．/g, ".")
+    .replace(/，/g, "")
+    .replace(/,/g, "")
+    .replace(/'/g, "")
+    .replace(/’/g, "")
+    .replace(/＋/g, "")
+    .replace(/\+/g, "")
+    .replace(/−/g, "-")
+    .replace(/\s/g, "")
+    .trim();
+  if (!numberFormatValidator(result)) {
+    throw new Error("NaN");
+  }
+  const isNegative = result.startsWith("-");
+  if (result.slice(0, 1) === "." && !isNegative) {
+    return "0" + result;
+  }
+  if (result.slice(0, 2) === "-." && isNegative) {
+    return "-0" + result.slice(1);
+  }
+  if (result.slice(-1) === ".") {
+    return result + "0";
+  }
+  return result;
+};
+
+/**
+ * Check number format validity.
+ * @internal
+ * @param num - The number string to validate
+ * @returns True if valid, otherwise false
+ */
+const numberFormatValidator = (num: string): boolean => {
+  if (RegExp(/[^0-9.-]/).test(num)) {
+    return false;
+  }
+  if (!RegExp(/^-?[0-9.]+$/).test(num)) {
+    return false;
+  }
+  if (!RegExp(/^[-0-9]*\.?[0-9]*$/).test(num)) {
+    return false;
+  }
+  if (!RegExp(/[0-9]+/).test(num)) {
+    return false;
+  }
+  return true;
 };
