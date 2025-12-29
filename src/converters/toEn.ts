@@ -16,7 +16,7 @@ export const toEn = (num: number | string): string => {
     throw new Error("Overflow");
   }
   // 連続ゼロを単一の0として扱う（小数部がない場合のみ）
-  if (/^0+$/.test(numArray.integer) && numArray.decimal == "") {
+  if (/^0+$/.test(numArray.integer) && numArray.decimal === "") {
     return "Zero";
   }
   const prefix = numArray.isNegative ? "Minus " : "";
@@ -36,7 +36,7 @@ export const toEn = (num: number | string): string => {
       return num;
     });
   }
-  integerArray = integerArray.filter((num) => num != "");
+  integerArray = integerArray.filter((num) => num !== "");
   decimalArray = decimalArray.map((num) => {
     return enOnesPlace[Number(num)];
   });

@@ -16,11 +16,11 @@ export const toJp = (num: number | string): string => {
     throw new Error("Overflow");
   }
   // ゼロの特別処理（小数部がない場合のみ）
-  if (numArray.integer == "0" && numArray.decimal == "") {
+  if (numArray.integer === "0" && numArray.decimal === "") {
     return jpOnesPlace[0];
   }
   // 連続ゼロを単一の0として扱う
-  if (/^0+$/.test(numArray.integer) && numArray.decimal == "") {
+  if (/^0+$/.test(numArray.integer) && numArray.decimal === "") {
     return jpOnesPlace[0];
   }
   const prefix = numArray.isNegative ? "負の" : "";
@@ -29,7 +29,7 @@ export const toJp = (num: number | string): string => {
   integerArray = integerArray
     .reverse()
     .map((num, i) => {
-      if (num != "0" && num != "00" && num != "000" && num != "0000") {
+      if (num !== "0" && num !== "00" && num !== "000" && num !== "0000") {
         return replaceIntUnitJp(num) + jpOthersPlace[i];
       }
       return undefined;
