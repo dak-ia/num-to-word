@@ -1,5 +1,5 @@
-import { enOnesPlace, enOthersPlace } from "../dictionaries";
-import { replaceIntUnitEn, sliceTo1digitNum, sliceTo3digitNum, splitNum } from "../utils";
+import { enLargeUnits, enOnesPlace } from "../dictionaries";
+import { replaceIntUnitEn, splitNum, splitTo1Digit, splitTo3Digits } from "../utils";
 
 /**
  * Converts a number to its English word representation.
@@ -10,22 +10,22 @@ import { replaceIntUnitEn, sliceTo1digitNum, sliceTo3digitNum, splitNum } from "
  * toEn(123) // "One Hundred Twenty Three"
  * toEn("1234.56") // "One Thousand Two Hundred Thirty Four Point Five Six"
  */
-export const toEn = (num: number | string): string => {
-  const numArray = splitNum(num);
-  if (numArray.integer.length > (Object.values(enOthersPlace).length - 1) * 3) {
+export const toEn = (number: number | string): string => {
+  const numberParts = splitNum(number);
+  if (numberParts.integer.length > (Object.values(enLargeUnits).length - 1) * 3) {
     throw new Error("Overflow");
   }
   // 連続ゼロを単一の0として扱う（小数部がない場合のみ）
-  if (/^0+$/.test(numArray.integer) && numArray.decimal === "") {
+  if (/^0+$/.test(numberParts.integer) && numberParts.decimal === "") {
     return "Zero";
   }
-  const prefix = numArray.isNegative ? "Minus " : "";
-  let integerArray = sliceTo3digitNum(numArray.integer);
-  let decimalArray = sliceTo1digitNum(numArray.decimal);
+  const prefix = numberParts.isNegative ? "Minus " : "";
+  let integerArray = splitTo3Digits(numberParts.integer);
+  let decimalArray = splitTo1Digit(numberParts.decimal);
   integerArray = integerArray
     .reverse()
     .map((num, i) => {
-      return replaceIntUnitEn(num) + " " + enOthersPlace[i * 3].toLowerCase();
+      return replaceIntUnitEn(num) + " " + enLargeUnits[i * 3].toLowerCase();
     })
     .reverse();
   if (integerArray.length > 1) {

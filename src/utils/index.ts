@@ -1,3 +1,3 @@
-export { splitNum, sliceTo1digitNum, sliceTo3digitNum, sliceTo4digitNum } from "./helpers";
+export { splitNum, splitTo1Digit, splitTo3Digits, splitTo4Digits } from "./helpers";
 export { replaceIntUnitEn } from "./replaceIntUnitEn";
 export { replaceIntUnitJp } from "./replaceIntUnitJp";

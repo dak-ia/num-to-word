@@ -1,5 +1,5 @@
-import { jpOnesPlace, jpOthersPlace } from "../dictionaries";
-import { replaceIntUnitJp, sliceTo1digitNum, sliceTo4digitNum, splitNum } from "../utils";
+import { jpLargeUnits, jpOnesPlace } from "../dictionaries";
+import { replaceIntUnitJp, splitNum, splitTo1Digit, splitTo4Digits } from "../utils";
 
 /**
  * Converts a number to its Japanese word representation using standard kanji.
@@ -10,27 +10,27 @@ import { replaceIntUnitJp, sliceTo1digitNum, sliceTo4digitNum, splitNum } from "
  * toJp(123) // "百二十三"
  * toJp("1234.56") // "千二百三十四点五六"
  */
-export const toJp = (num: number | string): string => {
-  const numArray = splitNum(num);
-  if (numArray.integer.length > jpOthersPlace.length * 4) {
+export const toJp = (number: number | string): string => {
+  const numberParts = splitNum(number);
+  if (numberParts.integer.length > jpLargeUnits.length * 4) {
     throw new Error("Overflow");
   }
   // ゼロの特別処理（小数部がない場合のみ）
-  if (numArray.integer === "0" && numArray.decimal === "") {
+  if (numberParts.integer === "0" && numberParts.decimal === "") {
     return jpOnesPlace[0];
   }
   // 連続ゼロを単一の0として扱う
-  if (/^0+$/.test(numArray.integer) && numArray.decimal === "") {
+  if (/^0+$/.test(numberParts.integer) && numberParts.decimal === "") {
     return jpOnesPlace[0];
   }
-  const prefix = numArray.isNegative ? "負の" : "";
-  let integerArray = sliceTo4digitNum(numArray.integer);
-  let decimalArray = sliceTo1digitNum(numArray.decimal);
+  const prefix = numberParts.isNegative ? "負の" : "";
+  let integerArray = splitTo4Digits(numberParts.integer);
+  let decimalArray = splitTo1Digit(numberParts.decimal);
   integerArray = integerArray
     .reverse()
     .map((num, i) => {
       if (num !== "0" && num !== "00" && num !== "000" && num !== "0000") {
-        return replaceIntUnitJp(num) + jpOthersPlace[i];
+        return replaceIntUnitJp(num) + jpLargeUnits[i];
       }
       return undefined;
     })

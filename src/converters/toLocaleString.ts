@@ -15,21 +15,28 @@ import { toSi } from "./toSi";
  * toLocaleString("jp", 123) // "百二十三"
  * toLocaleString("si", 1234) // "1.234K"
  */
-export const toLocaleString = (locale: string, num: number | string): string => {
-  if (locale === null || locale === undefined || locale === "" || num === null || num === undefined || num === "") {
+export const toLocaleString = (locale: string, number: number | string): string => {
+  if (
+    locale === null ||
+    locale === undefined ||
+    locale === "" ||
+    number === null ||
+    number === undefined ||
+    number === ""
+  ) {
     throw new TypeError("Invalid argument: expected a number or string");
   }
 
   const localeLower: string = locale.toLowerCase();
 
   if (localeLower === "si") {
-    return toSi(num);
+    return toSi(number);
   } else if (localeLower === "en" || localeLower === "english") {
-    return toEn(num);
+    return toEn(number);
   } else if (localeLower === "jp" || localeLower === "japanese") {
-    return toJp(num);
+    return toJp(number);
   } else if (localeLower === "jpdaiji" || localeLower === "daiji") {
-    return toJpDaiji(num);
+    return toJpDaiji(number);
   } else {
     throw new Error("Invalid locale");
   }

@@ -1,4 +1,4 @@
-import { sliceTo1digitNum, sliceTo3digitNum, sliceTo4digitNum, splitNum } from "./helpers";
+import { splitNum, splitTo1Digit, splitTo3Digits, splitTo4Digits } from "./helpers";
 
 describe("splitNum", () => {
   test("integer only", () => {
@@ -89,40 +89,40 @@ describe("splitNum", () => {
   });
 });
 
-describe("sliceTo1digitNum", () => {
+describe("splitTo1Digit", () => {
   test("basic slicing", () => {
-    expect(sliceTo1digitNum("123")).toEqual(["1", "2", "3"]);
-    expect(sliceTo1digitNum("0")).toEqual(["0"]);
-    expect(sliceTo1digitNum("999")).toEqual(["9", "9", "9"]);
-    expect(sliceTo1digitNum("12345")).toEqual(["1", "2", "3", "4", "5"]);
+    expect(splitTo1Digit("123")).toEqual(["1", "2", "3"]);
+    expect(splitTo1Digit("0")).toEqual(["0"]);
+    expect(splitTo1Digit("999")).toEqual(["9", "9", "9"]);
+    expect(splitTo1Digit("12345")).toEqual(["1", "2", "3", "4", "5"]);
   });
 });
 
-describe("sliceTo3digitNum", () => {
+describe("splitTo3Digits", () => {
   test("basic slicing", () => {
-    expect(sliceTo3digitNum("123")).toEqual(["123"]);
-    expect(sliceTo3digitNum("1234")).toEqual(["1", "234"]);
-    expect(sliceTo3digitNum("123456")).toEqual(["123", "456"]);
-    expect(sliceTo3digitNum("1234567")).toEqual(["1", "234", "567"]);
-    expect(sliceTo3digitNum("12345678")).toEqual(["12", "345", "678"]);
+    expect(splitTo3Digits("123")).toEqual(["123"]);
+    expect(splitTo3Digits("1234")).toEqual(["1", "234"]);
+    expect(splitTo3Digits("123456")).toEqual(["123", "456"]);
+    expect(splitTo3Digits("1234567")).toEqual(["1", "234", "567"]);
+    expect(splitTo3Digits("12345678")).toEqual(["12", "345", "678"]);
   });
 
   test("short numbers", () => {
-    expect(sliceTo3digitNum("1")).toEqual(["1"]);
-    expect(sliceTo3digitNum("12")).toEqual(["12"]);
+    expect(splitTo3Digits("1")).toEqual(["1"]);
+    expect(splitTo3Digits("12")).toEqual(["12"]);
   });
 });
 
-describe("sliceTo4digitNum", () => {
+describe("splitTo4Digits", () => {
   test("basic slicing", () => {
-    expect(sliceTo4digitNum("1234")).toEqual(["1234"]);
-    expect(sliceTo4digitNum("12345")).toEqual(["1", "2345"]);
-    expect(sliceTo4digitNum("12345678")).toEqual(["1234", "5678"]);
-    expect(sliceTo4digitNum("123456789")).toEqual(["1", "2345", "6789"]);
+    expect(splitTo4Digits("1234")).toEqual(["1234"]);
+    expect(splitTo4Digits("12345")).toEqual(["1", "2345"]);
+    expect(splitTo4Digits("12345678")).toEqual(["1234", "5678"]);
+    expect(splitTo4Digits("123456789")).toEqual(["1", "2345", "6789"]);
   });
 
   test("short numbers", () => {
-    expect(sliceTo4digitNum("1")).toEqual(["1"]);
-    expect(sliceTo4digitNum("123")).toEqual(["123"]);
+    expect(splitTo4Digits("1")).toEqual(["1"]);
+    expect(splitTo4Digits("123")).toEqual(["123"]);
   });
 });

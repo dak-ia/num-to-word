@@ -1,4 +1,4 @@
-import { jpOnesPlace, jpTHT } from "../dictionaries";
+import { jpBasicUnits, jpOnesPlace } from "../dictionaries";
 
 /**
  * Converts a 1-4 digit number string to Japanese kanji representation.
@@ -10,19 +10,19 @@ import { jpOnesPlace, jpTHT } from "../dictionaries";
  * replaceIntUnitJp("123") // "百二十三"
  * replaceIntUnitJp("1000") // "千"
  */
-export const replaceIntUnitJp = (num: string): string => {
-  const numArray: string[] = num.split("").reverse();
-  if (numArray.length > 4) {
+export const replaceIntUnitJp = (number: string): string => {
+  const splitDigits: string[] = number.split("").reverse();
+  if (splitDigits.length > 4) {
     throw new Error("Overflow");
   }
   let result: string = "";
-  for (let i = 0; i < numArray.length; i++) {
-    if ((i > 0 && numArray[i] === "0") || (i === 0 && numArray.length > 1 && numArray[i] === "0")) {
+  for (let i = 0; i < splitDigits.length; i++) {
+    if ((i > 0 && splitDigits[i] === "0") || (i === 0 && splitDigits.length > 1 && splitDigits[i] === "0")) {
       continue;
-    } else if (i > 0 && numArray[i] === "1") {
-      result = jpTHT[i] + result;
+    } else if (i > 0 && splitDigits[i] === "1") {
+      result = jpBasicUnits[i] + result;
     } else {
-      result = jpOnesPlace[Number(numArray[i])] + jpTHT[i] + result;
+      result = jpOnesPlace[Number(splitDigits[i])] + jpBasicUnits[i] + result;
     }
   }
   return result;

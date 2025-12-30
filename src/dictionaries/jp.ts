@@ -1,8 +1,8 @@
 export const jpOnesPlace: readonly string[] = ["〇", "一", "二", "三", "四", "五", "六", "七", "八", "九"];
 
-export const jpTHT: readonly string[] = ["", "十", "百", "千"];
+export const jpBasicUnits: readonly string[] = ["", "十", "百", "千"];
 
-export const jpOthersPlace: readonly string[] = [
+export const jpLargeUnits: readonly string[] = [
   "",
   "万",
   "億",

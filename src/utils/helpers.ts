@@ -11,17 +11,17 @@ import type { NumArray } from "../types/index";
  * splitNum(123.456) // { integer: "123", decimal: "456" }
  * splitNum("１，２３４") // { integer: "1234", decimal: "" }
  */
-export const splitNum = (num: number | string): NumArray => {
-  if (num === null || num === undefined || num === "") {
+export const splitNum = (number: number | string): NumArray => {
+  if (number === null || number === undefined || number === "") {
     throw new TypeError("Invalid argument: expected a number or string");
   }
-  const strNum = convertToStrNum(num);
-  const isNegative = strNum.startsWith("-");
-  const absNum = isNegative ? strNum.slice(1) : strNum;
-  const numArray: NumArray = { integer: "", decimal: "", isNegative };
-  numArray.integer = absNum.split(".")[0];
-  numArray.decimal = absNum.split(".")[1] || "";
-  return numArray;
+  const strNumber = convertToNumericString(number);
+  const isNegative = strNumber.startsWith("-");
+  const absNumber = isNegative ? strNumber.slice(1) : strNumber;
+  const numberParts: NumArray = { integer: "", decimal: "", isNegative };
+  numberParts.integer = absNumber.split(".")[0];
+  numberParts.decimal = absNumber.split(".")[1] || "";
+  return numberParts;
 };
 
 /**
@@ -29,10 +29,10 @@ export const splitNum = (num: number | string): NumArray => {
  * @param num - The number string to split
  * @returns An array of single-digit strings
  * @example
- * sliceTo1digitNum("123") // ["1", "2", "3"]
+ * splitTo1Digit("123") // ["1", "2", "3"]
  */
-export const sliceTo1digitNum = (num: string): string[] => {
-  return num.split("");
+export const splitTo1Digit = (number: string): string[] => {
+  return number.split("");
 };
 
 /**
@@ -40,14 +40,14 @@ export const sliceTo1digitNum = (num: string): string[] => {
  * @param num - The number string to split
  * @returns An array of 3-digit strings (or less for the leftmost chunk)
  * @example
- * sliceTo3digitNum("1234567") // ["1", "234", "567"]
+ * splitTo3Digits("1234567") // ["1", "234", "567"]
  */
-export const sliceTo3digitNum = (num: string): string[] => {
+export const splitTo3Digits = (number: string): string[] => {
   const result: string[] = [];
-  const len: number = num.length;
-  for (let i = 0; i < len; i = i + 3) {
-    result.unshift(num.slice(-3));
-    num = num.slice(0, -3);
+  const length: number = number.length;
+  for (let i = 0; i < length; i = i + 3) {
+    result.unshift(number.slice(-3));
+    number = number.slice(0, -3);
   }
   return result;
 };
@@ -57,14 +57,14 @@ export const sliceTo3digitNum = (num: string): string[] => {
  * @param num - The number string to split
  * @returns An array of 4-digit strings (or less for the leftmost chunk)
  * @example
- * sliceTo4digitNum("12345678") // ["1234", "5678"]
+ * splitTo4Digits("12345678") // ["1234", "5678"]
  */
-export const sliceTo4digitNum = (num: string): string[] => {
+export const splitTo4Digits = (number: string): string[] => {
   const result: string[] = [];
-  const len: number = num.length;
-  for (let i = 0; i < len; i = i + 4) {
-    result.unshift(num.slice(-4));
-    num = num.slice(0, -4);
+  const length: number = number.length;
+  for (let i = 0; i < length; i = i + 4) {
+    result.unshift(number.slice(-4));
+    number = number.slice(0, -4);
   }
   return result;
 };
@@ -77,8 +77,8 @@ export const sliceTo4digitNum = (num: string): string[] => {
  * @returns The normalized number string
  * @throws {Error} If the input is not a valid number (NaN)
  */
-const convertToStrNum = (num: number | string): string => {
-  const result = num
+const convertToNumericString = (number: number | string): string => {
+  const result = number
     .toString()
     .replace(/[０-９]/g, function (s) {
       return String.fromCharCode(s.charCodeAt(0) - 0xfee0);
@@ -115,17 +115,17 @@ const convertToStrNum = (num: number | string): string => {
  * @param num - The number string to validate
  * @returns True if valid, otherwise false
  */
-const numberFormatValidator = (num: string): boolean => {
-  if (RegExp(/[^0-9.-]/).test(num)) {
+const numberFormatValidator = (number: string): boolean => {
+  if (RegExp(/[^0-9.-]/).test(number)) {
     return false;
   }
-  if (!RegExp(/^-?[0-9.]+$/).test(num)) {
+  if (!RegExp(/^-?[0-9.]+$/).test(number)) {
     return false;
   }
-  if (!RegExp(/^[-0-9]*\.?[0-9]*$/).test(num)) {
+  if (!RegExp(/^[-0-9]*\.?[0-9]*$/).test(number)) {
     return false;
   }
-  if (!RegExp(/[0-9]+/).test(num)) {
+  if (!RegExp(/[0-9]+/).test(number)) {
     return false;
   }
   return true;
