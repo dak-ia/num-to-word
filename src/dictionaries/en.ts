@@ -39,7 +39,7 @@ export const enTensPlace: readonly string[] = [
 
 export const enHundredsPlace: readonly string[] = ["hundred"];
 
-export const enOthersPlace: Readonly<Record<number, string>> = {
+export const enLargeUnits: Readonly<Record<number, string>> = {
   0: "",
   3: "Thousand",
   6: "Million",

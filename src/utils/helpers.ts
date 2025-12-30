@@ -1,84 +1,73 @@
 import type { NumArray } from "../types/index";
 
 /**
- * Splits a number into integer and decimal parts.
- * Handles full-width characters, commas, and whitespace normalization.
- * @param num - The number to split (number or string)
+ * Splits a number into integer and decimal parts, handling full-width characters and commas.
+ * @param number - The number to split
  * @returns An object with integer and decimal string properties
- * @throws {TypeError} If num is null, undefined, or empty string
- * @throws {Error} If the input is not a valid number (NaN)
- * @example
- * splitNum(123.456) // { integer: "123", decimal: "456" }
- * splitNum("１，２３４") // { integer: "1234", decimal: "" }
+ * @throws {TypeError} If null, undefined, or empty
+ * @throws {Error} If not a valid number
  */
-export const splitNum = (num: number | string): NumArray => {
-  if (num === null || num === undefined || num === "") {
+export const splitNum = (number: number | string): NumArray => {
+  if (number === null || number === undefined || number === "") {
     throw new TypeError("Invalid argument: expected a number or string");
   }
-  const strNum = convertToStrNum(num);
-  const isNegative = strNum.startsWith("-");
-  const absNum = isNegative ? strNum.slice(1) : strNum;
-  const numArray: NumArray = { integer: "", decimal: "", isNegative };
-  numArray.integer = absNum.split(".")[0];
-  numArray.decimal = absNum.split(".")[1] || "";
-  return numArray;
+  const strNumber = convertToNumericString(number);
+  const isNegative = strNumber.startsWith("-");
+  const absNumber = isNegative ? strNumber.slice(1) : strNumber;
+  const numberParts: NumArray = { integer: "", decimal: "", isNegative };
+  numberParts.integer = absNumber.split(".")[0];
+  numberParts.decimal = absNumber.split(".")[1] || "";
+  return numberParts;
 };
 
 /**
- * Splits a number string into an array of single-digit strings.
- * @param num - The number string to split
- * @returns An array of single-digit strings
- * @example
- * sliceTo1digitNum("123") // ["1", "2", "3"]
+ * Splits a number string into individual digits.
+ * @param number - The number string
+ * @returns Array of single-digit strings
  */
-export const sliceTo1digitNum = (num: string): string[] => {
-  return num.split("");
+export const splitTo1Digit = (number: string): string[] => {
+  return number.split("");
 };
 
 /**
- * Splits a number string into chunks of 3 digits from right to left.
- * @param num - The number string to split
- * @returns An array of 3-digit strings (or less for the leftmost chunk)
- * @example
- * sliceTo3digitNum("1234567") // ["1", "234", "567"]
+ * Splits a number string into 3-digit chunks from right to left.
+ * @param number - The number string
+ * @returns Array of 3-digit chunks
  */
-export const sliceTo3digitNum = (num: string): string[] => {
+export const splitTo3Digits = (number: string): string[] => {
   const result: string[] = [];
-  const len: number = num.length;
-  for (let i = 0; i < len; i = i + 3) {
-    result.unshift(num.slice(-3));
-    num = num.slice(0, -3);
+  const length: number = number.length;
+  for (let i = 0; i < length; i = i + 3) {
+    result.unshift(number.slice(-3));
+    number = number.slice(0, -3);
   }
   return result;
 };
 
 /**
- * Splits a number string into chunks of 4 digits from right to left.
- * @param num - The number string to split
- * @returns An array of 4-digit strings (or less for the leftmost chunk)
- * @example
- * sliceTo4digitNum("12345678") // ["1234", "5678"]
+ * Splits a number string into 4-digit chunks from right to left.
+ * @param number - The number string
+ * @returns Array of 4-digit chunks
  */
-export const sliceTo4digitNum = (num: string): string[] => {
+export const splitTo4Digits = (number: string): string[] => {
   const result: string[] = [];
-  const len: number = num.length;
-  for (let i = 0; i < len; i = i + 4) {
-    result.unshift(num.slice(-4));
-    num = num.slice(0, -4);
+  const length: number = number.length;
+  for (let i = 0; i < length; i = i + 4) {
+    result.unshift(number.slice(-4));
+    number = number.slice(0, -4);
   }
   return result;
 };
 
 /**
- * Normalizes number input to a standard string format.
- * Converts full-width characters to half-width, removes commas and whitespace.
+ * Normalizes number input by converting full-width characters and removing separators.
  * @internal
- * @param num - The number to normalize (number or string)
- * @returns The normalized number string
- * @throws {Error} If the input is not a valid number (NaN)
+ * @param number - The number to normalize
+ * @returns Normalized number string
+ * @throws {Error} If not a valid number
  */
-const convertToStrNum = (num: number | string): string => {
-  const result = num
+const convertToNumericString = (number: number | string): string => {
+  const result = number
     .toString()
     .replace(/[０-９]/g, function (s) {
       return String.fromCharCode(s.charCodeAt(0) - 0xfee0);
@@ -110,22 +99,22 @@ const convertToStrNum = (num: number | string): string => {
 };
 
 /**
- * Check number format validity.
+ * Validates number format.
  * @internal
- * @param num - The number string to validate
- * @returns True if valid, otherwise false
+ * @param number - The number string
+ * @returns True if valid
  */
-const numberFormatValidator = (num: string): boolean => {
-  if (RegExp(/[^0-9.-]/).test(num)) {
+const numberFormatValidator = (number: string): boolean => {
+  if (RegExp(/[^0-9.-]/).test(number)) {
     return false;
   }
-  if (!RegExp(/^-?[0-9.]+$/).test(num)) {
+  if (!RegExp(/^-?[0-9.]+$/).test(number)) {
     return false;
   }
-  if (!RegExp(/^[-0-9]*\.?[0-9]*$/).test(num)) {
+  if (!RegExp(/^[-0-9]*\.?[0-9]*$/).test(number)) {
     return false;
   }
-  if (!RegExp(/[0-9]+/).test(num)) {
+  if (!RegExp(/[0-9]+/).test(number)) {
     return false;
   }
   return true;

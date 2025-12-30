@@ -4,32 +4,39 @@ import { toJpDaiji } from "./toJpDaiji";
 import { toSi } from "./toSi";
 
 /**
- * Converts a number to its word representation based on the specified locale.
- * @param locale - The locale identifier ("en"/"english", "jp"/"japanese", "jpdaiji"/"daiji", "si")
- * @param num - The number to convert (number or string)
- * @returns The word representation of the number in the specified locale
- * @throws {TypeError} If locale or num is invalid
- * @throws {Error} If the locale is not supported or the number is invalid
+ * Converts a number to words in the specified locale.
+ * @param locale - Locale identifier ("en", "jp", "jpdaiji", "si")
+ * @param number - The number to convert
+ * @returns Word representation in the specified locale
+ * @throws {TypeError} If invalid arguments
+ * @throws {Error} If unsupported locale
  * @example
  * toLocaleString("en", 123) // "One Hundred Twenty Three"
  * toLocaleString("jp", 123) // "百二十三"
  * toLocaleString("si", 1234) // "1.234K"
  */
-export const toLocaleString = (locale: string, num: number | string): string => {
-  if (locale === null || locale === undefined || locale === "" || num === null || num === undefined || num === "") {
+export const toLocaleString = (locale: string, number: number | string): string => {
+  if (
+    locale === null ||
+    locale === undefined ||
+    locale === "" ||
+    number === null ||
+    number === undefined ||
+    number === ""
+  ) {
     throw new TypeError("Invalid argument: expected a number or string");
   }
 
   const localeLower: string = locale.toLowerCase();
 
   if (localeLower === "si") {
-    return toSi(num);
+    return toSi(number);
   } else if (localeLower === "en" || localeLower === "english") {
-    return toEn(num);
+    return toEn(number);
   } else if (localeLower === "jp" || localeLower === "japanese") {
-    return toJp(num);
+    return toJp(number);
   } else if (localeLower === "jpdaiji" || localeLower === "daiji") {
-    return toJpDaiji(num);
+    return toJpDaiji(number);
   } else {
     throw new Error("Invalid locale");
   }
