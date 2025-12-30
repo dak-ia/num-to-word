@@ -2,10 +2,10 @@ import { jpLargeUnits, jpOnesPlace } from "../dictionaries";
 import { replaceIntUnitJp, splitNum, splitTo1Digit, splitTo4Digits } from "../utils";
 
 /**
- * Converts a number to its Japanese word representation using standard kanji.
- * @param num - The number to convert (number or string)
- * @returns The Japanese word representation of the number
- * @throws {Error} If the number is too large (Overflow) or invalid (NaN)
+ * Converts a number to Japanese kanji.
+ * @param number - The number to convert
+ * @returns Japanese kanji representation
+ * @throws {Error} If invalid or overflow
  * @example
  * toJp(123) // "百二十三"
  * toJp("1234.56") // "千二百三十四点五六"

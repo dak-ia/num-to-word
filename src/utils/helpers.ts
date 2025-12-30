@@ -1,15 +1,11 @@
 import type { NumArray } from "../types/index";
 
 /**
- * Splits a number into integer and decimal parts.
- * Handles full-width characters, commas, and whitespace normalization.
- * @param num - The number to split (number or string)
+ * Splits a number into integer and decimal parts, handling full-width characters and commas.
+ * @param number - The number to split
  * @returns An object with integer and decimal string properties
- * @throws {TypeError} If num is null, undefined, or empty string
- * @throws {Error} If the input is not a valid number (NaN)
- * @example
- * splitNum(123.456) // { integer: "123", decimal: "456" }
- * splitNum("１，２３４") // { integer: "1234", decimal: "" }
+ * @throws {TypeError} If null, undefined, or empty
+ * @throws {Error} If not a valid number
  */
 export const splitNum = (number: number | string): NumArray => {
   if (number === null || number === undefined || number === "") {
@@ -25,22 +21,18 @@ export const splitNum = (number: number | string): NumArray => {
 };
 
 /**
- * Splits a number string into an array of single-digit strings.
- * @param num - The number string to split
- * @returns An array of single-digit strings
- * @example
- * splitTo1Digit("123") // ["1", "2", "3"]
+ * Splits a number string into individual digits.
+ * @param number - The number string
+ * @returns Array of single-digit strings
  */
 export const splitTo1Digit = (number: string): string[] => {
   return number.split("");
 };
 
 /**
- * Splits a number string into chunks of 3 digits from right to left.
- * @param num - The number string to split
- * @returns An array of 3-digit strings (or less for the leftmost chunk)
- * @example
- * splitTo3Digits("1234567") // ["1", "234", "567"]
+ * Splits a number string into 3-digit chunks from right to left.
+ * @param number - The number string
+ * @returns Array of 3-digit chunks
  */
 export const splitTo3Digits = (number: string): string[] => {
   const result: string[] = [];
@@ -53,11 +45,9 @@ export const splitTo3Digits = (number: string): string[] => {
 };
 
 /**
- * Splits a number string into chunks of 4 digits from right to left.
- * @param num - The number string to split
- * @returns An array of 4-digit strings (or less for the leftmost chunk)
- * @example
- * splitTo4Digits("12345678") // ["1234", "5678"]
+ * Splits a number string into 4-digit chunks from right to left.
+ * @param number - The number string
+ * @returns Array of 4-digit chunks
  */
 export const splitTo4Digits = (number: string): string[] => {
   const result: string[] = [];
@@ -70,12 +60,11 @@ export const splitTo4Digits = (number: string): string[] => {
 };
 
 /**
- * Normalizes number input to a standard string format.
- * Converts full-width characters to half-width, removes commas and whitespace.
+ * Normalizes number input by converting full-width characters and removing separators.
  * @internal
- * @param num - The number to normalize (number or string)
- * @returns The normalized number string
- * @throws {Error} If the input is not a valid number (NaN)
+ * @param number - The number to normalize
+ * @returns Normalized number string
+ * @throws {Error} If not a valid number
  */
 const convertToNumericString = (number: number | string): string => {
   const result = number
@@ -110,10 +99,10 @@ const convertToNumericString = (number: number | string): string => {
 };
 
 /**
- * Check number format validity.
+ * Validates number format.
  * @internal
- * @param num - The number string to validate
- * @returns True if valid, otherwise false
+ * @param number - The number string
+ * @returns True if valid
  */
 const numberFormatValidator = (number: string): boolean => {
   if (RegExp(/[^0-9.-]/).test(number)) {

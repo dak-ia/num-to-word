@@ -4,12 +4,12 @@ import { toJpDaiji } from "./toJpDaiji";
 import { toSi } from "./toSi";
 
 /**
- * Converts a number to its word representation based on the specified locale.
- * @param locale - The locale identifier ("en"/"english", "jp"/"japanese", "jpdaiji"/"daiji", "si")
- * @param num - The number to convert (number or string)
- * @returns The word representation of the number in the specified locale
- * @throws {TypeError} If locale or num is invalid
- * @throws {Error} If the locale is not supported or the number is invalid
+ * Converts a number to words in the specified locale.
+ * @param locale - Locale identifier ("en", "jp", "jpdaiji", "si")
+ * @param number - The number to convert
+ * @returns Word representation in the specified locale
+ * @throws {TypeError} If invalid arguments
+ * @throws {Error} If unsupported locale
  * @example
  * toLocaleString("en", 123) // "One Hundred Twenty Three"
  * toLocaleString("jp", 123) // "百二十三"

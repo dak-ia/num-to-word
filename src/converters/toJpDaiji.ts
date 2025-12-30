@@ -2,11 +2,10 @@ import { jpDaijiAfter, jpDaijiBefore, jpLargeUnits } from "../dictionaries";
 import { toJp } from "./toJp";
 
 /**
- * Converts a number to its Japanese word representation using formal daiji (大字) numerals.
- * Daiji are used in legal and financial documents to prevent fraud.
- * @param num - The number to convert (number or string)
- * @returns The Japanese daiji representation of the number
- * @throws {Error} If the number is too large (Overflow) or invalid (NaN)
+ * Converts a number to formal daiji (大字) numerals used in legal documents.
+ * @param number - The number to convert
+ * @returns Japanese daiji representation
+ * @throws {Error} If invalid or overflow
  * @example
  * toJpDaiji(123) // "壱百弐拾参"
  * toJpDaiji("10000") // "壱萬"

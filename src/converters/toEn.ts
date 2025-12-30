@@ -2,10 +2,10 @@ import { enLargeUnits, enOnesPlace } from "../dictionaries";
 import { replaceIntUnitEn, splitNum, splitTo1Digit, splitTo3Digits } from "../utils";
 
 /**
- * Converts a number to its English word representation.
- * @param num - The number to convert (number or string)
- * @returns The English word representation of the number
- * @throws {Error} If the number is too large (Overflow) or invalid (NaN)
+ * Converts a number to English words.
+ * @param number - The number to convert
+ * @returns English word representation
+ * @throws {Error} If invalid or overflow
  * @example
  * toEn(123) // "One Hundred Twenty Three"
  * toEn("1234.56") // "One Thousand Two Hundred Thirty Four Point Five Six"

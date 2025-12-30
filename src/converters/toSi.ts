@@ -2,10 +2,10 @@ import { splitNum, splitTo3Digits } from "../utils";
 import { siSymbols } from "../dictionaries";
 
 /**
- * Converts a number to its SI (International System of Units) prefix notation.
- * @param num - The number to convert (number or string)
- * @returns The number in SI prefix notation
- * @throws {Error} If the number is too large (Overflow) or invalid (NaN)
+ * Converts a number to SI prefix notation (K, M, G, etc.).
+ * @param number - The number to convert
+ * @returns SI prefix notation
+ * @throws {Error} If invalid or overflow
  * @example
  * toSi(1234) // "1.234K"
  * toSi(1234567) // "1.234567M"
