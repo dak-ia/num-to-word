@@ -62,7 +62,7 @@ export const splitTo4Digits = (number: string): string[] => {
 /**
  * Normalizes number input by converting full-width characters and removing separators.
  * @internal
- * @param number - The number to normalize (supports exponential notation)
+ * @param number - The number to normalize
  * @returns Normalized numeric string
  * @throws {Error} If not a valid number format
  */
@@ -87,7 +87,6 @@ const convertToNumericString = (number: number | string): string => {
     throw new Error("NaN");
   }
 
-  // Expand exponential notation after validation
   result = expandExponentialNotation(result).replace("+", "");
 
   const isNegative = result.startsWith("-");
