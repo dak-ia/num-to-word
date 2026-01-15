@@ -82,6 +82,11 @@ describe("splitNum", () => {
     expect(splitNum("1e20")).toEqual({ integer: "100000000000000000000", decimal: "", isNegative: false });
     expect(splitNum("1.0e5")).toEqual({ integer: "100000", decimal: "", isNegative: false });
 
+    expect(splitNum("0e5")).toEqual({ integer: "0", decimal: "", isNegative: false });
+    expect(splitNum("0.0e3")).toEqual({ integer: "0", decimal: "", isNegative: false });
+    expect(splitNum("0.00e2")).toEqual({ integer: "0", decimal: "", isNegative: false });
+    expect(splitNum("0.000e1")).toEqual({ integer: "0", decimal: "00", isNegative: false });
+
     expect(splitNum("0.5e2")).toEqual({ integer: "50", decimal: "", isNegative: false });
     expect(splitNum("0.1e3")).toEqual({ integer: "100", decimal: "", isNegative: false });
     expect(splitNum("0.05e4")).toEqual({ integer: "500", decimal: "", isNegative: false });
@@ -138,6 +143,12 @@ describe("splitNum", () => {
     expect(() => splitNum("45456--")).toThrow("NaN");
     expect(() => splitNum("515-45")).toThrow("NaN");
     expect(() => splitNum("5-15-45")).toThrow("NaN");
+
+    expect(() => splitNum("e5")).toThrow("Invalid exponential notation");
+    expect(() => splitNum("1e")).toThrow("NaN");
+    expect(() => splitNum("1.23ee5")).toThrow("NaN");
+    expect(() => splitNum("1.23e+")).toThrow("NaN");
+    expect(() => splitNum("1.23e-")).toThrow("NaN");
   });
 });
 
