@@ -60,6 +60,63 @@ describe("splitNum", () => {
     expect(splitNum("−123")).toEqual({ integer: "123", decimal: "", isNegative: true });
   });
 
+  test("exponential notation", () => {
+    expect(splitNum("1.23e5")).toEqual({ integer: "123000", decimal: "", isNegative: false });
+    expect(splitNum("1.23e+5")).toEqual({ integer: "123000", decimal: "", isNegative: false });
+    expect(splitNum("5e3")).toEqual({ integer: "5000", decimal: "", isNegative: false });
+    expect(splitNum("1e0")).toEqual({ integer: "1", decimal: "", isNegative: false });
+    expect(splitNum("9.87654e6")).toEqual({ integer: "9876540", decimal: "", isNegative: false });
+
+    expect(splitNum("1.23e-2")).toEqual({ integer: "0", decimal: "0123", isNegative: false });
+    expect(splitNum("5e-3")).toEqual({ integer: "0", decimal: "005", isNegative: false });
+    expect(splitNum("1.5e-1")).toEqual({ integer: "0", decimal: "15", isNegative: false });
+    expect(splitNum("3.14159e-5")).toEqual({ integer: "0", decimal: "0000314159", isNegative: false });
+
+    expect(splitNum("-1.5e4")).toEqual({ integer: "15000", decimal: "", isNegative: true });
+    expect(splitNum("-2.5e-3")).toEqual({ integer: "0", decimal: "0025", isNegative: true });
+    expect(splitNum("-1e10")).toEqual({ integer: "10000000000", decimal: "", isNegative: true });
+
+    expect(splitNum("2.5E10")).toEqual({ integer: "25000000000", decimal: "", isNegative: false });
+    expect(splitNum("1.5E-2")).toEqual({ integer: "0", decimal: "015", isNegative: false });
+
+    expect(splitNum("1e20")).toEqual({ integer: "100000000000000000000", decimal: "", isNegative: false });
+    expect(splitNum("1.0e5")).toEqual({ integer: "100000", decimal: "", isNegative: false });
+
+    expect(splitNum("0e5")).toEqual({ integer: "0", decimal: "", isNegative: false });
+    expect(splitNum("0.0e3")).toEqual({ integer: "0", decimal: "", isNegative: false });
+    expect(splitNum("0.00e2")).toEqual({ integer: "0", decimal: "", isNegative: false });
+    expect(splitNum("0.000e1")).toEqual({ integer: "0", decimal: "00", isNegative: false });
+
+    expect(splitNum("0.5e2")).toEqual({ integer: "50", decimal: "", isNegative: false });
+    expect(splitNum("0.1e3")).toEqual({ integer: "100", decimal: "", isNegative: false });
+    expect(splitNum("0.05e4")).toEqual({ integer: "500", decimal: "", isNegative: false });
+    expect(splitNum("0.123e3")).toEqual({ integer: "123", decimal: "", isNegative: false });
+    expect(splitNum("0.001e5")).toEqual({ integer: "100", decimal: "", isNegative: false });
+    expect(splitNum("0.00456e3")).toEqual({ integer: "4", decimal: "56", isNegative: false });
+    expect(splitNum("-0.5e2")).toEqual({ integer: "50", decimal: "", isNegative: true });
+    expect(splitNum("-0.123e4")).toEqual({ integer: "1230", decimal: "", isNegative: true });
+
+    expect(splitNum("12.34e3")).toEqual({ integer: "12340", decimal: "", isNegative: false });
+    expect(splitNum("123.45e2")).toEqual({ integer: "12345", decimal: "", isNegative: false });
+    expect(splitNum("12e5")).toEqual({ integer: "1200000", decimal: "", isNegative: false });
+    expect(splitNum("100.5e3")).toEqual({ integer: "100500", decimal: "", isNegative: false });
+    expect(splitNum("99.99e4")).toEqual({ integer: "999900", decimal: "", isNegative: false });
+    expect(splitNum("-12.34e3")).toEqual({ integer: "12340", decimal: "", isNegative: true });
+
+    expect(splitNum("12.34e-1")).toEqual({ integer: "1", decimal: "234", isNegative: false });
+    expect(splitNum("123.456e-2")).toEqual({ integer: "1", decimal: "23456", isNegative: false });
+    expect(splitNum("12e-1")).toEqual({ integer: "1", decimal: "2", isNegative: false });
+    expect(splitNum("100.5e-2")).toEqual({ integer: "1", decimal: "005", isNegative: false });
+    expect(splitNum("-12.34e-1")).toEqual({ integer: "1", decimal: "234", isNegative: true });
+
+    expect(splitNum("1.23e1")).toEqual({ integer: "12", decimal: "3", isNegative: false });
+    expect(splitNum("12.34e1")).toEqual({ integer: "123", decimal: "4", isNegative: false });
+    expect(splitNum("123.45e-1")).toEqual({ integer: "12", decimal: "345", isNegative: false });
+    expect(splitNum("9.876e2")).toEqual({ integer: "987", decimal: "6", isNegative: false });
+    expect(splitNum("456.789e-2")).toEqual({ integer: "4", decimal: "56789", isNegative: false });
+    expect(splitNum("-1.23e1")).toEqual({ integer: "12", decimal: "3", isNegative: true });
+  });
+
   test("invalid input", () => {
     expect(() => splitNum("")).toThrow("Invalid argument: expected a number or string");
     // @ts-expect-error - Testing invalid input
@@ -86,6 +143,12 @@ describe("splitNum", () => {
     expect(() => splitNum("45456--")).toThrow("NaN");
     expect(() => splitNum("515-45")).toThrow("NaN");
     expect(() => splitNum("5-15-45")).toThrow("NaN");
+
+    expect(() => splitNum("e5")).toThrow("Invalid exponential notation");
+    expect(() => splitNum("1e")).toThrow("NaN");
+    expect(() => splitNum("1.23ee5")).toThrow("NaN");
+    expect(() => splitNum("1.23e+")).toThrow("NaN");
+    expect(() => splitNum("1.23e-")).toThrow("NaN");
   });
 });
 

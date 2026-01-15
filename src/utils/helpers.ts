@@ -63,11 +63,11 @@ export const splitTo4Digits = (number: string): string[] => {
  * Normalizes number input by converting full-width characters and removing separators.
  * @internal
  * @param number - The number to normalize
- * @returns Normalized number string
- * @throws {Error} If not a valid number
+ * @returns Normalized numeric string
+ * @throws {Error} If not a valid number format
  */
 const convertToNumericString = (number: number | string): string => {
-  const result = number
+  let result = number
     .toString()
     .replace(/[０-９]/g, function (s) {
       return String.fromCharCode(s.charCodeAt(0) - 0xfee0);
@@ -77,14 +77,18 @@ const convertToNumericString = (number: number | string): string => {
     .replace(/,/g, "")
     .replace(/'/g, "")
     .replace(/’/g, "")
-    .replace(/＋/g, "")
-    .replace(/\+/g, "")
+    .replace(/＋/g, "+")
     .replace(/−/g, "-")
+    .replace(/ｅ/g, "e")
+    .replace(/Ｅ/g, "E")
     .replace(/\s/g, "")
     .trim();
   if (!numberFormatValidator(result)) {
     throw new Error("NaN");
   }
+
+  result = expandExponentialNotation(result).replace("+", "");
+
   const isNegative = result.startsWith("-");
   if (result.slice(0, 1) === "." && !isNegative) {
     return "0" + result;
@@ -99,22 +103,69 @@ const convertToNumericString = (number: number | string): string => {
 };
 
 /**
+ * Expands exponential notation to a full decimal string.
+ * Examples:
+ * - "1.23e5" → "123000"
+ * - "1.23e-2" → "0.0123"
+ * - "-1.5e4" → "-15000"
+ * @internal
+ * @param number - The string that may contain exponential notation (e.g., "1.23e5")
+ * @returns Expanded number string without exponential notation
+ * @throws {Error} If invalid exponential notation format
+ */
+const expandExponentialNotation = (number: string): string => {
+  if (!/[eE]/.test(number)) {
+    return number;
+  }
+
+  const isNegative = number.startsWith("-");
+  const absNumber = isNegative ? number.slice(1) : number;
+
+  const match = absNumber.match(/^([0-9.]+)[eE]([+-]?[0-9]+)$/);
+  if (!match) {
+    throw new Error("Invalid exponential notation");
+  }
+
+  const mantissa = match[1];
+  const exponent = Number(match[2]);
+
+  const decimalPos = mantissa.indexOf(".");
+  const hasDecimal = decimalPos !== -1;
+
+  const digits = mantissa.replace(".", "");
+
+  const originalDecimalPos = hasDecimal ? decimalPos : digits.length;
+
+  const newDecimalPos = originalDecimalPos + exponent;
+
+  let result: string;
+  if (newDecimalPos <= 0) {
+    result = "0." + "0".repeat(Math.abs(newDecimalPos)) + digits;
+  } else if (newDecimalPos >= digits.length) {
+    const integerPart = (digits + "0".repeat(newDecimalPos - digits.length)).replace(/^0+/, "") || "0";
+    result = integerPart;
+  } else {
+    const integerPart = digits.slice(0, newDecimalPos).replace(/^0+/, "") || "0";
+    result = integerPart + "." + digits.slice(newDecimalPos);
+  }
+
+  return (isNegative ? "-" : "") + result;
+};
+
+/**
  * Validates number format.
  * @internal
- * @param number - The number string
- * @returns True if valid
+ * @param number - Number string to validate
+ * @returns True if valid number format
  */
 const numberFormatValidator = (number: string): boolean => {
-  if (RegExp(/[^0-9.-]/).test(number)) {
-    return false;
-  }
-  if (!RegExp(/^-?[0-9.]+$/).test(number)) {
-    return false;
-  }
-  if (!RegExp(/^[-0-9]*\.?[0-9]*$/).test(number)) {
+  if (RegExp(/[^0-9.+\-eE]/).test(number)) {
     return false;
   }
   if (!RegExp(/[0-9]+/).test(number)) {
+    return false;
+  }
+  if (!RegExp(/^[+-]?[0-9]*\.?[0-9]*(([eE][+-]?)[0-9]+)?$/).test(number)) {
     return false;
   }
   return true;
