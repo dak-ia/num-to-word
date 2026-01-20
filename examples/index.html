@@ -2,14 +2,19 @@
 <html lang="ja">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>NumToWord Test Page</title>
-    <!-- ビルド済みUMD (本番用) -->
-    <script src="../dist/index.umd.js"></script>
-    <!-- 開発サーバー用フォールバック -->
+    <title>num-to-word Test Page</title>
     <script type="module">
-      if (!window.NumToWord) {
-        const module = await import("../src/index.ts");
-        window.NumToWord = module.default;
+      if (location.protocol === "file:") {
+        // Load from dist when opening HTML file directly
+        const script = document.createElement("script");
+        script.src = "../dist/index.umd.js";
+        script.onerror = () => console.error("Failed to load UMD build");
+        document.head.appendChild(script);
+      } else {
+        // Load from source with HMR when using dev server
+        import("../src/index.ts")
+          .then((module) => (window.NumToWord = module.default))
+          .catch((error) => console.error("Failed to load module:", error));
       }
     </script>
   </head>
@@ -29,19 +34,19 @@
     let output = document.getElementById("output");
 
     function pressSi() {
-      output.innerText = NumToWord.toSi(input.value);
+      output.innerText = NumToWord.toSi(Number(input.value));
     }
 
     function pressEn() {
-      output.innerText = NumToWord.toEn(input.value);
+      output.innerText = NumToWord.toEn(Number(input.value));
     }
 
     function pressJp() {
-      output.innerText = NumToWord.toJp(input.value);
+      output.innerText = NumToWord.toJp(Number(input.value));
     }
 
     function pressJpDaiji() {
-      output.innerText = NumToWord.toJpDaiji(input.value);
+      output.innerText = NumToWord.toJpDaiji(Number(input.value));
     }
   </script>
 </html>
