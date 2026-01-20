@@ -13,13 +13,13 @@
     "si-prefix",
     "number-to-words"
   ],
-  "homepage": "https://github.com/dak-ia/NumToWord.js#readme",
+  "homepage": "https://github.com/dak-ia/num-to-word#readme",
   "bugs": {
-    "url": "https://github.com/dak-ia/NumToWord.js/issues"
+    "url": "https://github.com/dak-ia/num-to-word/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/dak-ia/NumToWord.js.git"
+    "url": "git+https://github.com/dak-ia/num-to-word.git"
   },
   "license": "MIT",
   "author": "dak-ia",
