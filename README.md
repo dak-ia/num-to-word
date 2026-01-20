@@ -154,8 +154,21 @@ Convert a number using the specified locale.
 
 - **number 型 / Number type**: `NumToWord.toEn(123)`
 - **string 型（推奨）/ String type (recommended)**: `NumToWord.toEn("123")`
+- **指数表記 / Exponential notation**: `NumToWord.toEn("1.23e5")` → `"One hundred twenty-three thousand"`
 - **全角数字 / Full-width numbers**: `NumToWord.toEn("123")` （自動変換 / converted automatically）
 - **カンマ区切り / With commas**: `NumToWord.toEn("123,456,789")` （自動的に削除 / commas removed automatically）
+
+### 指数表記について / About Exponential Notation
+
+指数表記（例: `1.23e5`、`5.67e-3`）がサポートされています。入力時に自動的に展開されます。
+
+Exponential notation (e.g., `1.23e5`, `5.67e-3`) is supported and automatically expanded.
+
+```javascript
+NumToWord.toEn("1.23e5"); // "One hundred twenty-three thousand"
+NumToWord.toEn("5.67e-3"); // "Zero point zero zero five six seven"
+NumToWord.toJp("1.5e4"); // "一万五千"
+```
 
 ## 💻 TypeScript サポート / TypeScript Support
 
@@ -182,7 +195,7 @@ open examples/index.html
 
 # または開発サーバーで確認 / Or use dev server
 npm run dev
-# http://localhost:5173/examples/
+# http://localhost:5173/
 ```
 
 ## 🛠️ 開発 / Development
