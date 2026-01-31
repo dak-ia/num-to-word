@@ -1,26 +1,20 @@
 import type { NumArray } from "../types/index";
 
 /**
- * Splits a number into integer and decimal parts, handling full-width characters and commas.
- * @param number - The number to split
+ * Preprocesses a number input: validates, normalizes, and splits into components.
+ * @param number - The number to preprocess
  * @returns An object with integer, decimal, isNegative, and isInfinity properties
  * @throws {TypeError} If null, undefined, or empty
  * @throws {Error} If not a valid number
  */
-export const splitNum = (number: number | string): NumArray => {
+export const preprocessNumber = (number: number | string): NumArray => {
   if (number === null || number === undefined || number === "") {
     throw new TypeError("Invalid argument: expected a number or string");
   }
 
-  if (number === Infinity || number === -Infinity) {
-    return { integer: "", decimal: "", isNegative: number < 0, isInfinity: true };
-  }
-
-  if (typeof number === "string") {
-    const match = number.replace(/\s/g, "").match(/^([+-])?infinity$/i);
-    if (match) {
-      return { integer: "", decimal: "", isNegative: match[1] === "-", isInfinity: true };
-    }
+  const infinityResult = checkInfinity(number);
+  if (infinityResult) {
+    return infinityResult;
   }
 
   const strNumber = convertToNumericString(number);
@@ -69,6 +63,25 @@ export const splitTo4Digits = (number: string): string[] => {
     number = number.slice(0, -4);
   }
   return result;
+};
+
+/**
+ * Checks if the input is Infinity (number or string type).
+ * @internal
+ * @param number - The value to check
+ * @returns NumArray if Infinity, null otherwise
+ */
+const checkInfinity = (number: number | string): NumArray | null => {
+  if (number === Infinity || number === -Infinity) {
+    return { integer: "", decimal: "", isNegative: number < 0, isInfinity: true };
+  }
+  if (typeof number === "string") {
+    const match = number.replace(/\s/g, "").match(/^([+-])?infinity$/i);
+    if (match) {
+      return { integer: "", decimal: "", isNegative: match[1] === "-", isInfinity: true };
+    }
+  }
+  return null;
 };
 
 /**

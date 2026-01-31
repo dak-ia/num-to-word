@@ -1,5 +1,5 @@
 import { jpLargeUnits, jpOnesPlace } from "../dictionaries";
-import { replaceIntUnitJp, splitNum, splitTo1Digit, splitTo4Digits } from "../utils";
+import { preprocessNumber, replaceIntUnitJp, splitTo1Digit, splitTo4Digits } from "../utils";
 
 /**
  * Converts a number to Japanese kanji.
@@ -12,7 +12,7 @@ import { replaceIntUnitJp, splitNum, splitTo1Digit, splitTo4Digits } from "../ut
  * toJp(Infinity) // "無限"
  */
 export const toJp = (number: number | string): string => {
-  const numberParts = splitNum(number);
+  const numberParts = preprocessNumber(number);
   if (numberParts.isInfinity) {
     return numberParts.isNegative ? "負の無限" : "無限";
   }
