@@ -163,6 +163,7 @@ describe("splitNum", () => {
     expect(() => splitNum(null)).toThrow("Invalid argument: expected a number or string");
     // @ts-expect-error - Testing invalid input
     expect(() => splitNum(undefined)).toThrow("Invalid argument: expected a number or string");
+    expect(() => splitNum(NaN)).toThrow("NaN");
     expect(() => splitNum("abc")).toThrow("NaN");
     expect(() => splitNum("12a34")).toThrow("NaN");
     expect(() => splitNum("1.2.3")).toThrow("NaN");
