@@ -157,6 +157,7 @@ Convert a number using the specified locale.
 - **指数表記 / Exponential notation**: `NumToWord.toEn("1.23e5")` → `"One hundred twenty-three thousand"`
 - **全角数字 / Full-width numbers**: `NumToWord.toEn("123")` （自動変換 / converted automatically）
 - **カンマ区切り / With commas**: `NumToWord.toEn("123,456,789")` （自動的に削除 / commas removed automatically）
+- **Infinity / 無限大**: `NumToWord.toEn(Infinity)` → `"Infinity"`, `NumToWord.toJp(Infinity)` → `"無限"`
 
 ### 指数表記について / About Exponential Notation
 
