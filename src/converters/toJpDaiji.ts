@@ -9,6 +9,7 @@ import { toJp } from "./toJp";
  * @example
  * toJpDaiji(123) // "壱百弐拾参"
  * toJpDaiji("10000") // "壱萬"
+ * toJpDaiji(Infinity) // "無限"
  */
 export const toJpDaiji = (number: number | string): string => {
   let result = toJp(number);

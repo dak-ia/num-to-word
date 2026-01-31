@@ -153,6 +153,14 @@ describe("toJp", () => {
     expect(toJp(-999)).toBe("負の九百九十九");
   });
 
+  test("infinity", () => {
+    expect(toJp(Infinity)).toBe("無限");
+    expect(toJp(-Infinity)).toBe("負の無限");
+    expect(toJp("Infinity")).toBe("無限");
+    expect(toJp("-Infinity")).toBe("負の無限");
+    expect(toJp("infinity")).toBe("無限");
+  });
+
   test("invalid input", () => {
     expect(() => toJp("1" + "0".repeat(73))).toThrow("Overflow");
     expect(() => toJp("abc")).toThrow("NaN");

@@ -9,9 +9,13 @@ import { replaceIntUnitJp, splitNum, splitTo1Digit, splitTo4Digits } from "../ut
  * @example
  * toJp(123) // "百二十三"
  * toJp("1234.56") // "千二百三十四点五六"
+ * toJp(Infinity) // "無限"
  */
 export const toJp = (number: number | string): string => {
   const numberParts = splitNum(number);
+  if (numberParts.isInfinity) {
+    return numberParts.isNegative ? "負の無限" : "無限";
+  }
   if (numberParts.integer.length > jpLargeUnits.length * 4) {
     throw new Error("Overflow");
   }

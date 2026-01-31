@@ -47,6 +47,14 @@ describe("toSi", () => {
     expect(toSi(-999)).toBe("-999");
   });
 
+  test("infinity", () => {
+    expect(toSi(Infinity)).toBe("∞");
+    expect(toSi(-Infinity)).toBe("-∞");
+    expect(toSi("Infinity")).toBe("∞");
+    expect(toSi("-Infinity")).toBe("-∞");
+    expect(toSi("infinity")).toBe("∞");
+  });
+
   test("invalid input", () => {
     expect(() => toSi("1" + "0".repeat(33))).toThrow("Overflow");
     expect(() => toSi("abc")).toThrow("NaN");
