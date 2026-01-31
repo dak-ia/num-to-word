@@ -152,6 +152,13 @@ describe("toJpDaiji", () => {
     expect(toJpDaiji("-10000")).toBe("負の壱萬");
   });
 
+  test("infinity", () => {
+    expect(toJpDaiji(Infinity)).toBe("無限");
+    expect(toJpDaiji(-Infinity)).toBe("負の無限");
+    expect(toJpDaiji("Infinity")).toBe("無限");
+    expect(toJpDaiji("-Infinity")).toBe("負の無限");
+  });
+
   test("invalid input", () => {
     expect(() => toJpDaiji("1" + "0".repeat(73))).toThrow("Overflow");
     expect(() => toJpDaiji("abc")).toThrow("NaN");

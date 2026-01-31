@@ -162,6 +162,14 @@ describe("toEn", () => {
     expect(toEn(-999)).toBe("Minus nine hundred ninety-nine");
   });
 
+  test("infinity", () => {
+    expect(toEn(Infinity)).toBe("Infinity");
+    expect(toEn(-Infinity)).toBe("Minus infinity");
+    expect(toEn("Infinity")).toBe("Infinity");
+    expect(toEn("-Infinity")).toBe("Minus infinity");
+    expect(toEn("infinity")).toBe("Infinity");
+  });
+
   test("invalid input", () => {
     expect(() => toEn("1" + "0".repeat(309))).toThrow("Overflow");
     expect(() => toEn("abc")).toThrow("NaN");

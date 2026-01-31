@@ -9,9 +9,13 @@ import { replaceIntUnitEn, splitNum, splitTo1Digit, splitTo3Digits } from "../ut
  * @example
  * toEn(123) // "One Hundred Twenty Three"
  * toEn("1234.56") // "One Thousand Two Hundred Thirty Four Point Five Six"
+ * toEn(Infinity) // "Infinity"
  */
 export const toEn = (number: number | string): string => {
   const numberParts = splitNum(number);
+  if (numberParts.isInfinity) {
+    return numberParts.isNegative ? "Minus infinity" : "Infinity";
+  }
   if (numberParts.integer.length > (Object.values(enLargeUnits).length - 1) * 3) {
     throw new Error("Overflow");
   }

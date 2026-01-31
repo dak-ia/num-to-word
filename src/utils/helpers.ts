@@ -3,7 +3,7 @@ import type { NumArray } from "../types/index";
 /**
  * Splits a number into integer and decimal parts, handling full-width characters and commas.
  * @param number - The number to split
- * @returns An object with integer and decimal string properties
+ * @returns An object with integer, decimal, isNegative, and isInfinity properties
  * @throws {TypeError} If null, undefined, or empty
  * @throws {Error} If not a valid number
  */
@@ -11,10 +11,22 @@ export const splitNum = (number: number | string): NumArray => {
   if (number === null || number === undefined || number === "") {
     throw new TypeError("Invalid argument: expected a number or string");
   }
+
+  if (typeof number === "number" && !isFinite(number)) {
+    return { integer: "", decimal: "", isNegative: number < 0, isInfinity: true };
+  }
+
+  if (typeof number === "string") {
+    const match = number.replace(/\s/g, "").match(/^([+-])?infinity$/i);
+    if (match) {
+      return { integer: "", decimal: "", isNegative: match[1] === "-", isInfinity: true };
+    }
+  }
+
   const strNumber = convertToNumericString(number);
   const isNegative = strNumber.startsWith("-");
   const absNumber = isNegative ? strNumber.slice(1) : strNumber;
-  const numberParts: NumArray = { integer: "", decimal: "", isNegative };
+  const numberParts: NumArray = { integer: "", decimal: "", isNegative, isInfinity: false };
   numberParts.integer = absNumber.split(".")[0];
   numberParts.decimal = absNumber.split(".")[1] || "";
   return numberParts;

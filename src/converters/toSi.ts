@@ -9,9 +9,13 @@ import { siSymbols } from "../dictionaries";
  * @example
  * toSi(1234) // "1.234K"
  * toSi(1234567) // "1.234567M"
+ * toSi(Infinity) // "∞"
  */
 export const toSi = (number: number | string): string => {
   const numberParts = splitNum(number);
+  if (numberParts.isInfinity) {
+    return numberParts.isNegative ? "-∞" : "∞";
+  }
   if (numberParts.integer.length > (siSymbols.length + 1) * 3) {
     throw new Error("Overflow");
   }
