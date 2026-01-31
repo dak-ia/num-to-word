@@ -1,13 +1,13 @@
 import type { NumArray } from "../types/index";
 
 /**
- * Splits a number into integer and decimal parts, handling full-width characters and commas.
- * @param number - The number to split
+ * Preprocesses a number input: validates, normalizes, and splits into components.
+ * @param number - The number to preprocess
  * @returns An object with integer, decimal, isNegative, and isInfinity properties
  * @throws {TypeError} If null, undefined, or empty
  * @throws {Error} If not a valid number
  */
-export const splitNum = (number: number | string): NumArray => {
+export const preprocessNumber = (number: number | string): NumArray => {
   if (number === null || number === undefined || number === "") {
     throw new TypeError("Invalid argument: expected a number or string");
   }

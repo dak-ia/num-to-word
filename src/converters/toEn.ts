@@ -1,5 +1,5 @@
 import { enLargeUnits, enOnesPlace } from "../dictionaries";
-import { replaceIntUnitEn, splitNum, splitTo1Digit, splitTo3Digits } from "../utils";
+import { preprocessNumber, replaceIntUnitEn, splitTo1Digit, splitTo3Digits } from "../utils";
 
 /**
  * Converts a number to English words.
@@ -12,7 +12,7 @@ import { replaceIntUnitEn, splitNum, splitTo1Digit, splitTo3Digits } from "../ut
  * toEn(Infinity) // "Infinity"
  */
 export const toEn = (number: number | string): string => {
-  const numberParts = splitNum(number);
+  const numberParts = preprocessNumber(number);
   if (numberParts.isInfinity) {
     return numberParts.isNegative ? "Minus infinity" : "Infinity";
   }

@@ -1,4 +1,4 @@
-import { splitNum, splitTo3Digits } from "../utils";
+import { preprocessNumber, splitTo3Digits } from "../utils";
 import { siSymbols } from "../dictionaries";
 
 /**
@@ -12,7 +12,7 @@ import { siSymbols } from "../dictionaries";
  * toSi(Infinity) // "∞"
  */
 export const toSi = (number: number | string): string => {
-  const numberParts = splitNum(number);
+  const numberParts = preprocessNumber(number);
   if (numberParts.isInfinity) {
     return numberParts.isNegative ? "-∞" : "∞";
   }
