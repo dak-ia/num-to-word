@@ -12,7 +12,7 @@ export const splitNum = (number: number | string): NumArray => {
     throw new TypeError("Invalid argument: expected a number or string");
   }
 
-  if (typeof number === "number" && !isFinite(number)) {
+  if (number === Infinity || number === -Infinity) {
     return { integer: "", decimal: "", isNegative: number < 0, isInfinity: true };
   }
 
