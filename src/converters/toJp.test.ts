@@ -162,12 +162,12 @@ describe("toJp", () => {
   });
 
   test("invalid input", () => {
-    expect(() => toJp("1" + "0".repeat(73))).toThrow("Overflow error: Number too large for conversion.");
-    expect(() => toJp("abc")).toThrow("Invalid input: Expected a valid number format.");
-    expect(() => toJp("")).toThrow("Invalid argument");
+    expect(() => toJp("1" + "0".repeat(73))).toThrow("Number too large for conversion.");
+    expect(() => toJp("abc")).toThrow("Expected a valid number format.");
+    expect(() => toJp("")).toThrow("Expected a number or string.");
     // @ts-expect-error - Testing invalid input
-    expect(() => toJp(null)).toThrow("Invalid argument");
+    expect(() => toJp(null)).toThrow("Expected a number or string.");
     // @ts-expect-error - Testing invalid input
-    expect(() => toJp(undefined)).toThrow("Invalid argument");
+    expect(() => toJp(undefined)).toThrow("Expected a number or string.");
   });
 });

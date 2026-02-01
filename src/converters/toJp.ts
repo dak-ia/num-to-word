@@ -1,5 +1,6 @@
 import { jpLargeUnits, jpOnesPlace } from "../dictionaries";
 import { preprocessNumber, replaceIntUnitJp, splitTo1Digit, splitTo4Digits } from "../utils";
+import { createOverflowError } from "../errors";
 
 /**
  * Converts a number to Japanese kanji.
@@ -17,7 +18,7 @@ export const toJp = (number: number | string): string => {
     return numberParts.isNegative ? "負の無限" : "無限";
   }
   if (numberParts.integer.length > jpLargeUnits.length * 4) {
-    throw new Error("Overflow error: Number too large for conversion.");
+    throw createOverflowError();
   }
   // ゼロの特別処理（小数部がない場合のみ）
   if (numberParts.integer === "0" && numberParts.decimal === "") {

@@ -1,15 +1,16 @@
+import { createInvalidArgumentError, createInvalidInputError } from "../errors";
 import type { NumArray } from "../types/index";
 
 /**
  * Preprocesses a number input: validates, normalizes, and splits into components.
  * @param number - The number to preprocess
  * @returns An object with integer, decimal, isNegative, and isInfinity properties
- * @throws {TypeError} If null, undefined, or empty
- * @throws {Error} If not a valid number
+ * @throws {InvalidArgumentError} If null, undefined, or empty
+ * @throws {InvalidInputError} If not a valid number or exponential notation
  */
 export const preprocessNumber = (number: number | string): NumArray => {
   if (number === null || number === undefined || number === "") {
-    throw new TypeError("Invalid argument: Expected a number or string.");
+    throw createInvalidArgumentError();
   }
 
   const infinityResult = checkInfinity(number);
@@ -89,7 +90,7 @@ const checkInfinity = (number: number | string): NumArray | null => {
  * @internal
  * @param number - The number to normalize
  * @returns Normalized numeric string
- * @throws {Error} If not a valid number format
+ * @throws {InvalidInputError} If not a valid number format
  */
 const convertToNumericString = (number: number | string): string => {
   let result = number
@@ -109,7 +110,7 @@ const convertToNumericString = (number: number | string): string => {
     .replace(/\s/g, "")
     .trim();
   if (!numberFormatValidator(result)) {
-    throw new Error("Invalid input: Expected a valid number format.");
+    throw createInvalidInputError();
   }
 
   result = expandExponentialNotation(result).replace("+", "");
@@ -136,7 +137,7 @@ const convertToNumericString = (number: number | string): string => {
  * @internal
  * @param number - The string that may contain exponential notation (e.g., "1.23e5")
  * @returns Expanded number string without exponential notation
- * @throws {Error} If invalid exponential notation format
+ * @throws {InvalidInputError} If invalid exponential notation format
  */
 const expandExponentialNotation = (number: string): string => {
   if (!/[eE]/.test(number)) {
@@ -148,7 +149,7 @@ const expandExponentialNotation = (number: string): string => {
 
   const match = absNumber.match(/^([0-9.]+)[eE]([+-]?[0-9]+)$/);
   if (!match) {
-    throw new Error("Invalid input: Expected a valid exponential notation.");
+    throw createInvalidInputError("Expected a valid exponential notation.");
   }
 
   const mantissa = match[1];

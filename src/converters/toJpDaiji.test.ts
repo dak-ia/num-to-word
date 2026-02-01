@@ -160,12 +160,12 @@ describe("toJpDaiji", () => {
   });
 
   test("invalid input", () => {
-    expect(() => toJpDaiji("1" + "0".repeat(73))).toThrow("Overflow error: Number too large for conversion.");
-    expect(() => toJpDaiji("abc")).toThrow("Invalid input: Expected a valid number format.");
-    expect(() => toJpDaiji("")).toThrow("Invalid argument");
+    expect(() => toJpDaiji("1" + "0".repeat(73))).toThrow("Number too large for conversion.");
+    expect(() => toJpDaiji("abc")).toThrow("Expected a valid number format.");
+    expect(() => toJpDaiji("")).toThrow("Expected a number or string.");
     // @ts-expect-error - Testing invalid input
-    expect(() => toJpDaiji(null)).toThrow("Invalid argument");
+    expect(() => toJpDaiji(null)).toThrow("Expected a number or string.");
     // @ts-expect-error - Testing invalid input
-    expect(() => toJpDaiji(undefined)).toThrow("Invalid argument");
+    expect(() => toJpDaiji(undefined)).toThrow("Expected a number or string.");
   });
 });

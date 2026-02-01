@@ -1,4 +1,5 @@
 import { preprocessNumber, splitTo3Digits } from "../utils";
+import { createOverflowError } from "../errors";
 import { siSymbols } from "../dictionaries";
 
 /**
@@ -17,7 +18,7 @@ export const toSi = (number: number | string): string => {
     return numberParts.isNegative ? "-∞" : "∞";
   }
   if (numberParts.integer.length > (siSymbols.length + 1) * 3) {
-    throw new Error("Overflow error: Number too large for conversion.");
+    throw createOverflowError();
   }
   const prefix = numberParts.isNegative ? "-" : "";
   numberParts.integer = numberParts.integer.replace(/^0+/, "") || "0";

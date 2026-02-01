@@ -1,4 +1,5 @@
 import { enHundredsPlace, enOnesPlace, enTens, enTensPlace } from "../dictionaries";
+import { createOverflowError } from "../errors";
 
 /**
  * Converts a 1-3 digit number string to English words.
@@ -10,7 +11,7 @@ import { enHundredsPlace, enOnesPlace, enTens, enTensPlace } from "../dictionari
 export const replaceIntUnitEn = (number: string): string => {
   const splitDigits: string[] = number.split("");
   if (splitDigits.length > 3) {
-    throw new Error("Overflow error: Number too large for conversion.");
+    throw createOverflowError();
   }
   let result: string = "";
   if (splitDigits.length === 1) {

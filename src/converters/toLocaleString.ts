@@ -1,3 +1,4 @@
+import { createInvalidArgumentError, createInvalidLocaleError } from "../errors";
 import { toEn } from "./toEn";
 import { toJp } from "./toJp";
 import { toJpDaiji } from "./toJpDaiji";
@@ -24,7 +25,7 @@ export const toLocaleString = (locale: string, number: number | string): string 
     number === undefined ||
     number === ""
   ) {
-    throw new TypeError("Invalid argument: Expected a number or string.");
+    throw createInvalidArgumentError();
   }
 
   const localeLower: string = locale.toLowerCase();
@@ -38,6 +39,6 @@ export const toLocaleString = (locale: string, number: number | string): string 
   } else if (localeLower === "jpdaiji" || localeLower === "daiji") {
     return toJpDaiji(number);
   } else {
-    throw new Error("Invalid locale: Unsupported.");
+    throw createInvalidLocaleError();
   }
 };

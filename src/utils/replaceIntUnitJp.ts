@@ -1,4 +1,5 @@
 import { jpBasicUnits, jpOnesPlace } from "../dictionaries";
+import { createOverflowError } from "../errors";
 
 /**
  * Converts a 1-4 digit number string to Japanese kanji (十, 百, 千).
@@ -10,7 +11,7 @@ import { jpBasicUnits, jpOnesPlace } from "../dictionaries";
 export const replaceIntUnitJp = (number: string): string => {
   const splitDigits: string[] = number.split("").reverse();
   if (splitDigits.length > 4) {
-    throw new Error("Overflow error: Number too large for conversion.");
+    throw createOverflowError();
   }
   let result: string = "";
   for (let i = 0; i < splitDigits.length; i++) {

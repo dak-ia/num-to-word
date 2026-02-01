@@ -47,7 +47,7 @@ describe("replaceIntUnitEn", () => {
   });
 
   test("overflow", () => {
-    expect(() => replaceIntUnitEn("1000")).toThrow("Overflow error: Number too large for conversion.");
-    expect(() => replaceIntUnitEn("9999")).toThrow("Overflow error: Number too large for conversion.");
+    expect(() => replaceIntUnitEn("1000")).toThrow("Number too large for conversion.");
+    expect(() => replaceIntUnitEn("9999")).toThrow("Number too large for conversion.");
   });
 });

@@ -28,20 +28,20 @@ describe("toLocaleString", () => {
   });
 
   test("throws error for invalid locale", () => {
-    expect(() => toLocaleString("invalid", "123")).toThrow("Invalid locale: Unsupported.");
-    expect(() => toLocaleString("fr", "123")).toThrow("Invalid locale: Unsupported.");
-    expect(() => toLocaleString("", "123")).toThrow("Invalid argument");
+    expect(() => toLocaleString("invalid", "123")).toThrow("Unsupported locale.");
+    expect(() => toLocaleString("fr", "123")).toThrow("Unsupported locale.");
+    expect(() => toLocaleString("", "123")).toThrow("Expected a number or string.");
     // @ts-expect-error - Testing invalid input
-    expect(() => toLocaleString(null, "123")).toThrow("Invalid argument");
+    expect(() => toLocaleString(null, "123")).toThrow("Expected a number or string.");
     // @ts-expect-error - Testing invalid input
-    expect(() => toLocaleString(undefined, "123")).toThrow("Invalid argument");
+    expect(() => toLocaleString(undefined, "123")).toThrow("Expected a number or string.");
   });
 
   test("throws error for empty number", () => {
-    expect(() => toLocaleString("en", "")).toThrow("Invalid argument");
+    expect(() => toLocaleString("en", "")).toThrow("Expected a number or string.");
     // @ts-expect-error - Testing invalid input
-    expect(() => toLocaleString("en", null)).toThrow("Invalid argument");
+    expect(() => toLocaleString("en", null)).toThrow("Expected a number or string.");
     // @ts-expect-error - Testing invalid input
-    expect(() => toLocaleString("en", undefined)).toThrow("Invalid argument");
+    expect(() => toLocaleString("en", undefined)).toThrow("Expected a number or string.");
   });
 });

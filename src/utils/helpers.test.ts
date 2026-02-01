@@ -288,38 +288,38 @@ describe("preprocessNumber", () => {
   });
 
   test("invalid input", () => {
-    expect(() => preprocessNumber("")).toThrow("Invalid argument: Expected a number or string.");
+    expect(() => preprocessNumber("")).toThrow("Expected a number or string.");
     // @ts-expect-error - Testing invalid input
-    expect(() => preprocessNumber(null)).toThrow("Invalid argument: Expected a number or string.");
+    expect(() => preprocessNumber(null)).toThrow("Expected a number or string.");
     // @ts-expect-error - Testing invalid input
-    expect(() => preprocessNumber(undefined)).toThrow("Invalid argument: Expected a number or string.");
-    expect(() => preprocessNumber(NaN)).toThrow("Invalid input: Expected a valid number format.");
-    expect(() => preprocessNumber("abc")).toThrow("Invalid input: Expected a valid number format.");
-    expect(() => preprocessNumber("12a34")).toThrow("Invalid input: Expected a valid number format.");
-    expect(() => preprocessNumber("1.2.3")).toThrow("Invalid input: Expected a valid number format.");
-    expect(() => preprocessNumber(".")).toThrow("Invalid input: Expected a valid number format.");
-    expect(() => preprocessNumber("..")).toThrow("Invalid input: Expected a valid number format.");
-    expect(() => preprocessNumber("--1")).toThrow("Invalid input: Expected a valid number format.");
-    expect(() => preprocessNumber("---1")).toThrow("Invalid input: Expected a valid number format.");
-    expect(() => preprocessNumber("1-1")).toThrow("Invalid input: Expected a valid number format.");
-    expect(() => preprocessNumber("1-1-1")).toThrow("Invalid input: Expected a valid number format.");
-    expect(() => preprocessNumber("....1")).toThrow("Invalid input: Expected a valid number format.");
-    expect(() => preprocessNumber("15201..411")).toThrow("Invalid input: Expected a valid number format.");
-    expect(() => preprocessNumber("152.01.411")).toThrow("Invalid input: Expected a valid number format.");
-    expect(() => preprocessNumber("--41561")).toThrow("Invalid input: Expected a valid number format.");
-    expect(() => preprocessNumber("531.-4153")).toThrow("Invalid input: Expected a valid number format.");
-    expect(() => preprocessNumber("--..4615")).toThrow("Invalid input: Expected a valid number format.");
-    expect(() => preprocessNumber(".-415")).toThrow("Invalid input: Expected a valid number format.");
-    expect(() => preprocessNumber("6465-")).toThrow("Invalid input: Expected a valid number format.");
-    expect(() => preprocessNumber("45456--")).toThrow("Invalid input: Expected a valid number format.");
-    expect(() => preprocessNumber("515-45")).toThrow("Invalid input: Expected a valid number format.");
-    expect(() => preprocessNumber("5-15-45")).toThrow("Invalid input: Expected a valid number format.");
+    expect(() => preprocessNumber(undefined)).toThrow("Expected a number or string.");
+    expect(() => preprocessNumber(NaN)).toThrow("Expected a valid number format.");
+    expect(() => preprocessNumber("abc")).toThrow("Expected a valid number format.");
+    expect(() => preprocessNumber("12a34")).toThrow("Expected a valid number format.");
+    expect(() => preprocessNumber("1.2.3")).toThrow("Expected a valid number format.");
+    expect(() => preprocessNumber(".")).toThrow("Expected a valid number format.");
+    expect(() => preprocessNumber("..")).toThrow("Expected a valid number format.");
+    expect(() => preprocessNumber("--1")).toThrow("Expected a valid number format.");
+    expect(() => preprocessNumber("---1")).toThrow("Expected a valid number format.");
+    expect(() => preprocessNumber("1-1")).toThrow("Expected a valid number format.");
+    expect(() => preprocessNumber("1-1-1")).toThrow("Expected a valid number format.");
+    expect(() => preprocessNumber("....1")).toThrow("Expected a valid number format.");
+    expect(() => preprocessNumber("15201..411")).toThrow("Expected a valid number format.");
+    expect(() => preprocessNumber("152.01.411")).toThrow("Expected a valid number format.");
+    expect(() => preprocessNumber("--41561")).toThrow("Expected a valid number format.");
+    expect(() => preprocessNumber("531.-4153")).toThrow("Expected a valid number format.");
+    expect(() => preprocessNumber("--..4615")).toThrow("Expected a valid number format.");
+    expect(() => preprocessNumber(".-415")).toThrow("Expected a valid number format.");
+    expect(() => preprocessNumber("6465-")).toThrow("Expected a valid number format.");
+    expect(() => preprocessNumber("45456--")).toThrow("Expected a valid number format.");
+    expect(() => preprocessNumber("515-45")).toThrow("Expected a valid number format.");
+    expect(() => preprocessNumber("5-15-45")).toThrow("Expected a valid number format.");
 
-    expect(() => preprocessNumber("e5")).toThrow("Invalid input: Expected a valid exponential notation.");
-    expect(() => preprocessNumber("1e")).toThrow("Invalid input: Expected a valid number format.");
-    expect(() => preprocessNumber("1.23ee5")).toThrow("Invalid input: Expected a valid number format.");
-    expect(() => preprocessNumber("1.23e+")).toThrow("Invalid input: Expected a valid number format.");
-    expect(() => preprocessNumber("1.23e-")).toThrow("Invalid input: Expected a valid number format.");
+    expect(() => preprocessNumber("e5")).toThrow("Expected a valid exponential notation.");
+    expect(() => preprocessNumber("1e")).toThrow("Expected a valid number format.");
+    expect(() => preprocessNumber("1.23ee5")).toThrow("Expected a valid number format.");
+    expect(() => preprocessNumber("1.23e+")).toThrow("Expected a valid number format.");
+    expect(() => preprocessNumber("1.23e-")).toThrow("Expected a valid number format.");
   });
 });
 

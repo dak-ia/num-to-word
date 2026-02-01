@@ -1,5 +1,6 @@
 import { enLargeUnits, enOnesPlace } from "../dictionaries";
 import { preprocessNumber, replaceIntUnitEn, splitTo1Digit, splitTo3Digits } from "../utils";
+import { createOverflowError } from "../errors";
 
 /**
  * Converts a number to English words.
@@ -17,7 +18,7 @@ export const toEn = (number: number | string): string => {
     return numberParts.isNegative ? "Minus infinity" : "Infinity";
   }
   if (numberParts.integer.length > (Object.values(enLargeUnits).length - 1) * 3) {
-    throw new Error("Overflow error: Number too large for conversion.");
+    throw createOverflowError();
   }
   // 連続ゼロを単一の0として扱う（小数部がない場合のみ）
   if (/^0+$/.test(numberParts.integer) && numberParts.decimal === "") {
