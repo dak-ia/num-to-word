@@ -55,7 +55,7 @@ describe("replaceIntUnitJp", () => {
   });
 
   test("overflow", () => {
-    expect(() => replaceIntUnitJp("10000")).toThrow("Overflow");
-    expect(() => replaceIntUnitJp("99999")).toThrow("Overflow");
+    expect(() => replaceIntUnitJp("10000")).toThrow("Overflow error: Number too large for conversion.");
+    expect(() => replaceIntUnitJp("99999")).toThrow("Overflow error: Number too large for conversion.");
   });
 });

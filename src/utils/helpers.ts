@@ -9,7 +9,7 @@ import type { NumArray } from "../types/index";
  */
 export const preprocessNumber = (number: number | string): NumArray => {
   if (number === null || number === undefined || number === "") {
-    throw new TypeError("Invalid argument: expected a number or string");
+    throw new TypeError("Invalid argument: Expected a number or string.");
   }
 
   const infinityResult = checkInfinity(number);
@@ -109,7 +109,7 @@ const convertToNumericString = (number: number | string): string => {
     .replace(/\s/g, "")
     .trim();
   if (!numberFormatValidator(result)) {
-    throw new Error("NaN");
+    throw new Error("Invalid input: Expected a valid number format.");
   }
 
   result = expandExponentialNotation(result).replace("+", "");
@@ -148,7 +148,7 @@ const expandExponentialNotation = (number: string): string => {
 
   const match = absNumber.match(/^([0-9.]+)[eE]([+-]?[0-9]+)$/);
   if (!match) {
-    throw new Error("Invalid exponential notation");
+    throw new Error("Invalid input: Expected a valid exponential notation.");
   }
 
   const mantissa = match[1];

@@ -28,8 +28,8 @@ describe("toLocaleString", () => {
   });
 
   test("throws error for invalid locale", () => {
-    expect(() => toLocaleString("invalid", "123")).toThrow("Invalid locale");
-    expect(() => toLocaleString("fr", "123")).toThrow("Invalid locale");
+    expect(() => toLocaleString("invalid", "123")).toThrow("Invalid locale: Unsupported.");
+    expect(() => toLocaleString("fr", "123")).toThrow("Invalid locale: Unsupported.");
     expect(() => toLocaleString("", "123")).toThrow("Invalid argument");
     // @ts-expect-error - Testing invalid input
     expect(() => toLocaleString(null, "123")).toThrow("Invalid argument");

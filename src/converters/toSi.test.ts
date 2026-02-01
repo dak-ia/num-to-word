@@ -56,8 +56,8 @@ describe("toSi", () => {
   });
 
   test("invalid input", () => {
-    expect(() => toSi("1" + "0".repeat(33))).toThrow("Overflow");
-    expect(() => toSi("abc")).toThrow("NaN");
+    expect(() => toSi("1" + "0".repeat(33))).toThrow("Overflow error: Number too large for conversion.");
+    expect(() => toSi("abc")).toThrow("Invalid input: Expected a valid number format.");
     expect(() => toSi("")).toThrow("Invalid argument");
     // @ts-expect-error - Testing invalid input
     expect(() => toSi(null)).toThrow("Invalid argument");

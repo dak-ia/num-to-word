@@ -17,7 +17,7 @@ export const toJp = (number: number | string): string => {
     return numberParts.isNegative ? "負の無限" : "無限";
   }
   if (numberParts.integer.length > jpLargeUnits.length * 4) {
-    throw new Error("Overflow");
+    throw new Error("Overflow error: Number too large for conversion.");
   }
   // ゼロの特別処理（小数部がない場合のみ）
   if (numberParts.integer === "0" && numberParts.decimal === "") {

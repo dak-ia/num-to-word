@@ -171,8 +171,8 @@ describe("toEn", () => {
   });
 
   test("invalid input", () => {
-    expect(() => toEn("1" + "0".repeat(309))).toThrow("Overflow");
-    expect(() => toEn("abc")).toThrow("NaN");
+    expect(() => toEn("1" + "0".repeat(309))).toThrow("Overflow error: Number too large for conversion.");
+    expect(() => toEn("abc")).toThrow("Invalid input: Expected a valid number format.");
     expect(() => toEn("")).toThrow("Invalid argument");
     // @ts-expect-error - Testing invalid input
     expect(() => toEn(null)).toThrow("Invalid argument");

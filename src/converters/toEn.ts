@@ -17,7 +17,7 @@ export const toEn = (number: number | string): string => {
     return numberParts.isNegative ? "Minus infinity" : "Infinity";
   }
   if (numberParts.integer.length > (Object.values(enLargeUnits).length - 1) * 3) {
-    throw new Error("Overflow");
+    throw new Error("Overflow error: Number too large for conversion.");
   }
   // 連続ゼロを単一の0として扱う（小数部がない場合のみ）
   if (/^0+$/.test(numberParts.integer) && numberParts.decimal === "") {

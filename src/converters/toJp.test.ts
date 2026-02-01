@@ -162,8 +162,8 @@ describe("toJp", () => {
   });
 
   test("invalid input", () => {
-    expect(() => toJp("1" + "0".repeat(73))).toThrow("Overflow");
-    expect(() => toJp("abc")).toThrow("NaN");
+    expect(() => toJp("1" + "0".repeat(73))).toThrow("Overflow error: Number too large for conversion.");
+    expect(() => toJp("abc")).toThrow("Invalid input: Expected a valid number format.");
     expect(() => toJp("")).toThrow("Invalid argument");
     // @ts-expect-error - Testing invalid input
     expect(() => toJp(null)).toThrow("Invalid argument");

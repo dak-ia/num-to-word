@@ -10,7 +10,7 @@ import { jpBasicUnits, jpOnesPlace } from "../dictionaries";
 export const replaceIntUnitJp = (number: string): string => {
   const splitDigits: string[] = number.split("").reverse();
   if (splitDigits.length > 4) {
-    throw new Error("Overflow");
+    throw new Error("Overflow error: Number too large for conversion.");
   }
   let result: string = "";
   for (let i = 0; i < splitDigits.length; i++) {

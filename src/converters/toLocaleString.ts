@@ -24,7 +24,7 @@ export const toLocaleString = (locale: string, number: number | string): string 
     number === undefined ||
     number === ""
   ) {
-    throw new TypeError("Invalid argument: expected a number or string");
+    throw new TypeError("Invalid argument: Expected a number or string.");
   }
 
   const localeLower: string = locale.toLowerCase();
@@ -38,6 +38,6 @@ export const toLocaleString = (locale: string, number: number | string): string 
   } else if (localeLower === "jpdaiji" || localeLower === "daiji") {
     return toJpDaiji(number);
   } else {
-    throw new Error("Invalid locale");
+    throw new Error("Invalid locale: Unsupported.");
   }
 };

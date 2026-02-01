@@ -160,8 +160,8 @@ describe("toJpDaiji", () => {
   });
 
   test("invalid input", () => {
-    expect(() => toJpDaiji("1" + "0".repeat(73))).toThrow("Overflow");
-    expect(() => toJpDaiji("abc")).toThrow("NaN");
+    expect(() => toJpDaiji("1" + "0".repeat(73))).toThrow("Overflow error: Number too large for conversion.");
+    expect(() => toJpDaiji("abc")).toThrow("Invalid input: Expected a valid number format.");
     expect(() => toJpDaiji("")).toThrow("Invalid argument");
     // @ts-expect-error - Testing invalid input
     expect(() => toJpDaiji(null)).toThrow("Invalid argument");
