@@ -171,12 +171,12 @@ describe("toEn", () => {
   });
 
   test("invalid input", () => {
-    expect(() => toEn("1" + "0".repeat(309))).toThrow("Overflow");
-    expect(() => toEn("abc")).toThrow("NaN");
-    expect(() => toEn("")).toThrow("Invalid argument");
+    expect(() => toEn("1" + "0".repeat(309))).toThrow("Number too large for conversion.");
+    expect(() => toEn("abc")).toThrow("Expected a valid number format.");
+    expect(() => toEn("")).toThrow("Expected a number or string.");
     // @ts-expect-error - Testing invalid input
-    expect(() => toEn(null)).toThrow("Invalid argument");
+    expect(() => toEn(null)).toThrow("Expected a number or string.");
     // @ts-expect-error - Testing invalid input
-    expect(() => toEn(undefined)).toThrow("Invalid argument");
+    expect(() => toEn(undefined)).toThrow("Expected a number or string.");
   });
 });
