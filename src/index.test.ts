@@ -1,4 +1,4 @@
-import NumToWord from "./index";
+import NumToWord, { numToWordEn, numToWordJp, numToWordJpDaiji, numToWordLocale, numToWordSi } from "./index";
 
 describe("index", () => {
   test("exports version", () => {
@@ -8,25 +8,30 @@ describe("index", () => {
   test("exports toEn function", () => {
     expect(typeof NumToWord.toEn).toBe("function");
     expect(NumToWord.toEn("123")).toBe("One hundred twenty-three");
+    expect(numToWordEn("123")).toBe("One hundred twenty-three");
   });
 
   test("exports toJp function", () => {
     expect(typeof NumToWord.toJp).toBe("function");
     expect(NumToWord.toJp("123")).toBe("百二十三");
+    expect(numToWordJp("123")).toBe("百二十三");
   });
 
   test("exports toJpDaiji function", () => {
     expect(typeof NumToWord.toJpDaiji).toBe("function");
     expect(NumToWord.toJpDaiji("123")).toBe("壱陌弐拾参");
+    expect(numToWordJpDaiji("123")).toBe("壱陌弐拾参");
   });
 
   test("exports toSi function", () => {
     expect(typeof NumToWord.toSi).toBe("function");
     expect(NumToWord.toSi("1000")).toBe("1K");
+    expect(numToWordSi("1000")).toBe("1K");
   });
 
   test("exports toLocaleString function", () => {
     expect(typeof NumToWord.toLocaleString).toBe("function");
     expect(NumToWord.toLocaleString("en", "123")).toBe("One hundred twenty-three");
+    expect(numToWordLocale("en", "123")).toBe("One hundred twenty-three");
   });
 });
