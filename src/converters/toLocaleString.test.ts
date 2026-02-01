@@ -1,4 +1,4 @@
-import { toLocaleString } from "./toLocaleString";
+import { localeMap, toLocaleString } from "./toLocaleString";
 
 describe("toLocaleString", () => {
   test("routes to Si converter", () => {
@@ -43,5 +43,11 @@ describe("toLocaleString", () => {
     expect(() => toLocaleString("en", null)).toThrow("Expected a number or string.");
     // @ts-expect-error - Testing invalid input
     expect(() => toLocaleString("en", undefined)).toThrow("Expected a number or string.");
+  });
+
+  test("localeMap exported and valid", () => {
+    expect(Array.isArray(localeMap)).toBe(true);
+    expect(localeMap.some((e) => e.keys.includes("en") && typeof e.fn === "function")).toBe(true);
+    expect(localeMap.some((e) => e.keys.includes("jp") && typeof e.fn === "function")).toBe(true);
   });
 });
