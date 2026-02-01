@@ -29,16 +29,18 @@ export const toLocaleString = (locale: string, number: number | string): string 
   }
 
   const localeLower: string = locale.toLowerCase();
-
-  if (localeLower === "si") {
-    return toSi(number);
-  } else if (localeLower === "en" || localeLower === "english") {
-    return toEn(number);
-  } else if (localeLower === "jp" || localeLower === "japanese") {
-    return toJp(number);
-  } else if (localeLower === "jpdaiji" || localeLower === "daiji") {
-    return toJpDaiji(number);
-  } else {
-    throw createInvalidLocaleError();
-  }
+  const entry = localeMap.find((e) => e.keys.includes(localeLower));
+  if (entry) return entry.fn(number);
+  throw createInvalidLocaleError();
 };
+
+interface LocaleEntry {
+  keys: string[];
+  fn: (_: number | string) => string;
+}
+export const localeMap: LocaleEntry[] = [
+  { keys: ["si"], fn: toSi },
+  { keys: ["en", "english"], fn: toEn },
+  { keys: ["jp", "japanese"], fn: toJp },
+  { keys: ["jpdaiji", "daiji"], fn: toJpDaiji },
+];
