@@ -1,13 +1,17 @@
-import { createInvalidLocaleError } from "./InvalidLocaleError";
+import { InvalidLocaleError } from "./InvalidLocaleError";
 
-describe("createInvalidLocaleError", () => {
-  it("should create an InvalidLocaleError with default message", () => {
-    const error = createInvalidLocaleError();
+describe("InvalidLocaleError", () => {
+  it("should create with default message", () => {
+    const error = new InvalidLocaleError();
     expect(error.name).toBe("InvalidLocaleError");
     expect(error.message).toBe("Unsupported locale.");
+    expect(error).toBeInstanceOf(Error);
   });
-  it("should create an InvalidLocaleError with custom message", () => {
-    const error = createInvalidLocaleError("custom");
+
+  it("should create with custom message", () => {
+    const error = new InvalidLocaleError("custom");
+    expect(error.name).toBe("InvalidLocaleError");
     expect(error.message).toBe("custom");
+    expect(error).toBeInstanceOf(Error);
   });
 });

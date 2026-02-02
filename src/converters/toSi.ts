@@ -1,12 +1,12 @@
 import { preprocessNumber, splitTo3Digits } from "../utils";
-import { createOverflowError } from "../errors";
+import { OverflowError } from "../errors";
 import { siSymbols } from "../dictionaries";
 
 /**
  * Converts a number to SI prefix notation (K, M, G, etc.).
  * @param number - The number to convert
  * @returns SI prefix notation
- * @throws {Error} If invalid or overflow
+ * @throws {OverflowError} If invalid or overflow
  * @example
  * toSi(1234) // "1.234K"
  * toSi(1234567) // "1.234567M"
@@ -18,7 +18,7 @@ export const toSi = (number: number | string): string => {
     return numberParts.isNegative ? "-∞" : "∞";
   }
   if (numberParts.integer.length > (siSymbols.length + 1) * 3) {
-    throw createOverflowError();
+    throw new OverflowError();
   }
   const prefix = numberParts.isNegative ? "-" : "";
   numberParts.integer = numberParts.integer.replace(/^0+/, "") || "0";

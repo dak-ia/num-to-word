@@ -1,6 +1,9 @@
-import type { NumToWordError } from "../types";
-import { createNumToWordError } from "./createNumToWordError";
+import { NumToWordError } from "../constants";
+import { NumToWordErrorBase } from "./NumToWordErrorBase";
 
-export function createInvalidLocaleError(message = "Unsupported locale."): NumToWordError {
-  return createNumToWordError("InvalidLocaleError", message);
+export class InvalidLocaleError extends NumToWordErrorBase {
+  public override name: NumToWordError = NumToWordError.InvalidLocaleError;
+  constructor(message = "Unsupported locale.") {
+    super(message);
+  }
 }

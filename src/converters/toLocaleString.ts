@@ -1,4 +1,4 @@
-import { createInvalidArgumentError, createInvalidLocaleError } from "../errors";
+import { InvalidArgumentError, InvalidLocaleError } from "../errors";
 import { toEn } from "./toEn";
 import { toJp } from "./toJp";
 import { toJpDaiji } from "./toJpDaiji";
@@ -9,8 +9,8 @@ import { toSi } from "./toSi";
  * @param locale - Locale identifier ("en", "jp", "jpdaiji", "si")
  * @param number - The number to convert
  * @returns Word representation in the specified locale
- * @throws {TypeError} If invalid arguments
- * @throws {Error} If unsupported locale
+ * @throws {InvalidArgumentError} If invalid arguments
+ * @throws {InvalidLocaleError} If unsupported locale
  * @example
  * toLocaleString("en", 123) // "One Hundred Twenty Three"
  * toLocaleString("jp", 123) // "百二十三"
@@ -25,13 +25,13 @@ export const toLocaleString = (locale: string, number: number | string): string 
     number === undefined ||
     number === ""
   ) {
-    throw createInvalidArgumentError();
+    throw new InvalidArgumentError();
   }
 
   const localeLower: string = locale.toLowerCase();
   const entry = localeMap.find((e) => e.keys.includes(localeLower));
   if (entry) return entry.fn(number);
-  throw createInvalidLocaleError();
+  throw new InvalidLocaleError();
 };
 
 interface LocaleEntry {

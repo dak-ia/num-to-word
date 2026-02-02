@@ -1,17 +1,17 @@
 import { enHundredsPlace, enOnesPlace, enTens, enTensPlace } from "../dictionaries";
-import { createOverflowError } from "../errors";
+import { OverflowError } from "../errors";
 
 /**
  * Converts a 1-3 digit number string to English words.
  * @internal
  * @param number - Number string (1-3 digits)
  * @returns English word representation
- * @throws {Error} If overflow
+ * @throws {OverflowError} If overflow
  */
 export const replaceIntUnitEn = (number: string): string => {
   const splitDigits: string[] = number.split("");
   if (splitDigits.length > 3) {
-    throw createOverflowError();
+    throw new OverflowError();
   }
   let result: string = "";
   if (splitDigits.length === 1) {

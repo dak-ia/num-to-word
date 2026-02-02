@@ -1,12 +1,12 @@
 import { enLargeUnits, enOnesPlace } from "../dictionaries";
 import { preprocessNumber, replaceIntUnitEn, splitTo1Digit, splitTo3Digits } from "../utils";
-import { createOverflowError } from "../errors";
+import { OverflowError } from "../errors";
 
 /**
  * Converts a number to English words.
  * @param number - The number to convert
  * @returns English word representation
- * @throws {Error} If invalid or overflow
+ * @throws {OverflowError} If invalid or overflow
  * @example
  * toEn(123) // "One Hundred Twenty Three"
  * toEn("1234.56") // "One Thousand Two Hundred Thirty Four Point Five Six"
@@ -18,7 +18,7 @@ export const toEn = (number: number | string): string => {
     return numberParts.isNegative ? "Minus infinity" : "Infinity";
   }
   if (numberParts.integer.length > (Object.values(enLargeUnits).length - 1) * 3) {
-    throw createOverflowError();
+    throw new OverflowError();
   }
   // 連続ゼロを単一の0として扱う（小数部がない場合のみ）
   if (/^0+$/.test(numberParts.integer) && numberParts.decimal === "") {

@@ -1,17 +1,17 @@
 import { jpBasicUnits, jpOnesPlace } from "../dictionaries";
-import { createOverflowError } from "../errors";
+import { OverflowError } from "../errors";
 
 /**
  * Converts a 1-4 digit number string to Japanese kanji (十, 百, 千).
  * @internal
  * @param number - Number string (1-4 digits)
  * @returns Japanese kanji representation
- * @throws {Error} If overflow
+ * @throws {OverflowError} If overflow
  */
 export const replaceIntUnitJp = (number: string): string => {
   const splitDigits: string[] = number.split("").reverse();
   if (splitDigits.length > 4) {
-    throw createOverflowError();
+    throw new OverflowError();
   }
   let result: string = "";
   for (let i = 0; i < splitDigits.length; i++) {
