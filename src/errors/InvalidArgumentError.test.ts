@@ -1,13 +1,17 @@
-import { createInvalidArgumentError } from "./InvalidArgumentError";
+import { InvalidArgumentError } from "./InvalidArgumentError";
 
-describe("createInvalidArgumentError", () => {
-  it("should create an InvalidArgumentError with default message", () => {
-    const error = createInvalidArgumentError();
+describe("InvalidArgumentError", () => {
+  it("should create with default message", () => {
+    const error = new InvalidArgumentError();
     expect(error.name).toBe("InvalidArgumentError");
     expect(error.message).toBe("Expected a number or string.");
+    expect(error).toBeInstanceOf(Error);
   });
-  it("should create an InvalidArgumentError with custom message", () => {
-    const error = createInvalidArgumentError("custom");
+
+  it("should create with custom message", () => {
+    const error = new InvalidArgumentError("custom");
+    expect(error.name).toBe("InvalidArgumentError");
     expect(error.message).toBe("custom");
+    expect(error).toBeInstanceOf(Error);
   });
 });

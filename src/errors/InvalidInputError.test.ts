@@ -1,13 +1,17 @@
-import { createInvalidInputError } from "./InvalidInputError";
+import { InvalidInputError } from "./InvalidInputError";
 
-describe("createInvalidInputError", () => {
-  it("should create an InvalidInputError with default message", () => {
-    const error = createInvalidInputError();
+describe("InvalidInputError", () => {
+  it("should create with default message", () => {
+    const error = new InvalidInputError();
     expect(error.name).toBe("InvalidInputError");
     expect(error.message).toBe("Expected a valid number format.");
+    expect(error).toBeInstanceOf(Error);
   });
-  it("should create an InvalidInputError with custom message", () => {
-    const error = createInvalidInputError("custom");
+
+  it("should create with custom message", () => {
+    const error = new InvalidInputError("custom");
+    expect(error.name).toBe("InvalidInputError");
     expect(error.message).toBe("custom");
+    expect(error).toBeInstanceOf(Error);
   });
 });

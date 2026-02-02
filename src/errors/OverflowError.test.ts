@@ -1,13 +1,17 @@
-import { createOverflowError } from "./OverflowError";
+import { OverflowError } from "./OverflowError";
 
-describe("createOverflowError", () => {
-  it("should create an OverflowError with default message", () => {
-    const error = createOverflowError();
+describe("OverflowError", () => {
+  it("should create with default message", () => {
+    const error = new OverflowError();
     expect(error.name).toBe("OverflowError");
     expect(error.message).toBe("Number too large for conversion.");
+    expect(error).toBeInstanceOf(Error);
   });
-  it("should create an OverflowError with custom message", () => {
-    const error = createOverflowError("custom");
+
+  it("should create with custom message", () => {
+    const error = new OverflowError("custom");
+    expect(error.name).toBe("OverflowError");
     expect(error.message).toBe("custom");
+    expect(error).toBeInstanceOf(Error);
   });
 });

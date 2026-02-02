@@ -1,4 +1,4 @@
-import { createInvalidArgumentError, createInvalidInputError } from "../errors";
+import { InvalidArgumentError, InvalidInputError } from "../errors";
 import type { NumArray } from "../types/index";
 
 /**
@@ -10,7 +10,7 @@ import type { NumArray } from "../types/index";
  */
 export const preprocessNumber = (number: number | string): NumArray => {
   if (number === null || number === undefined || number === "") {
-    throw createInvalidArgumentError();
+    throw new InvalidArgumentError();
   }
 
   const infinityResult = checkInfinity(number);
@@ -110,7 +110,7 @@ const convertToNumericString = (number: number | string): string => {
     .replace(/\s/g, "")
     .trim();
   if (!numberFormatValidator(result)) {
-    throw createInvalidInputError();
+    throw new InvalidInputError();
   }
 
   result = expandExponentialNotation(result).replace("+", "");
@@ -149,7 +149,7 @@ const expandExponentialNotation = (number: string): string => {
 
   const match = absNumber.match(/^([0-9.]+)[eE]([+-]?[0-9]+)$/);
   if (!match) {
-    throw createInvalidInputError("Expected a valid exponential notation.");
+    throw new InvalidInputError("Expected a valid exponential notation.");
   }
 
   const mantissa = match[1];

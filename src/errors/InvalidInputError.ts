@@ -1,6 +1,9 @@
-import type { NumToWordError } from "../types";
-import { createNumToWordError } from "./createNumToWordError";
+import { NumToWordError } from "../constants";
+import { NumToWordErrorBase } from "./NumToWordErrorBase";
 
-export function createInvalidInputError(message = "Expected a valid number format."): NumToWordError {
-  return createNumToWordError("InvalidInputError", message);
+export class InvalidInputError extends NumToWordErrorBase {
+  public override name: NumToWordError = NumToWordError.InvalidInputError;
+  constructor(message = "Expected a valid number format.") {
+    super(message);
+  }
 }

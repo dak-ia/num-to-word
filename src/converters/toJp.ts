@@ -1,12 +1,12 @@
 import { jpLargeUnits, jpOnesPlace } from "../dictionaries";
 import { preprocessNumber, replaceIntUnitJp, splitTo1Digit, splitTo4Digits } from "../utils";
-import { createOverflowError } from "../errors";
+import { OverflowError } from "../errors";
 
 /**
  * Converts a number to Japanese kanji.
  * @param number - The number to convert
  * @returns Japanese kanji representation
- * @throws {Error} If invalid or overflow
+ * @throws {OverflowError} If invalid or overflow
  * @example
  * toJp(123) // "百二十三"
  * toJp("1234.56") // "千二百三十四点五六"
@@ -18,7 +18,7 @@ export const toJp = (number: number | string): string => {
     return numberParts.isNegative ? "負の無限" : "無限";
   }
   if (numberParts.integer.length > jpLargeUnits.length * 4) {
-    throw createOverflowError();
+    throw new OverflowError();
   }
   // ゼロの特別処理（小数部がない場合のみ）
   if (numberParts.integer === "0" && numberParts.decimal === "") {
