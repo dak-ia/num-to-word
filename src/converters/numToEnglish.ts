@@ -8,11 +8,11 @@ import { OverflowError } from "../errors";
  * @returns English word representation
  * @throws {OverflowError} If invalid or overflow
  * @example
- * toEn(123) // "One Hundred Twenty Three"
- * toEn("1234.56") // "One Thousand Two Hundred Thirty Four Point Five Six"
- * toEn(Infinity) // "Infinity"
+ * numToEnglish(123) // "One Hundred Twenty Three"
+ * numToEnglish("1234.56") // "One Thousand Two Hundred Thirty Four Point Five Six"
+ * numToEnglish(Infinity) // "Infinity"
  */
-export const toEn = (number: number | string): string => {
+export const numToEnglish = (number: number | string): string => {
   const numberParts = preprocessNumber(number);
   if (numberParts.isInfinity) {
     return numberParts.isNegative ? "Minus infinity" : "Infinity";

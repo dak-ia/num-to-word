@@ -8,11 +8,11 @@ import { siSymbols } from "../dictionaries";
  * @returns SI prefix notation
  * @throws {OverflowError} If invalid or overflow
  * @example
- * toSi(1234) // "1.234K"
- * toSi(1234567) // "1.234567M"
- * toSi(Infinity) // "∞"
+ * numToSi(1234) // "1.234K"
+ * numToSi(1234567) // "1.234567M"
+ * numToSi(Infinity) // "∞"
  */
-export const toSi = (number: number | string): string => {
+export const numToSi = (number: number | string): string => {
   const numberParts = preprocessNumber(number);
   if (numberParts.isInfinity) {
     return numberParts.isNegative ? "-∞" : "∞";

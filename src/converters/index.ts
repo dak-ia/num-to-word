@@ -1,5 +1,5 @@
-export { toEn } from "./toEn";
-export { toJp } from "./toJp";
-export { toJpDaiji } from "./toJpDaiji";
-export { toLocaleString } from "./toLocaleString";
-export { toSi } from "./toSi";
+export { numToEnglish } from "./numToEnglish";
+export { numToJapanese } from "./numToJapanese";
+export { numToDaiji } from "./numToDaiji";
+export { numToWord } from "./numToWord";
+export { numToSi } from "./numToSi";
