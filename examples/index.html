@@ -13,7 +13,9 @@
       } else {
         // Load from source with HMR when using dev server
         import("../src/index.ts")
-          .then((module) => (window.NumToWord = module.default))
+          .then((module) => {
+            window.NumToWord = module;
+          })
           .catch((error) => console.error("Failed to load module:", error));
       }
     </script>
@@ -34,19 +36,19 @@
     let output = document.getElementById("output");
 
     function pressSi() {
-      output.innerText = NumToWord.toSi(Number(input.value));
+      output.innerText = NumToWord.numToSi(Number(input.value));
     }
 
     function pressEn() {
-      output.innerText = NumToWord.toEn(Number(input.value));
+      output.innerText = NumToWord.numToEnglish(Number(input.value));
     }
 
     function pressJp() {
-      output.innerText = NumToWord.toJp(Number(input.value));
+      output.innerText = NumToWord.numToJapanese(Number(input.value));
     }
 
     function pressJpDaiji() {
-      output.innerText = NumToWord.toJpDaiji(Number(input.value));
+      output.innerText = NumToWord.numToDaiji(Number(input.value));
     }
   </script>
 </html>

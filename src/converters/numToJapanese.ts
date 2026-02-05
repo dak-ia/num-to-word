@@ -8,11 +8,11 @@ import { OverflowError } from "../errors";
  * @returns Japanese kanji representation
  * @throws {OverflowError} If invalid or overflow
  * @example
- * toJp(123) // "百二十三"
- * toJp("1234.56") // "千二百三十四点五六"
- * toJp(Infinity) // "無限"
+ * numToJapanese(123) // "百二十三"
+ * numToJapanese("1234.56") // "千二百三十四点五六"
+ * numToJapanese(Infinity) // "無限"
  */
-export const toJp = (number: number | string): string => {
+export const numToJapanese = (number: number | string): string => {
   const numberParts = preprocessNumber(number);
   if (numberParts.isInfinity) {
     return numberParts.isNegative ? "負の無限" : "無限";

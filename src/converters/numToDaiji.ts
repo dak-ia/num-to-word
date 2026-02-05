@@ -1,5 +1,5 @@
 import { jpDaijiAfter, jpDaijiBefore, jpLargeUnits } from "../dictionaries";
-import { toJp } from "./toJp";
+import { numToJapanese } from "./numToJapanese";
 
 /**
  * Converts a number to formal daiji (大字) numerals used in legal documents.
@@ -7,12 +7,12 @@ import { toJp } from "./toJp";
  * @returns Japanese daiji representation
  * @throws {Error} If invalid or overflow
  * @example
- * toJpDaiji(123) // "壱百弐拾参"
- * toJpDaiji("10000") // "壱萬"
- * toJpDaiji(Infinity) // "無限"
+ * numToDaiji(123) // "壱百弐拾参"
+ * numToDaiji("10000") // "壱萬"
+ * numToDaiji(Infinity) // "無限"
  */
-export const toJpDaiji = (number: number | string): string => {
-  let result = toJp(number);
+export const numToDaiji = (number: number | string): string => {
+  let result = numToJapanese(number);
   // 大字では算用数字で1になるすべての単位の前に「壱」を明記する
   // 後年省略されるケースもあったが、ここでは明記する方式を採用
   result = result.replace(/(?<![一二三四五六七八九])(十|百|千)/gu, "一$1");
