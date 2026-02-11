@@ -28,19 +28,17 @@ Convert numbers to words in multiple languages (English, Japanese, SI prefixes).
 
 Download the latest release from the [Releases page](https://github.com/dak-ia/num-to-word/releases).
 
-<!-- **npm (公開準備中 / coming soon)**
-
 ```bash
-# 公開後に利用可能になります / Will be available after publication
-npm install num-to-word
-``` -->
+# npm (scoped package)
+npm install @dak-ia/num-to-word
+```
 
 ## 🚀 クイックスタート / Quick Start
 
 **Node.js (CommonJS)**
 
 ```javascript
-const { numToEnglish, numToJapanese, numToDaiji, numToSi, numToWord } = require("num-to-word");
+const { numToEnglish, numToJapanese, numToDaiji, numToSi, numToWord } = require("@dak-ia/num-to-word");
 
 console.log(numToEnglish(123456.789));
 // → "One hundred twenty-three thousand four hundred fifty-six point seven eight nine"
@@ -49,7 +47,7 @@ console.log(numToEnglish(123456.789));
 **Node.js (ESM)**
 
 ```javascript
-import { numToEnglish, numToJapanese, numToDaiji, numToSi, numToWord } from "num-to-word";
+import { numToEnglish, numToJapanese, numToDaiji, numToSi, numToWord } from "@dak-ia/num-to-word";
 
 console.log(numToEnglish(123456.789));
 // → "One hundred twenty-three thousand four hundred fifty-six point seven eight nine"
