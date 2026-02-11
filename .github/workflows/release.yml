@@ -44,6 +44,8 @@ jobs:
             --generate-notes \
             --fail-on-no-commits \
             --latest
+          env:
+            GH_TOKEN: ${{ github.token }}
 
       - name: Set up Node.js
         # v6
@@ -72,3 +74,5 @@ jobs:
             --base "main" \
             --title "Merge release/${{ github.event.inputs.version }} into main" \
             --body "Automated PR to merge release branch into main after release."
+          env:
+            GH_TOKEN: ${{ github.token }}
