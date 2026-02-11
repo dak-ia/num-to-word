@@ -70,10 +70,13 @@ jobs:
       - name: Build
         run: npm run build
 
-      # - name: Publish to npm
-      #   env:
-      #     NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-      #   run: npm publish --access public
+      - name: Publish to npmjs
+        run: npm publish --access public --registry=https://registry.npmjs.org
+
+      - name: Publish to GitHub Packages
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_GITHUB_TOKEN }}
+        run: npm publish --access public --registry=https://npm.pkg.github.com
 
       - name: Create PR to main
         run: |
