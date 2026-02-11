@@ -13,6 +13,7 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
+      id-token: write
     steps:
       - name: Checkout repository
         # v6
@@ -71,7 +72,7 @@ jobs:
         run: npm run build
 
       - name: Publish to npmjs
-        run: npm publish --access public --registry=https://registry.npmjs.org
+        run: npm publish --access public --registry=https://registry.npmjs.org --provenance
 
       - name: Publish to GitHub Packages
         env:
