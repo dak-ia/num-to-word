@@ -1,0 +1,74 @@
+name: Release Branch & Publish
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Release version (e.g. 0.1.0)"
+        required: true
+
+jobs:
+  release-flow:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        # v6
+        uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3
+        with:
+          ref: main
+
+      - name: Set up Git
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+
+      - name: Create release branch
+        run: |
+          git checkout -b release/${{ github.event.inputs.version }}
+
+      - name: Update package.json version
+        run: |
+          node -e "const fs=require('fs');const p=JSON.parse(fs.readFileSync('package.json','utf8'));p.version='${{ github.event.inputs.version }}';fs.writeFileSync('package.json',JSON.stringify(p,null,2)+'\n')"
+
+      - name: Commit and push release branch
+        run: |
+          git add package.json
+          git commit -m "chore: bump version to ${{ github.event.inputs.version }}"
+          git push origin release/${{ github.event.inputs.version }}
+
+      - name: Create GitHub Release
+        run: |
+          gh release create ${{ github.event.inputs.version }} \
+            --target release/${{ github.event.inputs.version }} \
+            --title ${{ github.event.inputs.version }} \
+            --generate-notes \
+            --fail-on-no-commits \
+            --latest
+
+      - name: Set up Node.js
+        # v6
+        uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903
+        with:
+          node-version-file: .tool-versions
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Test
+        run: npm run test:coverage
+
+      - name: Build
+        run: npm run build
+
+      # - name: Publish to npm
+      #   env:
+      #     NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      #   run: npm publish --access public
+
+      - name: Create PR to main
+        run: |
+          gh pr create \
+            --head "release/${{ github.event.inputs.version }}" \
+            --base "main" \
+            --title "Merge release/${{ github.event.inputs.version }} into main" \
+            --body "Automated PR to merge release branch into main after release."
