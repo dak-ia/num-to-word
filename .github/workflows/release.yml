@@ -26,6 +26,11 @@ jobs:
           git config user.name github-actions
           git config user.email github-actions@github.com
 
+      - name: Set up Node.js
+        # v6
+        uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903
+        with:
+          node-version-file: .tool-versions
       - name: Create release branch
         run: |
           git checkout -b release/${{ github.event.inputs.version }}
@@ -34,9 +39,15 @@ jobs:
         run: |
           node -e "const fs=require('fs');const p=JSON.parse(fs.readFileSync('package.json','utf8'));p.version='${{ github.event.inputs.version }}';fs.writeFileSync('package.json',JSON.stringify(p,null,2)+'\n')"
 
+      - name: Install dependencies & Update package-lock.json
+        run: npm i
+
+      - name: Test
+        run: npm run test:coverage
+
       - name: Commit and push release branch
         run: |
-          git add package.json
+          git add package.json package-lock.json
           git commit -m "chore: bump version to ${{ github.event.inputs.version }}"
           git push origin release/${{ github.event.inputs.version }}
 
@@ -55,18 +66,6 @@ jobs:
             --latest
         env:
           GH_TOKEN: ${{ github.token }}
-
-      - name: Set up Node.js
-        # v6
-        uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903
-        with:
-          node-version-file: .tool-versions
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Test
-        run: npm run test:coverage
 
       - name: Build
         run: npm run build
