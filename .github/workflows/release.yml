@@ -82,7 +82,8 @@ jobs:
               gh release create ${{ github.event.inputs.version }} \
                 --target release/${{ github.event.inputs.version }} \
                 --title ${{ github.event.inputs.version }} \
-                --generate-notes
+                --generate-notes \
+                --prerelease
             else
               gh release create ${{ github.event.inputs.version }} \
                 --target release/${{ github.event.inputs.version }} \
@@ -96,7 +97,8 @@ jobs:
                 --target release/${{ github.event.inputs.version }} \
                 --title ${{ github.event.inputs.version }} \
                 --generate-notes \
-                --notes-start-tag "$LATEST_TAG"
+                --notes-start-tag "$LATEST_TAG" \
+                --prerelease
             else
               gh release create ${{ github.event.inputs.version }} \
                 --target release/${{ github.event.inputs.version }} \
