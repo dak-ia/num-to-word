@@ -74,19 +74,39 @@ jobs:
 
       - name: Create GitHub Release
         run: |
-          if [[ "${{ github.event.inputs.version }}" == *-* ]]; then
-            gh release create ${{ github.event.inputs.version }} \
-              --target release/${{ github.event.inputs.version }} \
-              --title ${{ github.event.inputs.version }} \
-              --generate-notes \
-              --fail-on-no-commits
+          # 最新リリースタグを取得
+          LATEST_TAG=$(gh release list --limit 1 --json tagName --jq '.[0].tagName')
+          if [[ -z "$LATEST_TAG" ]]; then
+            # 初回リリースの場合は--notes-start-tagを省略
+            if [[ "${{ github.event.inputs.version }}" == *-* ]]; then
+              gh release create ${{ github.event.inputs.version }} \
+                --target release/${{ github.event.inputs.version }} \
+                --title ${{ github.event.inputs.version }} \
+                --generate-notes \
+                --prerelease
+            else
+              gh release create ${{ github.event.inputs.version }} \
+                --target release/${{ github.event.inputs.version }} \
+                --title ${{ github.event.inputs.version }} \
+                --generate-notes \
+                --latest
+            fi
           else
-            gh release create ${{ github.event.inputs.version }} \
-              --target release/${{ github.event.inputs.version }} \
-              --title ${{ github.event.inputs.version }} \
-              --generate-notes \
-              --fail-on-no-commits \
-              --latest
+            if [[ "${{ github.event.inputs.version }}" == *-* ]]; then
+              gh release create ${{ github.event.inputs.version }} \
+                --target release/${{ github.event.inputs.version }} \
+                --title ${{ github.event.inputs.version }} \
+                --generate-notes \
+                --notes-start-tag "$LATEST_TAG" \
+                --prerelease
+            else
+              gh release create ${{ github.event.inputs.version }} \
+                --target release/${{ github.event.inputs.version }} \
+                --title ${{ github.event.inputs.version }} \
+                --generate-notes \
+                --notes-start-tag "$LATEST_TAG" \
+                --latest
+            fi
           fi
         env:
           GH_TOKEN: ${{ github.token }}
