@@ -1,6 +1,6 @@
 {
   "name": "@dak-ia/num-to-word",
-  "version": "0.2.0",
+  "version": "0.2.0-test",
   "type": "module",
   "description": "Convert numbers to words in multiple languages (English, Japanese, SI prefixes)",
   "keywords": [
