@@ -35,7 +35,7 @@ npm install @dak-ia/num-to-word
 
 ## 🚀 クイックスタート / Quick Start
 
-**Node.js (CommonJS)**
+### Node.js (CommonJS)
 
 ```javascript
 const { numToEnglish, numToJapanese, numToDaiji, numToSi, numToWord } = require("@dak-ia/num-to-word");
@@ -44,7 +44,7 @@ console.log(numToEnglish(123456.789));
 // → "One hundred twenty-three thousand four hundred fifty-six point seven eight nine"
 ```
 
-**Node.js (ESM)**
+### Node.js (ESM)
 
 ```javascript
 import { numToEnglish, numToJapanese, numToDaiji, numToSi, numToWord } from "@dak-ia/num-to-word";
@@ -52,6 +52,34 @@ import { numToEnglish, numToJapanese, numToDaiji, numToSi, numToWord } from "@da
 console.log(numToEnglish(123456.789));
 // → "One hundred twenty-three thousand four hundred fifty-six point seven eight nine"
 ```
+
+### 🌐 CDN経由での利用 / Use via CDN
+
+jsDelivrやunpkgのCDNから直接ブラウザで利用できます。
+
+You can use the library directly in the browser via jsDelivr or unpkg CDN.
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/@dak-ia/num-to-word/dist/index.umd.js"></script>
+<script>
+  // グローバル変数NumToWord経由で利用できます
+  // Use via global variable NumToWord
+  const ntw = NumToWord;
+  console.log(ntw.numToWord("en", 123)); // "One hundred twenty-three"
+  console.log(ntw.numToWord("jp", 123)); // "百二十三"
+  console.log(ntw.numToWord("si", 1234)); // "1.234K"
+</script>
+```
+
+unpkgも同様に利用可能です：
+
+You can also use unpkg:
+
+```html
+<script src="https://unpkg.com/@dak-ia/num-to-word/dist/index.umd.js"></script>
+```
+
+---
 
 ## 📚 APIリファレンス / API Reference
 
