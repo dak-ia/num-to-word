@@ -1,19 +1,12 @@
-## 概要 / Summary
+## 概要・背景 / Summary & Motivation
 
-<!-- このPRで何を変更したか簡潔に説明してください -->
-<!-- Briefly describe what changes this PR introduces -->
+<!-- このPRの目的・背景・概要を簡潔に記載してください -->
+<!-- Briefly describe the purpose, background, and summary of this PR -->
 
 ## 変更内容 / Changes
 
 <!-- 具体的な変更内容をリストアップしてください -->
 <!-- List specific changes made in this PR -->
-
--
-
-## 動機・背景 / Motivation
-
-<!-- なぜこの変更が必要なのか説明してください -->
-<!-- Explain why this change is necessary -->
 
 ## テスト / Testing
 
