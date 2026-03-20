@@ -1,3 +1,4 @@
+import { ExpandExponentialErrorBase, expandExponential } from "expand-exponential";
 import { InvalidArgumentError, InvalidInputError } from "../errors";
 import type { NumArray } from "../types/index";
 
@@ -113,7 +114,14 @@ const convertToNumericString = (number: number | string): string => {
     throw new InvalidInputError();
   }
 
-  result = expandExponentialNotation(result).replace("+", "");
+  try {
+    result = expandExponential(result).replace("+", "");
+  } catch (error) {
+    if (error instanceof ExpandExponentialErrorBase) {
+      throw new InvalidInputError(error.message);
+    }
+    throw error;
+  }
 
   const isNegative = result.startsWith("-");
   if (result.slice(0, 1) === "." && !isNegative) {
@@ -126,56 +134,6 @@ const convertToNumericString = (number: number | string): string => {
     return result + "0";
   }
   return result;
-};
-
-/**
- * Expands exponential notation to a full decimal string.
- * Examples:
- * - "1.23e5" → "123000"
- * - "1.23e-2" → "0.0123"
- * - "-1.5e4" → "-15000"
- * @internal
- * @param number - The string that may contain exponential notation (e.g., "1.23e5")
- * @returns Expanded number string without exponential notation
- * @throws {InvalidInputError} If invalid exponential notation format
- */
-const expandExponentialNotation = (number: string): string => {
-  if (!/[eE]/.test(number)) {
-    return number;
-  }
-
-  const isNegative = number.startsWith("-");
-  const absNumber = isNegative ? number.slice(1) : number;
-
-  const match = absNumber.match(/^([0-9.]+)[eE]([+-]?[0-9]+)$/);
-  if (!match) {
-    throw new InvalidInputError("Expected a valid exponential notation.");
-  }
-
-  const mantissa = match[1];
-  const exponent = Number(match[2]);
-
-  const decimalPos = mantissa.indexOf(".");
-  const hasDecimal = decimalPos !== -1;
-
-  const digits = mantissa.replace(".", "");
-
-  const originalDecimalPos = hasDecimal ? decimalPos : digits.length;
-
-  const newDecimalPos = originalDecimalPos + exponent;
-
-  let result: string;
-  if (newDecimalPos <= 0) {
-    result = "0." + "0".repeat(Math.abs(newDecimalPos)) + digits;
-  } else if (newDecimalPos >= digits.length) {
-    const integerPart = (digits + "0".repeat(newDecimalPos - digits.length)).replace(/^0+/, "") || "0";
-    result = integerPart;
-  } else {
-    const integerPart = digits.slice(0, newDecimalPos).replace(/^0+/, "") || "0";
-    result = integerPart + "." + digits.slice(newDecimalPos);
-  }
-
-  return (isNegative ? "-" : "") + result;
 };
 
 /**
