@@ -1,3 +1,4 @@
+export * from "./NumToWordErrorBase";
 export * from "./OverflowError";
 export * from "./InvalidArgumentError";
 export * from "./InvalidInputError";

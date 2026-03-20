@@ -1,4 +1,17 @@
-import { numToDaiji, numToEnglish, numToJapanese, numToSi, numToWord, version } from "./index";
+import {
+  InvalidArgumentError,
+  InvalidInputError,
+  InvalidLocaleError,
+  NumToWordError,
+  NumToWordErrorBase,
+  OverflowError,
+  numToDaiji,
+  numToEnglish,
+  numToJapanese,
+  numToSi,
+  numToWord,
+  version,
+} from "./index";
 
 describe("index", () => {
   test("exports version", () => {
@@ -28,5 +41,26 @@ describe("index", () => {
   test("exports numToWord function", () => {
     expect(typeof numToWord).toBe("function");
     expect(numToWord("en", "123")).toBe("One hundred twenty-three");
+  });
+
+  test("exports error classes", () => {
+    expect(NumToWordErrorBase).toBeDefined();
+    expect(InvalidArgumentError).toBeDefined();
+    expect(InvalidInputError).toBeDefined();
+    expect(InvalidLocaleError).toBeDefined();
+    expect(OverflowError).toBeDefined();
+    expect(new InvalidArgumentError()).toBeInstanceOf(NumToWordErrorBase);
+    expect(new InvalidInputError()).toBeInstanceOf(NumToWordErrorBase);
+    expect(new InvalidLocaleError()).toBeInstanceOf(NumToWordErrorBase);
+    expect(new OverflowError()).toBeInstanceOf(NumToWordErrorBase);
+  });
+
+  test("exports NumToWordError constants", () => {
+    expect(NumToWordError).toBeDefined();
+    expect(NumToWordError.NumToWordError).toBe("NumToWordError");
+    expect(NumToWordError.InvalidArgumentError).toBe("InvalidArgumentError");
+    expect(NumToWordError.InvalidInputError).toBe("InvalidInputError");
+    expect(NumToWordError.InvalidLocaleError).toBe("InvalidLocaleError");
+    expect(NumToWordError.OverflowError).toBe("OverflowError");
   });
 });
