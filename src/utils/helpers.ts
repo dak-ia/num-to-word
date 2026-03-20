@@ -1,6 +1,6 @@
-import { ExpandExponentialErrorBase, expandExponential } from "expand-exponential";
 import { InvalidArgumentError, InvalidInputError } from "../errors";
 import type { NumArray } from "../types/index";
+import { expandExponential } from "expand-exponential";
 
 /**
  * Preprocesses a number input: validates, normalizes, and splits into components.
@@ -114,14 +114,7 @@ const convertToNumericString = (number: number | string): string => {
     throw new InvalidInputError();
   }
 
-  try {
-    result = expandExponential(result).replace("+", "");
-  } catch (error) {
-    if (error instanceof ExpandExponentialErrorBase) {
-      throw new InvalidInputError(error.message);
-    }
-    throw error;
-  }
+  result = expandExponential(result).replace("+", "");
 
   const isNegative = result.startsWith("-");
   if (result.slice(0, 1) === "." && !isNegative) {
