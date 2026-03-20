@@ -36,6 +36,10 @@ export default defineConfig(({ command }) => {
         },
         outDir: "dist",
         emptyOutDir: true,
+        minify: "esbuild",
+        esbuild: {
+          keepNames: true,
+        },
       },
     };
   }
