@@ -1,8 +1,7 @@
-import { NumToWordError } from "../constants";
 import { NumToWordErrorBase } from "./NumToWordErrorBase";
 
 export class InvalidLocaleError extends NumToWordErrorBase {
-  public override name: NumToWordError = NumToWordError.InvalidLocaleError;
+  public override readonly name = "InvalidLocaleError";
   constructor(message = "Unsupported locale.") {
     super(message);
   }

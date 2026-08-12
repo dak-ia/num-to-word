@@ -1,17 +1,22 @@
+import { NumToWordErrorBase } from "./NumToWordErrorBase";
 import { OverflowError } from "./OverflowError";
 
 describe("OverflowError", () => {
-  it("should create with default message", () => {
-    const error = new OverflowError();
-    expect(error.name).toBe("OverflowError");
-    expect(error.message).toBe("Number too large for conversion.");
-    expect(error).toBeInstanceOf(Error);
+  test("name is OverflowError", () => {
+    expect(new OverflowError().name).toBe("OverflowError");
   });
 
-  it("should create with custom message", () => {
-    const error = new OverflowError("custom");
-    expect(error.name).toBe("OverflowError");
-    expect(error.message).toBe("custom");
+  test("falls back to the default message", () => {
+    expect(new OverflowError().message).toBe("Number too large for conversion.");
+  });
+
+  test("keeps the given message", () => {
+    expect(new OverflowError("custom").message).toBe("custom");
+  });
+
+  test("extends NumToWordErrorBase and Error", () => {
+    const error = new OverflowError();
+    expect(error).toBeInstanceOf(NumToWordErrorBase);
     expect(error).toBeInstanceOf(Error);
   });
 });

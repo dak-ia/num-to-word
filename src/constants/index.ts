@@ -1,1 +1,0 @@
-export { NumToWordError } from "./NumToWordError";

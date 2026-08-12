@@ -6,7 +6,6 @@ export {
   InvalidLocaleError,
   OverflowError,
 } from "./errors";
-export { NumToWordError } from "./constants";
 
 declare const VERSION: string;
 
