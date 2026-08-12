@@ -1,5 +1,5 @@
-export * from "./NumToWordErrorBase";
-export * from "./OverflowError";
-export * from "./InvalidArgumentError";
-export * from "./InvalidInputError";
-export * from "./InvalidLocaleError";
+export { NumToWordErrorBase } from "./NumToWordErrorBase";
+export { InvalidArgumentError } from "./InvalidArgumentError";
+export { InvalidInputError } from "./InvalidInputError";
+export { InvalidLocaleError } from "./InvalidLocaleError";
+export { OverflowError } from "./OverflowError";

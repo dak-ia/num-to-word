@@ -1,17 +1,22 @@
 import { InvalidArgumentError } from "./InvalidArgumentError";
+import { NumToWordErrorBase } from "./NumToWordErrorBase";
 
 describe("InvalidArgumentError", () => {
-  it("should create with default message", () => {
-    const error = new InvalidArgumentError();
-    expect(error.name).toBe("InvalidArgumentError");
-    expect(error.message).toBe("Expected a number or string.");
-    expect(error).toBeInstanceOf(Error);
+  test("name is InvalidArgumentError", () => {
+    expect(new InvalidArgumentError().name).toBe("InvalidArgumentError");
   });
 
-  it("should create with custom message", () => {
-    const error = new InvalidArgumentError("custom");
-    expect(error.name).toBe("InvalidArgumentError");
-    expect(error.message).toBe("custom");
+  test("falls back to the default message", () => {
+    expect(new InvalidArgumentError().message).toBe("Expected a number or string.");
+  });
+
+  test("keeps the given message", () => {
+    expect(new InvalidArgumentError("custom").message).toBe("custom");
+  });
+
+  test("extends NumToWordErrorBase and Error", () => {
+    const error = new InvalidArgumentError();
+    expect(error).toBeInstanceOf(NumToWordErrorBase);
     expect(error).toBeInstanceOf(Error);
   });
 });

@@ -1,17 +1,22 @@
 import { InvalidLocaleError } from "./InvalidLocaleError";
+import { NumToWordErrorBase } from "./NumToWordErrorBase";
 
 describe("InvalidLocaleError", () => {
-  it("should create with default message", () => {
-    const error = new InvalidLocaleError();
-    expect(error.name).toBe("InvalidLocaleError");
-    expect(error.message).toBe("Unsupported locale.");
-    expect(error).toBeInstanceOf(Error);
+  test("name is InvalidLocaleError", () => {
+    expect(new InvalidLocaleError().name).toBe("InvalidLocaleError");
   });
 
-  it("should create with custom message", () => {
-    const error = new InvalidLocaleError("custom");
-    expect(error.name).toBe("InvalidLocaleError");
-    expect(error.message).toBe("custom");
+  test("falls back to the default message", () => {
+    expect(new InvalidLocaleError().message).toBe("Unsupported locale.");
+  });
+
+  test("keeps the given message", () => {
+    expect(new InvalidLocaleError("custom").message).toBe("custom");
+  });
+
+  test("extends NumToWordErrorBase and Error", () => {
+    const error = new InvalidLocaleError();
+    expect(error).toBeInstanceOf(NumToWordErrorBase);
     expect(error).toBeInstanceOf(Error);
   });
 });
