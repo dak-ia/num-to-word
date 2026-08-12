@@ -204,7 +204,7 @@ TypeScript 型定義が含まれています。
 TypeScript definitions are included.
 
 ```typescript
-import { numToEnglish } from "num-to-word";
+import { numToEnglish } from "@dak-ia/num-to-word";
 
 const result: string = numToEnglish(123);
 ```
