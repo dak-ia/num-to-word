@@ -164,7 +164,7 @@ describe("numToJapanese", () => {
   test("invalid input", () => {
     expect(() => numToJapanese("1" + "0".repeat(73))).toThrow("Number too large for conversion.");
     expect(() => numToJapanese("abc")).toThrow("Expected a valid number format.");
-    expect(() => numToJapanese("")).toThrow("Expected a number or string.");
+    expect(() => numToJapanese("")).toThrow("Expected a valid number format.");
     // @ts-expect-error - Testing invalid input
     expect(() => numToJapanese(null)).toThrow("Expected a number or string.");
     // @ts-expect-error - Testing invalid input

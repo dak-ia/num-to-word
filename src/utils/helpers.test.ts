@@ -1,4 +1,5 @@
 import { preprocessNumber, splitTo1Digit, splitTo3Digits, splitTo4Digits } from "./helpers";
+import { InvalidArgumentError } from "../errors";
 
 describe("preprocessNumber", () => {
   test("integer only", () => {
@@ -287,12 +288,41 @@ describe("preprocessNumber", () => {
     expect(preprocessNumber("  infinity  ")).toEqual({ integer: "", decimal: "", isNegative: false, isInfinity: true });
   });
 
+  test("neither number nor string", () => {
+    // @ts-expect-error - Testing invalid input
+    expect(() => preprocessNumber(null)).toThrow(InvalidArgumentError);
+    // @ts-expect-error - Testing invalid input
+    expect(() => preprocessNumber(undefined)).toThrow(InvalidArgumentError);
+    // @ts-expect-error - Testing invalid input
+    expect(() => preprocessNumber(true)).toThrow(InvalidArgumentError);
+    // @ts-expect-error - Testing invalid input
+    expect(() => preprocessNumber({})).toThrow(InvalidArgumentError);
+    // @ts-expect-error - Testing invalid input
+    expect(() => preprocessNumber(new Date(0))).toThrow(InvalidArgumentError);
+    // @ts-expect-error - Testing invalid input
+    expect(() => preprocessNumber(parseInt)).toThrow(InvalidArgumentError);
+    // @ts-expect-error - Testing invalid input
+    expect(() => preprocessNumber(Symbol("x"))).toThrow(InvalidArgumentError);
+    // @ts-expect-error - Testing invalid input
+    expect(() => preprocessNumber(10n)).toThrow(InvalidArgumentError);
+  });
+
+  test("arrays are rejected even when they look numeric", () => {
+    // @ts-expect-error - Testing invalid input
+    expect(() => preprocessNumber([])).toThrow(InvalidArgumentError);
+    // @ts-expect-error - Testing invalid input
+    expect(() => preprocessNumber([1])).toThrow(InvalidArgumentError);
+  });
+
+  test("String / Number objects are rejected", () => {
+    // @ts-expect-error - Testing invalid input
+    expect(() => preprocessNumber(new String("123"))).toThrow(InvalidArgumentError);
+    // @ts-expect-error - Testing invalid input
+    expect(() => preprocessNumber(new Number(123))).toThrow(InvalidArgumentError);
+  });
+
   test("invalid input", () => {
-    expect(() => preprocessNumber("")).toThrow("Expected a number or string.");
-    // @ts-expect-error - Testing invalid input
-    expect(() => preprocessNumber(null)).toThrow("Expected a number or string.");
-    // @ts-expect-error - Testing invalid input
-    expect(() => preprocessNumber(undefined)).toThrow("Expected a number or string.");
+    expect(() => preprocessNumber("")).toThrow("Expected a valid number format.");
     expect(() => preprocessNumber(NaN)).toThrow("Expected a valid number format.");
     expect(() => preprocessNumber("abc")).toThrow("Expected a valid number format.");
     expect(() => preprocessNumber("12a34")).toThrow("Expected a valid number format.");

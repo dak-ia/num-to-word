@@ -58,7 +58,7 @@ describe("numToSi", () => {
   test("invalid input", () => {
     expect(() => numToSi("1" + "0".repeat(33))).toThrow("Number too large for conversion.");
     expect(() => numToSi("abc")).toThrow("Expected a valid number format.");
-    expect(() => numToSi("")).toThrow("Expected a number or string.");
+    expect(() => numToSi("")).toThrow("Expected a valid number format.");
     // @ts-expect-error - Testing invalid input
     expect(() => numToSi(null)).toThrow("Expected a number or string.");
     // @ts-expect-error - Testing invalid input
