@@ -162,7 +162,7 @@ describe("numToDaiji", () => {
   test("invalid input", () => {
     expect(() => numToDaiji("1" + "0".repeat(73))).toThrow("Number too large for conversion.");
     expect(() => numToDaiji("abc")).toThrow("Expected a valid number format.");
-    expect(() => numToDaiji("")).toThrow("Expected a number or string.");
+    expect(() => numToDaiji("")).toThrow("Expected a valid number format.");
     // @ts-expect-error - Testing invalid input
     expect(() => numToDaiji(null)).toThrow("Expected a number or string.");
     // @ts-expect-error - Testing invalid input

@@ -6,11 +6,11 @@ import { expandExponential } from "expand-exponential";
  * Preprocesses a number input: validates, normalizes, and splits into components.
  * @param number - The number to preprocess
  * @returns An object with integer, decimal, isNegative, and isInfinity properties
- * @throws {InvalidArgumentError} If null, undefined, or empty
- * @throws {InvalidInputError} If not a valid number or exponential notation
+ * @throws {InvalidArgumentError} If not a number or string
+ * @throws {InvalidInputError} If empty, or not a valid number or exponential notation
  */
 export const preprocessNumber = (number: number | string): NumArray => {
-  if (number === null || number === undefined || number === "") {
+  if (typeof number !== "number" && typeof number !== "string") {
     throw new InvalidArgumentError();
   }
 

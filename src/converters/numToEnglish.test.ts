@@ -173,7 +173,7 @@ describe("numToEnglish", () => {
   test("invalid input", () => {
     expect(() => numToEnglish("1" + "0".repeat(309))).toThrow("Number too large for conversion.");
     expect(() => numToEnglish("abc")).toThrow("Expected a valid number format.");
-    expect(() => numToEnglish("")).toThrow("Expected a number or string.");
+    expect(() => numToEnglish("")).toThrow("Expected a valid number format.");
     // @ts-expect-error - Testing invalid input
     expect(() => numToEnglish(null)).toThrow("Expected a number or string.");
     // @ts-expect-error - Testing invalid input

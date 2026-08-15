@@ -1,3 +1,4 @@
+import { InvalidArgumentError, InvalidInputError, InvalidLocaleError } from "../errors";
 import { localeMap, numToWord } from "./numToWord";
 
 describe("numToWord", () => {
@@ -27,22 +28,51 @@ describe("numToWord", () => {
     expect(numToWord("DAIJI", "123")).toBe("壱陌弐拾参");
   });
 
-  test("throws error for invalid locale", () => {
-    expect(() => numToWord("invalid", "123")).toThrow("Unsupported locale.");
-    expect(() => numToWord("fr", "123")).toThrow("Unsupported locale.");
-    expect(() => numToWord("", "123")).toThrow("Expected a number or string.");
-    // @ts-expect-error - Testing invalid input
-    expect(() => numToWord(null, "123")).toThrow("Expected a number or string.");
-    // @ts-expect-error - Testing invalid input
-    expect(() => numToWord(undefined, "123")).toThrow("Expected a number or string.");
+  test("throws error for unsupported locale", () => {
+    expect(() => numToWord("invalid", "123")).toThrow(InvalidLocaleError);
+    expect(() => numToWord("fr", "123")).toThrow(InvalidLocaleError);
+    expect(() => numToWord("", "123")).toThrow(InvalidLocaleError);
   });
 
-  test("throws error for empty number", () => {
-    expect(() => numToWord("en", "")).toThrow("Expected a number or string.");
+  test("throws error when locale is not a string", () => {
     // @ts-expect-error - Testing invalid input
-    expect(() => numToWord("en", null)).toThrow("Expected a number or string.");
+    expect(() => numToWord(null, "123")).toThrow(InvalidArgumentError);
     // @ts-expect-error - Testing invalid input
-    expect(() => numToWord("en", undefined)).toThrow("Expected a number or string.");
+    expect(() => numToWord(undefined, "123")).toThrow(InvalidArgumentError);
+    // @ts-expect-error - Testing invalid input
+    expect(() => numToWord(123, "123")).toThrow(InvalidArgumentError);
+    // @ts-expect-error - Testing invalid input
+    expect(() => numToWord(true, "123")).toThrow(InvalidArgumentError);
+    // @ts-expect-error - Testing invalid input
+    expect(() => numToWord({}, "123")).toThrow(InvalidArgumentError);
+    // @ts-expect-error - Testing invalid input
+    expect(() => numToWord(["en"], "123")).toThrow(InvalidArgumentError);
+    // @ts-expect-error - Testing invalid input
+    expect(() => numToWord(new String("en"), "123")).toThrow(InvalidArgumentError);
+    // @ts-expect-error - Testing invalid input
+    expect(() => numToWord(Symbol("en"), "123")).toThrow(InvalidArgumentError);
+    // @ts-expect-error - Testing invalid input
+    expect(() => numToWord(10n, "123")).toThrow(InvalidArgumentError);
+  });
+
+  test("locale error message names the locale, not the number", () => {
+    // @ts-expect-error - Testing invalid input
+    expect(() => numToWord(123, "123")).toThrow("Expected a string locale.");
+  });
+
+  test("throws error for invalid number", () => {
+    expect(() => numToWord("en", "")).toThrow(InvalidInputError);
+    // @ts-expect-error - Testing invalid input
+    expect(() => numToWord("en", null)).toThrow(InvalidArgumentError);
+    // @ts-expect-error - Testing invalid input
+    expect(() => numToWord("en", undefined)).toThrow(InvalidArgumentError);
+    // @ts-expect-error - Testing invalid input
+    expect(() => numToWord("en", [1])).toThrow(InvalidArgumentError);
+  });
+
+  test("locale is checked before number", () => {
+    // @ts-expect-error - Testing invalid input
+    expect(() => numToWord("fr", null)).toThrow(InvalidLocaleError);
   });
 
   test("localeMap exported and valid", () => {

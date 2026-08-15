@@ -9,7 +9,7 @@ import { numToSi } from "./numToSi";
  * @param locale - Locale identifier ("en", "jp", "jpdaiji", "si")
  * @param number - The number to convert
  * @returns Word representation in the specified locale
- * @throws {InvalidArgumentError} If invalid arguments
+ * @throws {InvalidArgumentError} If locale is not a string, or number is neither a number nor a string
  * @throws {InvalidLocaleError} If unsupported locale
  * @example
  * numToWord("en", 123) // "One Hundred Twenty Three"
@@ -17,15 +17,8 @@ import { numToSi } from "./numToSi";
  * numToWord("si", 1234) // "1.234K"
  */
 export const numToWord = (locale: string, number: number | string): string => {
-  if (
-    locale === null ||
-    locale === undefined ||
-    locale === "" ||
-    number === null ||
-    number === undefined ||
-    number === ""
-  ) {
-    throw new InvalidArgumentError();
+  if (typeof locale !== "string") {
+    throw new InvalidArgumentError("Expected a string locale.");
   }
 
   const localeLower: string = locale.toLowerCase();
