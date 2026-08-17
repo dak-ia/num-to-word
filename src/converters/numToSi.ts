@@ -17,11 +17,10 @@ export const numToSi = (number: number | string): string => {
   if (numberParts.isInfinity) {
     return numberParts.isNegative ? "-∞" : "∞";
   }
+  numberParts.integer = numberParts.integer.replace(/^0+/, "") || "0";
   if (numberParts.integer.length > (siSymbols.length + 1) * 3) {
     throw new OverflowError();
   }
-  const prefix = numberParts.isNegative ? "-" : "";
-  numberParts.integer = numberParts.integer.replace(/^0+/, "") || "0";
 
   let integerPart: string, decimalPart: string, suffix: string;
 
@@ -47,6 +46,10 @@ export const numToSi = (number: number | string): string => {
   if (decimalPart !== "") {
     decimalPart = decimalPart.replace(/0+$/, "");
   }
+
+  // 0になったら符号を削除
+  const isZero = integerPart === "0" && decimalPart === "";
+  const prefix = numberParts.isNegative && !isZero ? "-" : "";
 
   if (decimalPart !== "") {
     return prefix + integerPart + "." + decimalPart + suffix;

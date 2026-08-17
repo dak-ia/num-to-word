@@ -132,16 +132,16 @@ describe("numToDaiji", () => {
   test("numbers with zeros", () => {
     expect(numToDaiji("0")).toBe("零");
     expect(numToDaiji("00")).toBe("零");
-    expect(numToDaiji("0.0")).toBe("零・零");
-    expect(numToDaiji("0.00")).toBe("零・零零");
-    expect(numToDaiji("00.0")).toBe("零・零");
+    expect(numToDaiji("0.0")).toBe("零");
+    expect(numToDaiji("0.00")).toBe("零");
+    expect(numToDaiji("00.0")).toBe("零");
   });
 
   test("zeros in decimal part", () => {
-    expect(numToDaiji("1.0")).toBe("壱・零");
-    expect(numToDaiji("1.00")).toBe("壱・零零");
+    expect(numToDaiji("1.0")).toBe("壱");
+    expect(numToDaiji("1.00")).toBe("壱");
     expect(numToDaiji("10.01")).toBe("壱拾・零壱");
-    expect(numToDaiji("1.0000")).toBe("壱・零零零零");
+    expect(numToDaiji("1.0000")).toBe("壱");
     expect(numToDaiji("0.0001")).toBe("零・零零零壱");
     expect(numToDaiji("0.001")).toBe("零・零零壱");
   });
@@ -152,11 +152,24 @@ describe("numToDaiji", () => {
     expect(numToDaiji("-10000")).toBe("負の壱萬");
   });
 
+  test("reads out the sign of -0 as written", () => {
+    expect(numToDaiji("-0")).toBe("負の零");
+    expect(numToDaiji("-000")).toBe("負の零");
+    expect(numToDaiji("-0.0")).toBe("負の零");
+    expect(numToDaiji("0")).toBe("零");
+  });
+
   test("infinity", () => {
     expect(numToDaiji(Infinity)).toBe("無限");
     expect(numToDaiji(-Infinity)).toBe("負の無限");
     expect(numToDaiji("Infinity")).toBe("無限");
     expect(numToDaiji("-Infinity")).toBe("負の無限");
+  });
+
+  test("digit limit boundary", () => {
+    expect(() => numToDaiji("1" + "0".repeat(72))).toThrow("Number too large for conversion.");
+    expect(numToDaiji("0".repeat(73) + "5")).toBe("伍");
+    expect(() => numToDaiji("0".repeat(10) + "1" + "0".repeat(72))).toThrow("Number too large for conversion.");
   });
 
   test("invalid input", () => {

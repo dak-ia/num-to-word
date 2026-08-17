@@ -17,12 +17,10 @@ export const numToEnglish = (number: number | string): string => {
   if (numberParts.isInfinity) {
     return numberParts.isNegative ? "Minus infinity" : "Infinity";
   }
+  numberParts.integer = numberParts.integer.replace(/^0+/, "") || "0";
+  numberParts.decimal = numberParts.decimal.replace(/0+$/, "");
   if (numberParts.integer.length > (Object.values(enLargeUnits).length - 1) * 3) {
     throw new OverflowError();
-  }
-  // 連続ゼロを単一の0として扱う（小数部がない場合のみ）
-  if (/^0+$/.test(numberParts.integer) && numberParts.decimal === "") {
-    return "Zero";
   }
   const prefix = numberParts.isNegative ? "Minus " : "";
   let integerArray = splitTo3Digits(numberParts.integer);

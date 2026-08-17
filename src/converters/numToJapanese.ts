@@ -17,18 +17,16 @@ export const numToJapanese = (number: number | string): string => {
   if (numberParts.isInfinity) {
     return numberParts.isNegative ? "負の無限" : "無限";
   }
+  numberParts.integer = numberParts.integer.replace(/^0+/, "") || "0";
+  numberParts.decimal = numberParts.decimal.replace(/0+$/, "");
   if (numberParts.integer.length > jpLargeUnits.length * 4) {
     throw new OverflowError();
   }
+  const prefix = numberParts.isNegative ? "負の" : "";
   // ゼロの特別処理（小数部がない場合のみ）
   if (numberParts.integer === "0" && numberParts.decimal === "") {
-    return jpOnesPlace[0];
+    return prefix + jpOnesPlace[0];
   }
-  // 連続ゼロを単一の0として扱う
-  if (/^0+$/.test(numberParts.integer) && numberParts.decimal === "") {
-    return jpOnesPlace[0];
-  }
-  const prefix = numberParts.isNegative ? "負の" : "";
   let integerArray = splitTo4Digits(numberParts.integer);
   let decimalArray = splitTo1Digit(numberParts.decimal);
   integerArray = integerArray

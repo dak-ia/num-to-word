@@ -47,12 +47,35 @@ describe("numToSi", () => {
     expect(numToSi(-999)).toBe("-999");
   });
 
+  test("drops the sign when the value is zero", () => {
+    expect(numToSi("-0")).toBe("0");
+    expect(numToSi("-000")).toBe("0");
+    expect(numToSi(-0)).toBe("0");
+    expect(numToSi("-0.0")).toBe("0");
+    expect(numToSi("-0.00")).toBe("0");
+    expect(numToSi("-000.000")).toBe("0");
+  });
+
+  test("keeps the sign when the value is not zero", () => {
+    expect(numToSi("-0.5")).toBe("-0.5");
+    expect(numToSi("-0.0001")).toBe("-0.0001");
+    expect(numToSi("-000.500")).toBe("-0.5");
+    expect(numToSi("-0.0000001")).toBe("-0.0000001");
+  });
+
   test("infinity", () => {
     expect(numToSi(Infinity)).toBe("∞");
     expect(numToSi(-Infinity)).toBe("-∞");
     expect(numToSi("Infinity")).toBe("∞");
     expect(numToSi("-Infinity")).toBe("-∞");
     expect(numToSi("infinity")).toBe("∞");
+  });
+
+  test("digit limit boundary", () => {
+    expect(numToSi("1" + "0".repeat(32))).toBe("100Q");
+    expect(() => numToSi("1" + "0".repeat(33))).toThrow("Number too large for conversion.");
+    expect(numToSi("0".repeat(34) + "5")).toBe("5");
+    expect(() => numToSi("0".repeat(10) + "1" + "0".repeat(33))).toThrow("Number too large for conversion.");
   });
 
   test("invalid input", () => {
