@@ -132,16 +132,16 @@ describe("numToJapanese", () => {
   test("numbers with zeros", () => {
     expect(numToJapanese("0")).toBe("〇");
     expect(numToJapanese("00")).toBe("〇");
-    expect(numToJapanese("0.0")).toBe("〇・〇");
-    expect(numToJapanese("0.00")).toBe("〇・〇〇");
-    expect(numToJapanese("00.0")).toBe("〇・〇");
+    expect(numToJapanese("0.0")).toBe("〇");
+    expect(numToJapanese("0.00")).toBe("〇");
+    expect(numToJapanese("00.0")).toBe("〇");
   });
 
   test("zeros in decimal part", () => {
-    expect(numToJapanese("1.0")).toBe("一・〇");
-    expect(numToJapanese("1.00")).toBe("一・〇〇");
+    expect(numToJapanese("1.0")).toBe("一");
+    expect(numToJapanese("1.00")).toBe("一");
     expect(numToJapanese("10.01")).toBe("十・〇一");
-    expect(numToJapanese("1.0000")).toBe("一・〇〇〇〇");
+    expect(numToJapanese("1.0000")).toBe("一");
     expect(numToJapanese("0.0001")).toBe("〇・〇〇〇一");
     expect(numToJapanese("0.001")).toBe("〇・〇〇一");
   });
@@ -153,12 +153,26 @@ describe("numToJapanese", () => {
     expect(numToJapanese(-999)).toBe("負の九百九十九");
   });
 
+  test("reads out the sign of -0 as written", () => {
+    expect(numToJapanese("-0")).toBe("負の〇");
+    expect(numToJapanese("-000")).toBe("負の〇");
+    expect(numToJapanese("-0.0")).toBe("負の〇");
+    expect(numToJapanese("0")).toBe("〇");
+  });
+
   test("infinity", () => {
     expect(numToJapanese(Infinity)).toBe("無限");
     expect(numToJapanese(-Infinity)).toBe("負の無限");
     expect(numToJapanese("Infinity")).toBe("無限");
     expect(numToJapanese("-Infinity")).toBe("負の無限");
     expect(numToJapanese("infinity")).toBe("無限");
+  });
+
+  test("digit limit boundary", () => {
+    expect(numToJapanese("1" + "0".repeat(71))).toContain("無量大数");
+    expect(() => numToJapanese("1" + "0".repeat(72))).toThrow("Number too large for conversion.");
+    expect(numToJapanese("0".repeat(73) + "5")).toBe("五");
+    expect(() => numToJapanese("0".repeat(10) + "1" + "0".repeat(72))).toThrow("Number too large for conversion.");
   });
 
   test("invalid input", () => {

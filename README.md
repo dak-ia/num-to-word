@@ -16,7 +16,7 @@ Convert numbers to words in multiple languages (English, Japanese, SI prefixes).
 - [🚀 クイックスタート / Quick Start](#クイックスタート--quick-start)
 - [📚 API リファレンス / API Reference](#apiリファレンス--api-reference)
 - [📝 入力形式 / Input Format](#入力形式--input-format)
-- [💻 TypeScript サポート / TypeScript Support](#typescript-サポート--typescript-support)
+- [💻 TypeScriptサポート / TypeScript Support](#typescriptサポート--typescript-support)
 - [🎨 Examples](#examples)
 - [🛠️ 開発 / Development](#開発--development)
 
@@ -24,7 +24,7 @@ Convert numbers to words in multiple languages (English, Japanese, SI prefixes).
 
 ## 📦 インストール / Installation
 
-最新リリースは [Releases ページ](https://github.com/dak-ia/num-to-word/releases) からダウンロードできます。
+最新リリースは [Releasesページ](https://github.com/dak-ia/num-to-word/releases) からダウンロードできます。
 
 Download the latest release from the [Releases page](https://github.com/dak-ia/num-to-word/releases).
 
@@ -91,7 +91,7 @@ Convert a number to English words.
 
 - **引数 / Parameters**: `number` (number | string) - 変換する数字 / The number to convert
 - **戻り値 / Returns**: string - 英語表現 / English word representation
-- **範囲 / Range**: 10^306 (Uncentillion) まで / Up to 10^306 (Uncentillion)
+- **範囲 / Range**: 10^306（Uncentillion）まで / Up to 10^306 (Uncentillion)
 - **負の数 / Negative numbers**: サポート / Supported
 - **例 / Example**:
   ```javascript
@@ -109,7 +109,7 @@ Convert a number to Japanese Kanji numerals.
 
 - **引数 / Parameters**: `number` (number | string) - 変換する数字 / The number to convert
 - **戻り値 / Returns**: string - 日本語（漢数字）表現 / Japanese Kanji representation
-- **範囲 / Range**: 10^68 (無量大数) まで / Up to 10^68 (無量大数)
+- **範囲 / Range**: 10^68（無量大数）まで / Up to 10^68 (無量大数)
 - **負の数 / Negative numbers**: サポート / Supported
 - **例 / Example**:
   ```javascript
@@ -127,7 +127,7 @@ Convert a number to Japanese Daiji (formal) numerals.
 
 - **引数 / Parameters**: `number` (number | string) - 変換する数字 / The number to convert
 - **戻り値 / Returns**: string - 日本語（大字）表現 / Japanese Daiji representation
-- **範囲 / Range**: 10^68 まで対応、大字変換は萬 (10,000) まで / Up to 10^68, Daiji conversion up to 萬 (10,000)
+- **範囲 / Range**: 10^68 まで対応、大字変換は萬（10,000）まで / Up to 10^68, Daiji conversion up to 萬 (10,000)
 - **負の数 / Negative numbers**: サポート / Supported
 - **例 / Example**:
   ```javascript
@@ -138,13 +138,13 @@ Convert a number to Japanese Daiji (formal) numerals.
 
 ### `numToSi(number)`
 
-数字を SI 接頭語表記に変換します。
+数字をSI接頭語表記に変換します。
 
 Convert a number to SI prefix notation.
 
 - **引数 / Parameters**: `number` (number | string) - 変換する数字 / The number to convert
-- **戻り値 / Returns**: string - SI 接頭語表現 / SI prefix representation
-- **範囲 / Range**: 10^30 (Q - Quetta) まで / Up to 10^30 (Q - Quetta)
+- **戻り値 / Returns**: string - SI接頭語表現 / SI prefix representation
+- **範囲 / Range**: 10^30（Q - Quetta）まで / Up to 10^30 (Q - Quetta)
 - **接頭語 / Prefixes**: K, M, G, T, P, E, Z, Y, R, Q
 - **負の数 / Negative numbers**: サポート / Supported
 - **例 / Example**:
@@ -176,10 +176,21 @@ Convert a number using the specified locale.
 
 ## 📝 入力形式 / Input Format
 
+### 変換ルール / Conversion Policy
+
+- **言語への変換 / To words**: 数値としての読み方に変換します。整数部の先頭のゼロや小数部の末尾のゼロは値に影響しないため取り除きます。 / read as a number. Leading zeros in the integer part and trailing zeros in the decimal part are removed because they do not affect the value.
+- **単位への変換 / To units**: SI接頭辞として適切な形式に整えます。末尾のゼロやゼロの符号など、表記として不要なものは取り除きます。 / formatted as a proper SI prefix notation. Anything unnecessary for the notation, such as trailing zeros and the sign of zero, is removed.
+
+```javascript
+numToEnglish("0123.500"); // "One hundred twenty-three point five"
+numToJapanese("0123.500"); // "百二十三・五"
+numToSi("0123.500"); // "123.5"
+```
+
 ### サポートされている入力タイプ / Supported Input Types
 
-- **number 型 / Number type**: `numToEnglish(123)`
-- **string 型（推奨）/ String type (recommended)**: `numToEnglish("123")`
+- **number型 / Number type**: `numToEnglish(123)`
+- **string型（推奨）/ String type (recommended)**: `numToEnglish("123")`
 - **指数表記 / Exponential notation**: `numToEnglish("1.23e5")` → `"One hundred twenty-three thousand"`
 - **全角数字 / Full-width numbers**: `numToEnglish("123")` （自動変換 / converted automatically）
 - **カンマ区切り / With commas**: `numToEnglish("123,456,789")` （自動的に削除 / commas removed automatically）
@@ -197,9 +208,9 @@ numToEnglish("5.67e-3"); // "Zero point zero zero five six seven"
 numToJapanese("1.5e4"); // "一万五千"
 ```
 
-## 💻 TypeScript サポート / TypeScript Support
+## 💻 TypeScriptサポート / TypeScript Support
 
-TypeScript 型定義が含まれています。
+TypeScript型定義が含まれています。
 
 TypeScript definitions are included.
 

@@ -141,16 +141,16 @@ describe("numToEnglish", () => {
   test("numbers with zeros", () => {
     expect(numToEnglish("0")).toBe("Zero");
     expect(numToEnglish("00")).toBe("Zero");
-    expect(numToEnglish("0.0")).toBe("Zero point zero");
-    expect(numToEnglish("0.00")).toBe("Zero point zero zero");
-    expect(numToEnglish("00.0")).toBe("Zero point zero");
+    expect(numToEnglish("0.0")).toBe("Zero");
+    expect(numToEnglish("0.00")).toBe("Zero");
+    expect(numToEnglish("00.0")).toBe("Zero");
   });
 
   test("zeros in decimal part", () => {
-    expect(numToEnglish("1.0")).toBe("One point zero");
-    expect(numToEnglish("1.00")).toBe("One point zero zero");
+    expect(numToEnglish("1.0")).toBe("One");
+    expect(numToEnglish("1.00")).toBe("One");
     expect(numToEnglish("10.01")).toBe("Ten point zero one");
-    expect(numToEnglish("1.0000")).toBe("One point zero zero zero zero");
+    expect(numToEnglish("1.0000")).toBe("One");
     expect(numToEnglish("0.0001")).toBe("Zero point zero zero zero one");
     expect(numToEnglish("0.001")).toBe("Zero point zero zero one");
   });
@@ -162,12 +162,34 @@ describe("numToEnglish", () => {
     expect(numToEnglish(-999)).toBe("Minus nine hundred ninety-nine");
   });
 
+  test("reads out the sign of -0 as written", () => {
+    expect(numToEnglish("-0")).toBe("Minus zero");
+    expect(numToEnglish("-000")).toBe("Minus zero");
+    expect(numToEnglish("-0.0")).toBe("Minus zero");
+    expect(numToEnglish("0")).toBe("Zero");
+  });
+
   test("infinity", () => {
     expect(numToEnglish(Infinity)).toBe("Infinity");
     expect(numToEnglish(-Infinity)).toBe("Minus infinity");
     expect(numToEnglish("Infinity")).toBe("Infinity");
     expect(numToEnglish("-Infinity")).toBe("Minus infinity");
     expect(numToEnglish("infinity")).toBe("Infinity");
+  });
+
+  test("leading zeros", () => {
+    expect(numToEnglish("000.5")).toBe("Zero point five");
+    expect(numToEnglish("0000.5")).toBe("Zero point five");
+    expect(numToEnglish("00000.500")).toBe("Zero point five");
+    expect(numToEnglish("0123")).toBe("One hundred twenty-three");
+    expect(numToEnglish("0".repeat(310) + "5")).toBe("Five");
+  });
+
+  test("digit limit boundary", () => {
+    expect(numToEnglish("1" + "0".repeat(308))).toContain("uncentillion");
+    expect(() => numToEnglish("1" + "0".repeat(309))).toThrow("Number too large for conversion.");
+    expect(numToEnglish("0".repeat(10) + "1" + "0".repeat(308))).toContain("uncentillion");
+    expect(() => numToEnglish("0".repeat(10) + "1" + "0".repeat(309))).toThrow("Number too large for conversion.");
   });
 
   test("invalid input", () => {
