@@ -28,6 +28,10 @@
     <input type="button" onclick="pressEn()" value="数字を英語へ" />
     <input type="button" onclick="pressJp()" value="数字を漢字へ" />
     <input type="button" onclick="pressJpDaiji()" value="数字を大字へ" />
+    <br />
+    <input type="button" onclick="pressEnDigits()" value="数字を英語の桁読みへ" />
+    <input type="button" onclick="pressJpDigits()" value="数字を漢字の桁読みへ" />
+    <input type="button" onclick="pressJpDaijiDigits()" value="数字を大字の桁読みへ" />
     <br /><br />
     <span id="output"></span>
   </body>
@@ -49,6 +53,18 @@
 
     function pressJpDaiji() {
       output.innerText = NumToWord.numToDaiji(Number(input.value));
+    }
+
+    function pressEnDigits() {
+      output.innerText = NumToWord.numToEnglishDigits(input.value);
+    }
+
+    function pressJpDigits() {
+      output.innerText = NumToWord.numToJapaneseDigits(input.value);
+    }
+
+    function pressJpDaijiDigits() {
+      output.innerText = NumToWord.numToDaijiDigits(input.value);
     }
   </script>
 </html>
