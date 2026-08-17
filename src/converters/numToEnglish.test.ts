@@ -162,7 +162,7 @@ describe("numToEnglish", () => {
     expect(numToEnglish(-999)).toBe("Minus nine hundred ninety-nine");
   });
 
-  test("reads out the sign of -0 as written", () => {
+  test("converts negative zero", () => {
     expect(numToEnglish("-0")).toBe("Minus zero");
     expect(numToEnglish("-000")).toBe("Minus zero");
     expect(numToEnglish("-0.0")).toBe("Minus zero");

@@ -199,7 +199,7 @@ Convert a number using the specified locale.
 
 ### 変換ルール / Conversion Policy
 
-- **言語への変換 / To words**: 数値としての読み方に変換します。整数部の先頭のゼロや小数部の末尾のゼロは値に影響しないため取り除きます。 / read as a number. Leading zeros in the integer part and trailing zeros in the decimal part are removed because they do not affect the value.
+- **言語への変換 / To words**: 数値としての読み方に変換します。整数部の先頭のゼロや小数部の末尾のゼロは値に影響しないため取り除きます。 / converted as a numeral. Leading zeros in the integer part and trailing zeros in the decimal part are removed because they do not affect the value.
 - **単位への変換 / To units**: SI接頭辞として適切な形式に整えます。末尾のゼロやゼロの符号など、表記として不要なものは取り除きます。 / formatted as a proper SI prefix notation. Anything unnecessary for the notation, such as trailing zeros and the sign of zero, is removed.
 
 ```javascript
