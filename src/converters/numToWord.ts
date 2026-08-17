@@ -1,12 +1,15 @@
 import { InvalidArgumentError, InvalidLocaleError } from "../errors";
 import { numToDaiji } from "./numToDaiji";
+import { numToDaijiDigits } from "./numToDaijiDigits";
 import { numToEnglish } from "./numToEnglish";
+import { numToEnglishDigits } from "./numToEnglishDigits";
 import { numToJapanese } from "./numToJapanese";
+import { numToJapaneseDigits } from "./numToJapaneseDigits";
 import { numToSi } from "./numToSi";
 
 /**
  * Converts a number to words in the specified locale.
- * @param locale - Locale identifier ("en", "jp", "jpdaiji", "si")
+ * @param locale - Locale identifier ("en", "jp", "jpdaiji", "si"). Add "-digits" to convert digit by digit
  * @param number - The number to convert
  * @returns Word representation in the specified locale
  * @throws {InvalidArgumentError} If locale is not a string, or number is neither a number nor a string
@@ -36,4 +39,7 @@ export const localeMap: LocaleEntry[] = [
   { keys: ["en", "english"], fn: numToEnglish },
   { keys: ["jp", "japanese", "kanji"], fn: numToJapanese },
   { keys: ["jpdaiji", "daiji"], fn: numToDaiji },
+  { keys: ["en-digits", "english-digits"], fn: numToEnglishDigits },
+  { keys: ["jp-digits", "japanese-digits", "kanji-digits"], fn: numToJapaneseDigits },
+  { keys: ["jpdaiji-digits", "daiji-digits"], fn: numToDaijiDigits },
 ];

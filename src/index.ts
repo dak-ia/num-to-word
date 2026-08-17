@@ -1,4 +1,13 @@
-export { numToDaiji, numToEnglish, numToJapanese, numToSi, numToWord } from "./converters";
+export {
+  numToDaiji,
+  numToDaijiDigits,
+  numToEnglish,
+  numToEnglishDigits,
+  numToJapanese,
+  numToJapaneseDigits,
+  numToSi,
+  numToWord,
+} from "./converters";
 export {
   NumToWordErrorBase,
   InvalidArgumentError,
