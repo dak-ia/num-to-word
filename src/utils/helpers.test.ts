@@ -1,4 +1,4 @@
-import { InvalidArgumentError, InvalidInputError, NumToWordErrorBase, OverflowError } from "../errors";
+import { InvalidArgumentError, InvalidInputError, NumToWordError, OverflowError } from "../errors";
 import { preprocessNumber, splitTo1Digit, splitTo3Digits, splitTo4Digits } from "./helpers";
 
 describe("preprocessNumber", () => {
@@ -297,9 +297,9 @@ describe("preprocessNumber", () => {
 
   test("converts dependency errors into this library's own", () => {
     expect(() => preprocessNumber("e5")).toThrow(InvalidInputError);
-    expect(() => preprocessNumber("e5")).toThrow(NumToWordErrorBase);
+    expect(() => preprocessNumber("e5")).toThrow(NumToWordError);
     expect(() => preprocessNumber("1e999999999")).toThrow(OverflowError);
-    expect(() => preprocessNumber("1e999999999")).toThrow(NumToWordErrorBase);
+    expect(() => preprocessNumber("1e999999999")).toThrow(NumToWordError);
   });
 
   test("neither number nor string", () => {

@@ -1,4 +1,4 @@
-import { NumToWordErrorBase } from "./NumToWordErrorBase";
+import { NumToWordError } from "./NumToWordError";
 import { OverflowError } from "./OverflowError";
 
 describe("OverflowError", () => {
@@ -14,9 +14,9 @@ describe("OverflowError", () => {
     expect(new OverflowError("custom").message).toBe("custom");
   });
 
-  test("extends NumToWordErrorBase and Error", () => {
+  test("extends NumToWordError and Error", () => {
     const error = new OverflowError();
-    expect(error).toBeInstanceOf(NumToWordErrorBase);
+    expect(error).toBeInstanceOf(NumToWordError);
     expect(error).toBeInstanceOf(Error);
   });
 });

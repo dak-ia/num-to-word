@@ -8,13 +8,7 @@ export {
   numToSi,
   numToWord,
 } from "./converters";
-export {
-  NumToWordErrorBase,
-  InvalidArgumentError,
-  InvalidInputError,
-  InvalidLocaleError,
-  OverflowError,
-} from "./errors";
+export { NumToWordError, InvalidArgumentError, InvalidInputError, InvalidLocaleError, OverflowError } from "./errors";
 
 declare const VERSION: string;
 
