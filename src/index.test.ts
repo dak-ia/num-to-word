@@ -2,7 +2,7 @@ import {
   InvalidArgumentError,
   InvalidInputError,
   InvalidLocaleError,
-  NumToWordErrorBase,
+  NumToWordError,
   OverflowError,
   numToDaiji,
   numToDaijiDigits,
@@ -61,14 +61,14 @@ describe("index", () => {
   });
 
   test("exports error classes", () => {
-    expect(NumToWordErrorBase).toBeDefined();
+    expect(NumToWordError).toBeDefined();
     expect(InvalidArgumentError).toBeDefined();
     expect(InvalidInputError).toBeDefined();
     expect(InvalidLocaleError).toBeDefined();
     expect(OverflowError).toBeDefined();
-    expect(new InvalidArgumentError()).toBeInstanceOf(NumToWordErrorBase);
-    expect(new InvalidInputError()).toBeInstanceOf(NumToWordErrorBase);
-    expect(new InvalidLocaleError()).toBeInstanceOf(NumToWordErrorBase);
-    expect(new OverflowError()).toBeInstanceOf(NumToWordErrorBase);
+    expect(new InvalidArgumentError()).toBeInstanceOf(NumToWordError);
+    expect(new InvalidInputError()).toBeInstanceOf(NumToWordError);
+    expect(new InvalidLocaleError()).toBeInstanceOf(NumToWordError);
+    expect(new OverflowError()).toBeInstanceOf(NumToWordError);
   });
 });

@@ -1,5 +1,5 @@
 import { InvalidInputError } from "./InvalidInputError";
-import { NumToWordErrorBase } from "./NumToWordErrorBase";
+import { NumToWordError } from "./NumToWordError";
 
 describe("InvalidInputError", () => {
   test("name is InvalidInputError", () => {
@@ -14,9 +14,9 @@ describe("InvalidInputError", () => {
     expect(new InvalidInputError("custom").message).toBe("custom");
   });
 
-  test("extends NumToWordErrorBase and Error", () => {
+  test("extends NumToWordError and Error", () => {
     const error = new InvalidInputError();
-    expect(error).toBeInstanceOf(NumToWordErrorBase);
+    expect(error).toBeInstanceOf(NumToWordError);
     expect(error).toBeInstanceOf(Error);
   });
 });

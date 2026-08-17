@@ -1,5 +1,5 @@
 import { InvalidArgumentError } from "./InvalidArgumentError";
-import { NumToWordErrorBase } from "./NumToWordErrorBase";
+import { NumToWordError } from "./NumToWordError";
 
 describe("InvalidArgumentError", () => {
   test("name is InvalidArgumentError", () => {
@@ -14,9 +14,9 @@ describe("InvalidArgumentError", () => {
     expect(new InvalidArgumentError("custom").message).toBe("custom");
   });
 
-  test("extends NumToWordErrorBase and Error", () => {
+  test("extends NumToWordError and Error", () => {
     const error = new InvalidArgumentError();
-    expect(error).toBeInstanceOf(NumToWordErrorBase);
+    expect(error).toBeInstanceOf(NumToWordError);
     expect(error).toBeInstanceOf(Error);
   });
 });

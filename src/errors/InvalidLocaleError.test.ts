@@ -1,5 +1,5 @@
 import { InvalidLocaleError } from "./InvalidLocaleError";
-import { NumToWordErrorBase } from "./NumToWordErrorBase";
+import { NumToWordError } from "./NumToWordError";
 
 describe("InvalidLocaleError", () => {
   test("name is InvalidLocaleError", () => {
@@ -14,9 +14,9 @@ describe("InvalidLocaleError", () => {
     expect(new InvalidLocaleError("custom").message).toBe("custom");
   });
 
-  test("extends NumToWordErrorBase and Error", () => {
+  test("extends NumToWordError and Error", () => {
     const error = new InvalidLocaleError();
-    expect(error).toBeInstanceOf(NumToWordErrorBase);
+    expect(error).toBeInstanceOf(NumToWordError);
     expect(error).toBeInstanceOf(Error);
   });
 });

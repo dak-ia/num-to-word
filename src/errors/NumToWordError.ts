@@ -1,4 +1,4 @@
-export class NumToWordErrorBase extends Error {
+export class NumToWordError extends Error {
   public override readonly name: string = "NumToWordError";
   constructor(message: string) {
     super(message);
