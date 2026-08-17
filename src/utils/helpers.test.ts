@@ -1,5 +1,5 @@
+import { InvalidArgumentError, InvalidInputError, NumToWordErrorBase, OverflowError } from "../errors";
 import { preprocessNumber, splitTo1Digit, splitTo3Digits, splitTo4Digits } from "./helpers";
-import { InvalidArgumentError } from "../errors";
 
 describe("preprocessNumber", () => {
   test("integer only", () => {
@@ -286,6 +286,20 @@ describe("preprocessNumber", () => {
     expect(preprocessNumber("+ Infinity")).toEqual({ integer: "", decimal: "", isNegative: false, isInfinity: true });
     expect(preprocessNumber("- Infinity")).toEqual({ integer: "", decimal: "", isNegative: true, isInfinity: true });
     expect(preprocessNumber("  infinity  ")).toEqual({ integer: "", decimal: "", isNegative: false, isInfinity: true });
+  });
+
+  test("keeps leading zeros and the sign of zero as given", () => {
+    expect(preprocessNumber("000")).toEqual({ integer: "000", decimal: "", isNegative: false, isInfinity: false });
+    expect(preprocessNumber("0000.5")).toEqual({ integer: "0000", decimal: "5", isNegative: false, isInfinity: false });
+    expect(preprocessNumber("-0")).toEqual({ integer: "0", decimal: "", isNegative: true, isInfinity: false });
+    expect(preprocessNumber("1.500")).toEqual({ integer: "1", decimal: "500", isNegative: false, isInfinity: false });
+  });
+
+  test("converts dependency errors into this library's own", () => {
+    expect(() => preprocessNumber("e5")).toThrow(InvalidInputError);
+    expect(() => preprocessNumber("e5")).toThrow(NumToWordErrorBase);
+    expect(() => preprocessNumber("1e999999999")).toThrow(OverflowError);
+    expect(() => preprocessNumber("1e999999999")).toThrow(NumToWordErrorBase);
   });
 
   test("neither number nor string", () => {

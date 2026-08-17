@@ -1,6 +1,6 @@
-import { InvalidArgumentError, InvalidInputError } from "../errors";
+import { InvalidArgumentError, InvalidInputError, OverflowError } from "../errors";
+import { ResultOverflowError, expandExponential } from "expand-exponential";
 import type { NumArray } from "../types/index";
-import { expandExponential } from "expand-exponential";
 
 /**
  * Preprocesses a number input: validates, normalizes, and splits into components.
@@ -91,6 +91,7 @@ const checkInfinity = (number: number | string): NumArray | null => {
  * @internal
  * @param number - The number to normalize
  * @returns Normalized numeric string
+ * @throws {OverflowError} If the expanded result is too large
  * @throws {InvalidInputError} If not a valid number format
  */
 const convertToNumericString = (number: number | string): string => {
@@ -114,7 +115,15 @@ const convertToNumericString = (number: number | string): string => {
     throw new InvalidInputError();
   }
 
-  result = expandExponential(result).replace("+", "");
+  try {
+    result = expandExponential(result);
+  } catch (error) {
+    if (error instanceof ResultOverflowError) {
+      throw new OverflowError();
+    }
+    throw new InvalidInputError((error as Error).message);
+  }
+  result = result.replace("+", "");
 
   const isNegative = result.startsWith("-");
   if (result.slice(0, 1) === "." && !isNegative) {
