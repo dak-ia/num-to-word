@@ -152,7 +152,7 @@ describe("numToDaiji", () => {
     expect(numToDaiji("-10000")).toBe("負の壱萬");
   });
 
-  test("reads out the sign of -0 as written", () => {
+  test("converts negative zero", () => {
     expect(numToDaiji("-0")).toBe("負の零");
     expect(numToDaiji("-000")).toBe("負の零");
     expect(numToDaiji("-0.0")).toBe("負の零");

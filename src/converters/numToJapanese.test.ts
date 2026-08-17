@@ -153,7 +153,7 @@ describe("numToJapanese", () => {
     expect(numToJapanese(-999)).toBe("負の九百九十九");
   });
 
-  test("reads out the sign of -0 as written", () => {
+  test("converts negative zero", () => {
     expect(numToJapanese("-0")).toBe("負の〇");
     expect(numToJapanese("-000")).toBe("負の〇");
     expect(numToJapanese("-0.0")).toBe("負の〇");

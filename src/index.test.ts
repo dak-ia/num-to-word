@@ -5,8 +5,11 @@ import {
   NumToWordErrorBase,
   OverflowError,
   numToDaiji,
+  numToDaijiDigits,
   numToEnglish,
+  numToEnglishDigits,
   numToJapanese,
+  numToJapaneseDigits,
   numToSi,
   numToWord,
   version,
@@ -30,6 +33,21 @@ describe("index", () => {
   test("exports numToDaiji function", () => {
     expect(typeof numToDaiji).toBe("function");
     expect(numToDaiji("123")).toBe("壱陌弐拾参");
+  });
+
+  test("exports numToEnglishDigits function", () => {
+    expect(typeof numToEnglishDigits).toBe("function");
+    expect(numToEnglishDigits("0123")).toBe("Zero one two three");
+  });
+
+  test("exports numToJapaneseDigits function", () => {
+    expect(typeof numToJapaneseDigits).toBe("function");
+    expect(numToJapaneseDigits("0123")).toBe("〇一二三");
+  });
+
+  test("exports numToDaijiDigits function", () => {
+    expect(typeof numToDaijiDigits).toBe("function");
+    expect(numToDaijiDigits("0123")).toBe("零壱弐参");
   });
 
   test("exports numToSi function", () => {

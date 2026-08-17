@@ -28,10 +28,28 @@ describe("numToWord", () => {
     expect(numToWord("DAIJI", "123")).toBe("壱陌弐拾参");
   });
 
+  test("routes to En digit converter", () => {
+    expect(numToWord("en-digits", "0123")).toBe("Zero one two three");
+    expect(numToWord("EN-DIGITS", "0123")).toBe("Zero one two three");
+    expect(numToWord("english-digits", "0123")).toBe("Zero one two three");
+  });
+
+  test("routes to Jp digit converter", () => {
+    expect(numToWord("jp-digits", "0123")).toBe("〇一二三");
+    expect(numToWord("japanese-digits", "0123")).toBe("〇一二三");
+    expect(numToWord("kanji-digits", "0123")).toBe("〇一二三");
+  });
+
+  test("routes to JpDaiji digit converter", () => {
+    expect(numToWord("jpdaiji-digits", "0123")).toBe("零壱弐参");
+    expect(numToWord("daiji-digits", "0123")).toBe("零壱弐参");
+  });
+
   test("throws error for unsupported locale", () => {
     expect(() => numToWord("invalid", "123")).toThrow(InvalidLocaleError);
     expect(() => numToWord("fr", "123")).toThrow(InvalidLocaleError);
     expect(() => numToWord("", "123")).toThrow(InvalidLocaleError);
+    expect(() => numToWord("si-digits", "123")).toThrow(InvalidLocaleError);
   });
 
   test("throws error when locale is not a string", () => {

@@ -155,6 +155,24 @@ Convert a number to SI prefix notation.
   numToSi(-1234); // "-1.234K"
   ```
 
+### `numToEnglishDigits(number)` / `numToJapaneseDigits(number)` / `numToDaijiDigits(number)`
+
+数字を1桁ずつ変換します。IDなどのように、桁をそのまま表現したい場合に使います。
+
+Convert a number digit by digit. Use these when the digits themselves matter, such as IDs.
+
+- **引数 / Parameters**: `number` (number | string) - 変換する数字 / The number to convert
+- **戻り値 / Returns**: string - 1桁ずつの表現 / Digit-by-digit representation
+- **範囲 / Range**: 上限なし（桁の単位語を使わないため）/ No limit, because no unit words are used
+- **例 / Example**:
+  ```javascript
+  numToEnglishDigits("0123"); // "Zero one two three"
+  numToJapaneseDigits("0123"); // "〇一二三"
+  numToDaijiDigits("0123"); // "零壱弐参"
+  numToEnglishDigits("1.50"); // "One point five zero"
+  numToEnglishDigits(-12); // "Minus one two"
+  ```
+
 ### `numToWord(locale, number)`
 
 指定したロケールで数字を変換します。
@@ -163,6 +181,7 @@ Convert a number using the specified locale.
 
 - **引数 / Parameters**:
   - `locale` (string) - ロケール識別子 / Locale identifier: `"si"`, `"en"`, `"english"`, `"jp"`, `"japanese"`, `"kanji"`, `"jpdaiji"`, `"daiji"`
+    - 末尾に `-digits` を付けると1桁ずつ変換します（`"en-digits"`, `"jp-digits"`, `"daiji-digits"` など）。`"si"` に桁読みはありません / Append `-digits` to convert digit by digit. Not available for `"si"`
   - `number` (number | string) - 変換する数字 / The number to convert
 - **戻り値 / Returns**: string - ロケール対応表現 / Localized representation
 - **負の数 / Negative numbers**: 全ロケールでサポート / Supported in all locales
@@ -172,13 +191,15 @@ Convert a number using the specified locale.
   numToWord("jp", 123); // "百二十三"
   numToWord("si", 123456); // "123.456K"
   numToWord("en", -123); // "Minus one hundred twenty-three"
+  numToWord("en-digits", "0123"); // "Zero one two three"
+  numToWord("jp-digits", "0123"); // "〇一二三"
   ```
 
 ## 📝 入力形式 / Input Format
 
 ### 変換ルール / Conversion Policy
 
-- **言語への変換 / To words**: 数値としての読み方に変換します。整数部の先頭のゼロや小数部の末尾のゼロは値に影響しないため取り除きます。 / read as a number. Leading zeros in the integer part and trailing zeros in the decimal part are removed because they do not affect the value.
+- **言語への変換 / To words**: 数値としての読み方に変換します。整数部の先頭のゼロや小数部の末尾のゼロは値に影響しないため取り除きます。 / converted as a numeral. Leading zeros in the integer part and trailing zeros in the decimal part are removed because they do not affect the value.
 - **単位への変換 / To units**: SI接頭辞として適切な形式に整えます。末尾のゼロやゼロの符号など、表記として不要なものは取り除きます。 / formatted as a proper SI prefix notation. Anything unnecessary for the notation, such as trailing zeros and the sign of zero, is removed.
 
 ```javascript
