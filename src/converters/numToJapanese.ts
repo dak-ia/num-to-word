@@ -9,7 +9,7 @@ import { OverflowError } from "../errors";
  * @throws {OverflowError} If invalid or overflow
  * @example
  * numToJapanese(123) // "百二十三"
- * numToJapanese("1234.56") // "千二百三十四点五六"
+ * numToJapanese("1234.56") // "千二百三十四・五六"
  * numToJapanese(Infinity) // "無限"
  */
 export const numToJapanese = (number: number | string): string => {

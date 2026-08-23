@@ -8,8 +8,8 @@ import { OverflowError } from "../errors";
  * @returns English word representation
  * @throws {OverflowError} If invalid or overflow
  * @example
- * numToEnglish(123) // "One Hundred Twenty Three"
- * numToEnglish("1234.56") // "One Thousand Two Hundred Thirty Four Point Five Six"
+ * numToEnglish(123) // "One hundred twenty-three"
+ * numToEnglish("1234.56") // "One thousand two hundred thirty-four point five six"
  * numToEnglish(Infinity) // "Infinity"
  */
 export const numToEnglish = (number: number | string): string => {

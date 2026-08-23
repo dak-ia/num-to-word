@@ -38,9 +38,15 @@ describe("numToDaijiDigits", () => {
     expect(numToDaijiDigits("1" + "0".repeat(400))).toBe("壱" + "零".repeat(400));
   });
 
+  test("does not support letter case", () => {
+    expect(() => numToDaijiDigits("12", "upper")).toThrow(InvalidArgumentError);
+  });
+
   test("invalid input", () => {
     expect(() => numToDaijiDigits("abc")).toThrow(InvalidInputError);
     // @ts-expect-error - Testing invalid input
     expect(() => numToDaijiDigits(null)).toThrow(InvalidArgumentError);
+    // @ts-expect-error - Testing invalid input
+    expect(() => numToDaijiDigits("12", "bogus")).toThrow(InvalidArgumentError);
   });
 });
