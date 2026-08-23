@@ -1,3 +1,6 @@
+import type { DigitWords } from "../types";
+import { LetterCase } from "../constants";
+
 export const enOnesPlace: readonly string[] = [
   "zero",
   "one",
@@ -144,4 +147,13 @@ export const enLargeUnits: Readonly<Record<number, string>> = {
   300: "Novemnonagintillion",
   303: "Centillion",
   306: "Uncentillion",
+};
+
+export const enDigitWords: DigitWords = {
+  digits: enOnesPlace,
+  join: " ",
+  decimalPoint: " point ",
+  minus: "minus ",
+  infinity: "infinity",
+  letterCase: LetterCase.capitalize,
 };

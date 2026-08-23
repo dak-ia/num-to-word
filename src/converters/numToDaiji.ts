@@ -7,7 +7,7 @@ import { numToJapanese } from "./numToJapanese";
  * @returns Japanese daiji representation
  * @throws {Error} If invalid or overflow
  * @example
- * numToDaiji(123) // "壱百弐拾参"
+ * numToDaiji(123) // "壱陌弐拾参"
  * numToDaiji("10000") // "壱萬"
  * numToDaiji(Infinity) // "無限"
  */

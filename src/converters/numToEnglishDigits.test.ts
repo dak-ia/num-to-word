@@ -46,11 +46,29 @@ describe("numToEnglishDigits", () => {
     expect(numToEnglishDigits("1" + "0".repeat(400))).toBe("One" + " zero".repeat(400));
   });
 
+  test("changes letter case", () => {
+    expect(numToEnglishDigits("12", "capitalize")).toBe("One two");
+    expect(numToEnglishDigits("12", "upper")).toBe("ONE TWO");
+    expect(numToEnglishDigits("12", "lower")).toBe("one two");
+    expect(numToEnglishDigits(-Infinity, "upper")).toBe("MINUS INFINITY");
+  });
+
+  test("rejects an unsupported letter case", () => {
+    // @ts-expect-error - Testing invalid input
+    expect(() => numToEnglishDigits("12", "UPPER")).toThrow(
+      "Expected one of capitalize, upper, lower for the letter case."
+    );
+    // @ts-expect-error - Testing invalid input
+    expect(() => numToEnglishDigits("12", null)).toThrow(InvalidArgumentError);
+  });
+
   test("invalid input", () => {
     expect(() => numToEnglishDigits("abc")).toThrow(InvalidInputError);
     expect(() => numToEnglishDigits("")).toThrow(InvalidInputError);
     // @ts-expect-error - Testing invalid input
     expect(() => numToEnglishDigits(null)).toThrow(InvalidArgumentError);
+    // @ts-expect-error - Testing invalid input
+    expect(() => numToEnglishDigits("12", "bogus")).toThrow(InvalidArgumentError);
     // @ts-expect-error - Testing invalid input
     expect(() => numToEnglishDigits([1])).toThrow(InvalidArgumentError);
   });

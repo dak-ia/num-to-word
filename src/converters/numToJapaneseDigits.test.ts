@@ -46,11 +46,25 @@ describe("numToJapaneseDigits", () => {
     expect(numToJapaneseDigits("1" + "0".repeat(400))).toBe("一" + "〇".repeat(400));
   });
 
+  test("does not support letter case", () => {
+    expect(() => numToJapaneseDigits("12", "upper")).toThrow(InvalidArgumentError);
+    expect(() => numToJapaneseDigits("12", "upper")).toThrow("Letter case is not supported for this conversion.");
+  });
+
+  test("checks the letter case value before the language", () => {
+    // @ts-expect-error - Testing invalid input
+    expect(() => numToJapaneseDigits("12", "bogus")).toThrow(
+      "Expected one of capitalize, upper, lower for the letter case."
+    );
+  });
+
   test("invalid input", () => {
     expect(() => numToJapaneseDigits("abc")).toThrow(InvalidInputError);
     expect(() => numToJapaneseDigits("")).toThrow(InvalidInputError);
     // @ts-expect-error - Testing invalid input
     expect(() => numToJapaneseDigits(null)).toThrow(InvalidArgumentError);
+    // @ts-expect-error - Testing invalid input
+    expect(() => numToJapaneseDigits("12", "bogus")).toThrow(InvalidArgumentError);
     // @ts-expect-error - Testing invalid input
     expect(() => numToJapaneseDigits([1])).toThrow(InvalidArgumentError);
   });

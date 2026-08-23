@@ -1,29 +1,16 @@
-import { preprocessNumber, splitTo1Digit } from "../utils";
-import { enOnesPlace } from "../dictionaries";
+import type { LetterCase } from "../constants";
+import { enDigitWords } from "../dictionaries";
+import { replaceDigits } from "../utils";
 
 /**
  * Converts a number to English words digit by digit.
  * @param number - The number to convert
+ * @param letterCase - Overrides the default letter case of the language
  * @returns English word representation of each digit
  * @example
  * numToEnglishDigits("0123") // "Zero one two three"
  * numToEnglishDigits("1.500") // "One point five zero zero"
  * numToEnglishDigits(Infinity) // "Infinity"
  */
-export const numToEnglishDigits = (number: number | string): string => {
-  const numberParts = preprocessNumber(number);
-  if (numberParts.isInfinity) {
-    return numberParts.isNegative ? "Minus infinity" : "Infinity";
-  }
-  const replaceDigits = (digits: string): string =>
-    splitTo1Digit(digits)
-      .map((d) => enOnesPlace[Number(d)])
-      .join(" ");
-  const prefix = numberParts.isNegative ? "Minus " : "";
-  let result = replaceDigits(numberParts.integer);
-  if (numberParts.decimal !== "") {
-    result = result + " point " + replaceDigits(numberParts.decimal);
-  }
-  result = (prefix + result).toLowerCase();
-  return result.slice(0, 1).toUpperCase() + result.slice(1);
-};
+export const numToEnglishDigits = (number: number | string, letterCase?: LetterCase): string =>
+  replaceDigits(number, enDigitWords, letterCase);
