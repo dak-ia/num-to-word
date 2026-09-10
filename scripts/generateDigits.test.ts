@@ -1,4 +1,12 @@
-import { buildEntries, findStale, main, prettify, renderBarrel, renderConverter } from "./generateDigits.ts";
+import {
+  buildEntries,
+  findStale,
+  main,
+  prettify,
+  renderBarrel,
+  renderConverter,
+  renderDigitsDoc,
+} from "./generateDigits.ts";
 import { mkdtemp, readFile, readdir, rm, writeFile } from "node:fs/promises";
 import type { DigitWords } from "../src/types/index.ts";
 import type { FormatSource } from "./generateDigits.ts";
@@ -23,13 +31,25 @@ const base = {
   infinity: "inf",
 };
 
-const enDigitWords: DigitWords = { ...base, name: "English", letterCase: LetterCase.capitalize };
-const jpDigitWords: DigitWords = { ...base, name: "Japanese", label: "Japanese kanji" };
-const romanDigitWords: DigitWords = { ...base, name: "Roman", label: "Roman numeral", letterCase: LetterCase.upper };
+const enDigitWords: DigitWords = {
+  ...base,
+  name: "English",
+  locales: ["en-digits", "english-digits"],
+  letterCase: LetterCase.capitalize,
+};
+const jpDigitWords: DigitWords = { ...base, name: "Japanese", label: "Japanese kanji", locales: ["jp-digits"] };
+const romanDigitWords: DigitWords = {
+  ...base,
+  name: "Roman",
+  label: "Roman numeral",
+  locales: ["roman-digits"],
+  letterCase: LetterCase.upper,
+};
 
 const exampleOf = (number: number | string, dictionary: DigitWords): string => `<${dictionary.name}:${number}>`;
 const load = async () => ({
   replaceDigits: (number: number | string, dictionary: DigitWords) => exampleOf(number, dictionary),
+  LetterCase,
   enDigitWords,
   jpDigitWords,
   romanDigitWords,
@@ -43,7 +63,8 @@ describe("renderConverter", () => {
       fn: "numToEnglishDigits",
       wordsExport: "enDigitWords",
       label: "English",
-      hasLetterCase: true,
+      letterCase: LetterCase.capitalize,
+      locales: ["en-digits"],
       examples: [{ input: "0123", output: "Ze-on-tw-th" }],
     });
     expect(source).toContain("letterCase?: LetterCase");
@@ -57,7 +78,7 @@ describe("renderConverter", () => {
       fn: "numToJapaneseDigits",
       wordsExport: "jpDigitWords",
       label: "Japanese kanji",
-      hasLetterCase: false,
+      locales: ["jp-digits"],
       examples: [{ input: "0123", output: "ze-on-tw-th" }],
     });
     expect(source).toContain("(number: number | string): string =>\n  replaceDigits(number, jpDigitWords);");
@@ -68,7 +89,14 @@ describe("renderConverter", () => {
 
   test("orders the imports the way sort-imports expects", () => {
     const order = (wordsExport: string): number[] => {
-      const source = renderConverter({ fn: "f", wordsExport, label: "l", hasLetterCase: true, examples: [] });
+      const source = renderConverter({
+        fn: "f",
+        wordsExport,
+        label: "l",
+        letterCase: LetterCase.capitalize,
+        locales: ["x-digits"],
+        examples: [],
+      });
       return ['from "../../constants"', 'from "../../dictionaries"', 'from "../../utils"'].map((from) =>
         source.indexOf(from)
       );
@@ -86,7 +114,7 @@ describe("renderConverter", () => {
       fn: "f",
       wordsExport: "enDigitWords",
       label: "l",
-      hasLetterCase: false,
+      locales: ["x-digits"],
       examples: [],
     });
     expect(source).not.toContain("@example");
@@ -98,7 +126,8 @@ describe("renderConverter", () => {
       fn: "numToEnglishDigits",
       wordsExport: "enDigitWords",
       label: "English words",
-      hasLetterCase: true,
+      letterCase: LetterCase.capitalize,
+      locales: ["en-digits"],
       examples: [
         { input: "1.500", output: "on dot fi" },
         { input: Infinity, output: "inf" },
@@ -118,6 +147,88 @@ describe("renderBarrel", () => {
   });
 });
 
+describe("renderDigitsDoc", () => {
+  const letterCases = Object.values(LetterCase);
+  const entries = [
+    {
+      fn: "numToEnglishDigits",
+      wordsExport: "enDigitWords",
+      label: "English words",
+      letterCase: LetterCase.capitalize,
+      locales: ["en-digits", "english-digits"],
+      examples: [
+        { input: "0123", output: "Ze-on-tw-th" },
+        { input: Infinity, output: "inf" },
+      ],
+    },
+    {
+      fn: "numToJapaneseDigits",
+      wordsExport: "jpDigitWords",
+      label: "Japanese kanji",
+      letterCase: undefined,
+      locales: ["jp-digits"],
+      examples: [{ input: "0123", output: "ze-on-tw-th" }],
+    },
+  ];
+
+  test("says the file is generated", () => {
+    expect(renderDigitsDoc(entries, letterCases)).toContain(
+      "<!-- このファイルはnpm run generateからの自動生成のため手動編集禁止 -->"
+    );
+  });
+
+  test("puts the plain conversion before its variant when both start with the same language", () => {
+    const kanji = { ...entries[1], fn: "numToJapaneseDigits", label: "Japanese kanji", locales: ["jp-digits"] };
+    const daiji = {
+      ...entries[1],
+      fn: "numToDaijiDigits",
+      label: "Japanese daiji (大字) numerals",
+      locales: ["jpdaiji-digits"],
+    };
+    const doc = renderDigitsDoc([daiji, kanji], letterCases);
+    expect(doc.indexOf("## Japanese kanji")).toBeLessThan(doc.indexOf("## Japanese daiji"));
+  });
+
+  test("orders the sections by heading, not by function name", () => {
+    const daiji = { ...entries[1], fn: "numToDaijiDigits", label: "Japanese daiji" };
+    const doc = renderDigitsDoc([daiji, entries[0]], letterCases);
+    expect(doc.indexOf("## English words")).toBeLessThan(doc.indexOf("## Japanese daiji"));
+  });
+
+  test("gives every dictionary a section headed by its label", () => {
+    const doc = renderDigitsDoc(entries, letterCases);
+    expect(doc).toContain("## English words");
+    expect(doc).toContain("## Japanese kanji");
+  });
+
+  test("shows the result of every example input", () => {
+    expect(renderDigitsDoc(entries, letterCases)).toContain('numToEnglishDigits("0123"); // "Ze-on-tw-th"');
+    expect(renderDigitsDoc(entries, letterCases)).toContain('numToEnglishDigits(Infinity); // "inf"');
+  });
+
+  test("shows how to reach the conversion through numToWord", () => {
+    expect(renderDigitsDoc(entries, letterCases)).toContain('numToWord("en-digits", "0123"); // "Ze-on-tw-th"');
+  });
+
+  test("lists every locale the conversion answers to", () => {
+    expect(renderDigitsDoc(entries, letterCases)).toContain("`en-digits`, `english-digits`");
+  });
+
+  test("marks the default letter case among the values that can be given", () => {
+    expect(renderDigitsDoc(entries, letterCases)).toContain("`capitalize`（既定）, `upper`, `lower`");
+  });
+
+  test("says a conversion without a letter case does not take one", () => {
+    const doc = renderDigitsDoc([entries[1]], letterCases);
+    expect(doc).toContain("非対応 / Not supported");
+    expect(doc).not.toContain("capitalize");
+  });
+
+  test("leaves out the code block when there is no example", () => {
+    expect(renderDigitsDoc([{ ...entries[1], examples: [] }], letterCases)).not.toContain("```");
+  });
+});
+
 describe("buildEntries", () => {
   test("takes only the dictionaries and sorts them by function name", () => {
     const entries = buildEntries({ romanDigitWords, enDigitWords, siSymbols: {}, jpOnesPlace: [] }, exampleOf);
@@ -129,9 +240,33 @@ describe("buildEntries", () => {
     expect(entries.map((e) => e.label)).toEqual(["English words", "Japanese kanji"]);
   });
 
-  test("reads whether a letter case is available from the dictionary", () => {
+  test("reads the default letter case from the dictionary", () => {
     const entries = buildEntries({ enDigitWords, jpDigitWords }, exampleOf);
-    expect(entries.map((e) => e.hasLetterCase)).toEqual([true, false]);
+    expect(entries.map((e) => e.letterCase)).toEqual([LetterCase.capitalize, undefined]);
+  });
+
+  test("carries the locales of the dictionary", () => {
+    const entries = buildEntries({ enDigitWords }, exampleOf);
+    expect(entries[0].locales).toEqual(["en-digits", "english-digits"]);
+  });
+
+  test("rejects a dictionary without a locale", () => {
+    const words = { ...enDigitWords, locales: [] };
+    expect(() => buildEntries({ emptyDigitWords: words }, exampleOf)).toThrow("emptyDigitWordsにロケールが無い");
+  });
+
+  test("rejects two dictionaries that share a locale", () => {
+    const words = { ...jpDigitWords, name: "Clash", locales: ["en-digits"] };
+    expect(() => buildEntries({ enDigitWords, clashDigitWords: words }, exampleOf)).toThrow(
+      "ロケールが重複している: en-digits"
+    );
+  });
+
+  test("rejects a label that would break the document heading", () => {
+    const words = { ...enDigitWords, label: "English\nwords" };
+    expect(() => buildEntries({ brokenDigitWords: words }, exampleOf)).toThrow(
+      'brokenDigitWordsのlabelが1行になっていない: "English\\nwords"'
+    );
   });
 
   test("rejects a dictionary that is not shaped like one", () => {
@@ -196,7 +331,9 @@ describe("main", () => {
   test("refuses an argument it does not know instead of writing", async () => {
     await withTempDir(async (dir) => {
       const { log, error } = io();
-      expect(await main({ argv: ["--chek"], outDir: dir, load, formatSource, log, error })).toBe(1);
+      expect(
+        await main({ argv: ["--chek"], outDir: dir, docPath: join(dir, "digits.md"), load, formatSource, log, error })
+      ).toBe(1);
       expect(await readdir(dir)).toEqual([]);
       expect(error).toHaveBeenCalledWith("知らない引数: --chek");
       expect(log).not.toHaveBeenCalled();
@@ -206,44 +343,97 @@ describe("main", () => {
   test("writes a converter per dictionary plus a barrel", async () => {
     await withTempDir(async (dir) => {
       const { log, error } = io();
-      expect(await main({ argv: [], outDir: dir, load, formatSource, log, error })).toBe(0);
+      expect(
+        await main({ argv: [], outDir: dir, docPath: join(dir, "digits.md"), load, formatSource, log, error })
+      ).toBe(0);
       expect((await readdir(dir)).sort()).toEqual([
+        "digits.md",
         "index.ts",
         "numToEnglishDigits.ts",
         "numToJapaneseDigits.ts",
         "numToRomanDigits.ts",
       ]);
-      expect(log).toHaveBeenCalledWith(`生成4件: ${dir}（3言語、うち大文字小文字あり2）`);
+      expect(log).toHaveBeenCalledWith("生成5件（3種類、うち大文字小文字あり2）");
       expect(error).not.toHaveBeenCalled();
+    });
+  });
+
+  test("writes the document alongside the converters", async () => {
+    await withTempDir(async (dir) => {
+      await main({ argv: [], outDir: dir, docPath: join(dir, "digits.md"), load, formatSource, ...io() });
+      const doc = await readFile(join(dir, "digits.md"), "utf8");
+      expect(doc).toContain("## English words");
+      expect(doc).toContain("## Japanese kanji");
+    });
+  });
+
+  test("creates the directory of the document when it does not exist", async () => {
+    await withTempDir(async (dir) => {
+      const docPath = join(dir, "docs", "digits.md");
+      expect(await main({ argv: [], outDir: dir, docPath, load, formatSource, ...io() })).toBe(0);
+      expect(await readFile(docPath, "utf8")).toContain("## English words");
+    });
+  });
+
+  test("fails the check when only the document is out of date", async () => {
+    await withTempDir(async (dir) => {
+      const docPath = join(dir, "digits.md");
+      await main({ argv: [], outDir: dir, docPath, load, formatSource, ...io() });
+      await writeFile(docPath, "手で書き換えた\n");
+      const { log, error } = io();
+      expect(await main({ argv: ["--check"], outDir: dir, docPath, load, formatSource, log, error })).toBe(1);
+      expect(error).toHaveBeenCalledWith(`辞書と食い違っている: ${docPath}`);
+      // --checkは書き換えない
+      expect(await readFile(docPath, "utf8")).toBe("手で書き換えた\n");
     });
   });
 
   test("reports nothing moved when the files are already up to date", async () => {
     await withTempDir(async (dir) => {
-      await main({ argv: [], outDir: dir, load, formatSource, ...io() });
+      await main({ argv: [], outDir: dir, docPath: join(dir, "digits.md"), load, formatSource, ...io() });
       const { log } = io();
-      expect(await main({ argv: [], outDir: dir, load, formatSource, log, error: jest.fn() })).toBe(0);
-      expect(log).toHaveBeenCalledWith(`変更なし: ${dir}（3言語、うち大文字小文字あり2）`);
+      expect(
+        await main({
+          argv: [],
+          outDir: dir,
+          docPath: join(dir, "digits.md"),
+          load,
+          formatSource,
+          log,
+          error: jest.fn(),
+        })
+      ).toBe(0);
+      expect(log).toHaveBeenCalledWith("変更なし（3種類、うち大文字小文字あり2）");
     });
   });
 
   test("removes a converter whose dictionary is gone", async () => {
     await withTempDir(async (dir) => {
-      await main({ argv: [], outDir: dir, load, formatSource, ...io() });
+      await main({ argv: [], outDir: dir, docPath: join(dir, "digits.md"), load, formatSource, ...io() });
       await writeFile(join(dir, "numToGoneDigits.ts"), "export const numToGoneDigits = () => '';\n");
       const { log } = io();
-      expect(await main({ argv: [], outDir: dir, load, formatSource, log, error: jest.fn() })).toBe(0);
+      expect(
+        await main({
+          argv: [],
+          outDir: dir,
+          docPath: join(dir, "digits.md"),
+          load,
+          formatSource,
+          log,
+          error: jest.fn(),
+        })
+      ).toBe(0);
       expect(await readdir(dir)).not.toContain("numToGoneDigits.ts");
       // 削除だけでも件数に数える
-      expect(log).toHaveBeenCalledWith(`生成1件: ${dir}（3言語、うち大文字小文字あり2）`);
+      expect(log).toHaveBeenCalledWith("生成1件（3種類、うち大文字小文字あり2）");
     });
   });
 
   test("leaves hand-written tests alone", async () => {
     await withTempDir(async (dir) => {
-      await main({ argv: [], outDir: dir, load, formatSource, ...io() });
+      await main({ argv: [], outDir: dir, docPath: join(dir, "digits.md"), load, formatSource, ...io() });
       await writeFile(join(dir, "numToEnglishDigits.test.ts"), "test.skip('x', () => {});\n");
-      await main({ argv: [], outDir: dir, load, formatSource, ...io() });
+      await main({ argv: [], outDir: dir, docPath: join(dir, "digits.md"), load, formatSource, ...io() });
       expect(await readdir(dir)).toContain("numToEnglishDigits.test.ts");
     });
   });
@@ -251,16 +441,20 @@ describe("main", () => {
   test("accepts a directory that does not exist yet", async () => {
     await withTempDir(async (dir) => {
       const nested = join(dir, "digits");
-      expect(await main({ argv: [], outDir: nested, load, formatSource, ...io() })).toBe(0);
+      expect(
+        await main({ argv: [], outDir: nested, docPath: join(nested, "digits.md"), load, formatSource, ...io() })
+      ).toBe(0);
       expect(await readdir(nested)).toContain("index.ts");
     });
   });
 
   test("passes the check when the files match the dictionaries", async () => {
     await withTempDir(async (dir) => {
-      await main({ argv: [], outDir: dir, load, formatSource, ...io() });
+      await main({ argv: [], outDir: dir, docPath: join(dir, "digits.md"), load, formatSource, ...io() });
       const { log, error } = io();
-      expect(await main({ argv: ["--check"], outDir: dir, load, formatSource, log, error })).toBe(0);
+      expect(
+        await main({ argv: ["--check"], outDir: dir, docPath: join(dir, "digits.md"), load, formatSource, log, error })
+      ).toBe(0);
       expect(log).toHaveBeenCalledWith(expect.stringContaining("最新"));
       expect(error).not.toHaveBeenCalled();
     });
@@ -268,10 +462,12 @@ describe("main", () => {
 
   test("fails the check when a file no longer matches its dictionary", async () => {
     await withTempDir(async (dir) => {
-      await main({ argv: [], outDir: dir, load, formatSource, ...io() });
+      await main({ argv: [], outDir: dir, docPath: join(dir, "digits.md"), load, formatSource, ...io() });
       await writeFile(join(dir, "numToEnglishDigits.ts"), "手で書き換えた\n");
       const { log, error } = io();
-      expect(await main({ argv: ["--check"], outDir: dir, load, formatSource, log, error })).toBe(1);
+      expect(
+        await main({ argv: ["--check"], outDir: dir, docPath: join(dir, "digits.md"), load, formatSource, log, error })
+      ).toBe(1);
       expect(error).toHaveBeenCalledWith(`辞書と食い違っている: ${join(dir, "numToEnglishDigits.ts")}`);
       expect(error).toHaveBeenCalledWith("npm run generateを実行すること");
       expect(error).not.toHaveBeenCalledWith(expect.stringContaining("辞書に無いのに残っている"));
@@ -282,10 +478,12 @@ describe("main", () => {
 
   test("fails the check when a converter is left over", async () => {
     await withTempDir(async (dir) => {
-      await main({ argv: [], outDir: dir, load, formatSource, ...io() });
+      await main({ argv: [], outDir: dir, docPath: join(dir, "digits.md"), load, formatSource, ...io() });
       await writeFile(join(dir, "numToGoneDigits.ts"), "export const numToGoneDigits = () => '';\n");
       const { log, error } = io();
-      expect(await main({ argv: ["--check"], outDir: dir, load, formatSource, log, error })).toBe(1);
+      expect(
+        await main({ argv: ["--check"], outDir: dir, docPath: join(dir, "digits.md"), load, formatSource, log, error })
+      ).toBe(1);
       expect(error).toHaveBeenCalledWith(`辞書に無いのに残っている: ${join(dir, "numToGoneDigits.ts")}`);
       expect(error).not.toHaveBeenCalledWith(expect.stringContaining("辞書と食い違っている"));
       // --checkは消さない
@@ -295,11 +493,21 @@ describe("main", () => {
 
   test("fails the check when a file is stale and another is left over", async () => {
     await withTempDir(async (dir) => {
-      await main({ argv: [], outDir: dir, load, formatSource, ...io() });
+      await main({ argv: [], outDir: dir, docPath: join(dir, "digits.md"), load, formatSource, ...io() });
       await writeFile(join(dir, "numToEnglishDigits.ts"), "手で書き換えた\n");
       await writeFile(join(dir, "numToGoneDigits.ts"), "export const numToGoneDigits = () => '';\n");
       const { error } = io();
-      expect(await main({ argv: ["--check"], outDir: dir, load, formatSource, log: jest.fn(), error })).toBe(1);
+      expect(
+        await main({
+          argv: ["--check"],
+          outDir: dir,
+          docPath: join(dir, "digits.md"),
+          load,
+          formatSource,
+          log: jest.fn(),
+          error,
+        })
+      ).toBe(1);
       expect(error).toHaveBeenCalledWith(expect.stringContaining("辞書と食い違っている"));
       expect(error).toHaveBeenCalledWith(expect.stringContaining("辞書に無いのに残っている"));
     });
@@ -307,7 +515,7 @@ describe("main", () => {
 
   test("writes every converter and the barrel through the formatter", async () => {
     await withTempDir(async (dir) => {
-      await main({ argv: [], outDir: dir, load, formatSource, ...io() });
+      await main({ argv: [], outDir: dir, docPath: join(dir, "digits.md"), load, formatSource, ...io() });
 
       expect(await readFile(join(dir, "numToEnglishDigits.ts"), "utf8")).toBe(
         `// このファイルはnpm run generateからの自動生成のため手動編集禁止

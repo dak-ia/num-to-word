@@ -3,6 +3,7 @@ import { LetterCase } from "../constants";
 
 export const trDigitWords: DigitWords = {
   name: "Turkish",
+  locales: ["tr-digits", "turkish-digits"],
   digits: ["sıfır", "bir", "iki", "üç", "dört", "beş", "altı", "yedi", "sekiz", "dokuz"],
   join: " ",
   decimalPoint: " virgül ",

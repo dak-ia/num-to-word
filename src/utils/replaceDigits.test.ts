@@ -5,6 +5,7 @@ import { replaceDigits } from "./replaceDigits";
 
 const plain: DigitWords = {
   name: "Plain",
+  locales: ["plain-digits"],
   digits: ["ze", "on", "tw", "th", "fo", "fi", "si", "se", "ei", "ni"] as const,
   join: "-",
   decimalPoint: " dot ",

@@ -1,8 +1,10 @@
+import { dirname, join } from "node:path";
 import { mkdir, readFile, readdir, rm, writeFile } from "node:fs/promises";
 import type { DigitWords } from "../src/types/index.ts";
-import { join } from "node:path";
+import type { LetterCase } from "../src/constants/index.ts";
 
-const HEADER = "// このファイルはnpm run generateからの自動生成のため手動編集禁止";
+const NOTICE = "このファイルはnpm run generateからの自動生成のため手動編集禁止";
+const HEADER = `// ${NOTICE}`;
 
 export type DigitExample = {
   input: number | string;
@@ -13,12 +15,14 @@ export type DigitEntry = {
   fn: string;
   wordsExport: string;
   label: string;
-  hasLetterCase: boolean;
+  letterCase?: LetterCase;
+  locales: readonly string[];
   examples: readonly DigitExample[];
 };
 
 export type SourceModule = {
   replaceDigits: (_number: number | string, _words: DigitWords) => string;
+  LetterCase: Record<string, string>;
   [key: string]: unknown;
 };
 
@@ -32,7 +36,8 @@ const EXAMPLE_INPUTS: readonly (number | string)[] = ["0123", "1.500", Infinity]
 // JSON.stringifyはInfinityをnullにするので、数値は文字列化だけにする
 const literal = (value: number | string): string => (typeof value === "string" ? JSON.stringify(value) : String(value));
 
-export const renderConverter = ({ fn, wordsExport, label, hasLetterCase, examples }: DigitEntry): string => {
+export const renderConverter = ({ fn, wordsExport, label, letterCase, examples }: DigitEntry): string => {
+  const hasLetterCase = letterCase !== undefined;
   // 大文字小文字を持たない言語に引数を残すと、undefinedしか入らない選択肢が公開の型に出てしまう
   const letterCaseParam = hasLetterCase ? ", letterCase?: LetterCase" : "";
   const letterCaseArg = hasLetterCase ? ", letterCase" : "";
@@ -64,6 +69,42 @@ export const ${fn} = (number: number | string${letterCaseParam}): string =>
 `;
 };
 
+// 関数名順だと大字がChineseとDutchの間に来る。labelだけで並べると大字が漢数字より前に出る
+const docOrder = ({ label, locales }: DigitEntry): string => `${label.split(" ")[0]} ${locales[0]}`;
+
+const renderDocSection = (
+  { fn, label, letterCase, locales, examples }: DigitEntry,
+  letterCases: readonly string[]
+): string => {
+  const calls = examples.map(({ input, output }) => `${fn}(${literal(input)}); // ${JSON.stringify(output)}`);
+  if (calls.length > 0) {
+    const [{ input, output }] = examples;
+    calls.push(`numToWord(${JSON.stringify(locales[0])}, ${literal(input)}); // ${JSON.stringify(output)}`);
+  }
+  const code = calls.length === 0 ? "" : `\n\`\`\`js\n${calls.join("\n")}\n\`\`\`\n`;
+  const cases =
+    letterCase === undefined
+      ? "非対応 / Not supported"
+      : letterCases.map((value) => `\`${value}\`${value === letterCase ? "（既定）" : ""}`).join(", ");
+  return `## ${label}
+${code}
+- ロケール / Locale: ${locales.map((locale) => `\`${locale}\``).join(", ")}
+- 大文字小文字 / Letter case: ${cases}
+`;
+};
+
+export const renderDigitsDoc = (entries: readonly DigitEntry[], letterCases: readonly string[]): string =>
+  `<!-- ${NOTICE} -->
+
+# 桁読み変換 / Digit-by-digit Conversion
+
+\`@dak-ia/num-to-word\`で数字を1桁ずつ各言語の語に変換した一覧です。使い方は[README](https://github.com/dak-ia/num-to-word#readme)を参照してください。
+
+${[...entries]
+  .sort((a, b) => (docOrder(a) < docOrder(b) ? -1 : 1))
+  .map((entry) => renderDocSection(entry, letterCases))
+  .join("\n")}`;
+
 export const renderBarrel = (entries: readonly Pick<DigitEntry, "fn">[]): string =>
   `${HEADER}\n${entries.map(({ fn }) => `export { ${fn} } from "./${fn}";`).join("\n")}\n`;
 
@@ -75,7 +116,8 @@ const isDigitWords = (value: unknown): value is DigitWords =>
   typeof value === "object" &&
   value !== null &&
   Array.isArray((value as DigitWords).digits) &&
-  (value as DigitWords).digits.length === 10;
+  (value as DigitWords).digits.length === 10 &&
+  Array.isArray((value as DigitWords).locales);
 
 export const buildEntries = (
   dictionaries: Record<string, unknown>,
@@ -90,11 +132,20 @@ export const buildEntries = (
       if (!NAME_PATTERN.test(dictionary.name)) {
         throw new Error(`${wordsExport}のnameが識別子として使えない: ${JSON.stringify(dictionary.name)}`);
       }
+      const label = dictionary.label ?? `${dictionary.name} words`;
+      // labelは文書の見出しになるので、改行が混ざると節が割れる
+      if (label.includes("\n")) {
+        throw new Error(`${wordsExport}のlabelが1行になっていない: ${JSON.stringify(label)}`);
+      }
+      if (dictionary.locales.length === 0) {
+        throw new Error(`${wordsExport}にロケールが無い`);
+      }
       return {
         fn: `numTo${dictionary.name}Digits`,
         wordsExport,
-        label: dictionary.label ?? `${dictionary.name} words`,
-        hasLetterCase: dictionary.letterCase !== undefined,
+        label,
+        letterCase: dictionary.letterCase,
+        locales: dictionary.locales,
         examples: EXAMPLE_INPUTS.map((input) => ({ input, output: exampleOf(input, dictionary) })),
       };
     })
@@ -106,6 +157,12 @@ export const buildEntries = (
   const duplicated = entries.find((entry, index) => entries[index + 1]?.fn === entry.fn);
   if (duplicated !== undefined) {
     throw new Error(`nameが重複している: ${duplicated.fn}`);
+  }
+  // 同じロケールを2つの辞書が名乗ると、localeMapの後ろ側が引かれなくなる
+  const locales = entries.flatMap(({ locales: own }) => own);
+  const sharedLocale = locales.find((locale, index) => locales.indexOf(locale) !== index);
+  if (sharedLocale !== undefined) {
+    throw new Error(`ロケールが重複している: ${sharedLocale}`);
   }
   return entries;
 };
@@ -123,6 +180,7 @@ export const prettify: FormatSource = async (path, text) => {
 export type MainOptions = {
   argv: readonly string[];
   outDir: string;
+  docPath: string;
   load: () => Promise<SourceModule>;
   formatSource: FormatSource;
   log: (_message: string) => void;
@@ -133,14 +191,14 @@ export type MainOptions = {
  * 辞書から変換関数を生成して書き出す
  * @returns 終了コード
  */
-export const main = async ({ argv, outDir, load, formatSource, log, error }: MainOptions): Promise<number> => {
+export const main = async ({ argv, outDir, docPath, load, formatSource, log, error }: MainOptions): Promise<number> => {
   // --checkの綴りを間違えると、そのまま書き込みと削除が走ってしまう
   const unknown = argv.filter((arg) => arg !== "--check");
   if (unknown.length > 0) {
     error(`知らない引数: ${unknown.join(", ")}`);
     return 1;
   }
-  const { replaceDigits, ...dictionaries } = await load();
+  const { replaceDigits, LetterCase: letterCases, ...dictionaries } = await load();
   const entries = buildEntries(dictionaries, (number, dictionary) => replaceDigits(number, dictionary));
 
   const files = new Map<string, string>();
@@ -150,6 +208,7 @@ export const main = async ({ argv, outDir, load, formatSource, log, error }: Mai
   }
   const barrelPath = join(outDir, "index.ts");
   files.set(barrelPath, await formatSource(barrelPath, renderBarrel(entries)));
+  files.set(docPath, await formatSource(docPath, renderDigitsDoc(entries, Object.values(letterCases))));
 
   const wanted = [...entries.map(({ fn }) => `${fn}.ts`), "index.ts"];
   const stale = findStale(await readdir(outDir).catch(() => []), wanted);
@@ -159,7 +218,7 @@ export const main = async ({ argv, outDir, load, formatSource, log, error }: Mai
     if ((await readFile(path, "utf8").catch(() => null)) !== text) changed.push(path);
   }
 
-  const summary = `${entries.length}言語、うち大文字小文字あり${entries.filter((e) => e.hasLetterCase).length}`;
+  const summary = `${entries.length}種類、うち大文字小文字あり${entries.filter((e) => e.letterCase !== undefined).length}`;
 
   if (argv.includes("--check")) {
     if (changed.length > 0 || stale.length > 0) {
@@ -168,16 +227,17 @@ export const main = async ({ argv, outDir, load, formatSource, log, error }: Mai
       error("npm run generateを実行すること");
       return 1;
     }
-    log(`最新: ${outDir}（${summary}）`);
+    log(`最新（${summary}）`);
     return 0;
   }
 
-  await mkdir(outDir, { recursive: true });
   for (const [path, text] of files) {
-    if (changed.includes(path)) await writeFile(path, text);
+    if (!changed.includes(path)) continue;
+    await mkdir(dirname(path), { recursive: true });
+    await writeFile(path, text);
   }
   for (const name of stale) await rm(join(outDir, name));
   const moved = changed.length + stale.length;
-  log(`${moved === 0 ? "変更なし" : `生成${moved}件`}: ${outDir}（${summary}）`);
+  log(`${moved === 0 ? "変更なし" : `生成${moved}件`}（${summary}）`);
   return 0;
 };

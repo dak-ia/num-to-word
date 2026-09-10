@@ -3,6 +3,7 @@ import { LetterCase } from "../constants";
 
 export const nlDigitWords: DigitWords = {
   name: "Dutch",
+  locales: ["nl-digits", "dutch-digits"],
   digits: ["nul", "een", "twee", "drie", "vier", "vijf", "zes", "zeven", "acht", "negen"],
   join: " ",
   decimalPoint: " komma ",

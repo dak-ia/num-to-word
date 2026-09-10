@@ -34,6 +34,7 @@ export const jpDaijiAfter: readonly string[] = [...jpDaijiOnesPlace, "拾", "陌
 export const jpDigitWords: DigitWords = {
   name: "Japanese",
   label: "Japanese kanji",
+  locales: ["jp-digits", "japanese-digits", "kanji-digits"],
   digits: jpOnesPlace,
   join: "",
   decimalPoint: "・",
@@ -45,5 +46,6 @@ export const jpDaijiDigitWords: DigitWords = {
   ...jpDigitWords,
   name: "Daiji",
   label: "Japanese daiji (大字) numerals",
+  locales: ["jpdaiji-digits", "daiji-digits"],
   digits: jpDaijiOnesPlace,
 };

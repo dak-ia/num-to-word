@@ -3,6 +3,7 @@ import { LetterCase } from "../constants";
 
 export const viDigitWords: DigitWords = {
   name: "Vietnamese",
+  locales: ["vi-digits", "vietnamese-digits"],
   digits: ["không", "một", "hai", "ba", "bốn", "năm", "sáu", "bảy", "tám", "chín"],
   join: " ",
   decimalPoint: " phẩy ",
