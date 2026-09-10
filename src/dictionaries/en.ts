@@ -140,6 +140,7 @@ export const enLargeUnits: Readonly<Record<number, string>> = {
 
 export const enDigitWords: DigitWords = {
   name: "English",
+  locales: ["en-digits", "english-digits"],
   digits: enOnesPlace,
   join: " ",
   decimalPoint: " point ",

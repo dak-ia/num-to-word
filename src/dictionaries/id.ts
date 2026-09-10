@@ -3,6 +3,7 @@ import { LetterCase } from "../constants";
 
 export const idDigitWords: DigitWords = {
   name: "Indonesian",
+  locales: ["id-digits", "indonesian-digits"],
   digits: ["nol", "satu", "dua", "tiga", "empat", "lima", "enam", "tujuh", "delapan", "sembilan"],
   join: " ",
   decimalPoint: " koma ",

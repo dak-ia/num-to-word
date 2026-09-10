@@ -3,6 +3,7 @@ import { LetterCase } from "../constants";
 
 export const ptDigitWords: DigitWords = {
   name: "Portuguese",
+  locales: ["pt-digits", "portuguese-digits"],
   digits: ["zero", "um", "dois", "três", "quatro", "cinco", "seis", "sete", "oito", "nove"],
   join: " ",
   decimalPoint: " vírgula ",

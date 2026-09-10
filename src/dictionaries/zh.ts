@@ -2,6 +2,7 @@ import type { DigitWords } from "../types";
 
 export const zhDigitWords: DigitWords = {
   name: "Chinese",
+  locales: ["zh-digits", "chinese-digits"],
   digits: ["零", "一", "二", "三", "四", "五", "六", "七", "八", "九"],
   join: "",
   decimalPoint: "点",

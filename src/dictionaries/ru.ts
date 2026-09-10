@@ -3,6 +3,7 @@ import { LetterCase } from "../constants";
 
 export const ruDigitWords: DigitWords = {
   name: "Russian",
+  locales: ["ru-digits", "russian-digits"],
   digits: ["ноль", "один", "два", "три", "четыре", "пять", "шесть", "семь", "восемь", "девять"],
   join: " ",
   decimalPoint: " запятая ",
