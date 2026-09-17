@@ -23,7 +23,7 @@ export const replaceDigits = (number: number | string, words: DigitWords, letter
       throw new InvalidArgumentError("Letter case is not supported for this conversion.");
     }
   }
-  const numberParts = preprocessNumber(number);
+  const numberParts = preprocessNumber(number, words.separators);
   const prefix = numberParts.isNegative ? words.minus : "";
   if (numberParts.isInfinity) {
     return applyLetterCase(prefix + words.infinity, words, letterCase);
