@@ -1,9 +1,10 @@
+import { DecimalSeparator, GroupSeparator, LetterCase } from "../constants";
 import type { DigitWords } from "../types";
-import { LetterCase } from "../constants";
 
 export const idDigitWords: DigitWords = {
   name: "Indonesian",
   locales: ["id-digits", "indonesian-digits"],
+  separators: { decimal: DecimalSeparator.comma, group: GroupSeparator.period },
   digits: ["nol", "satu", "dua", "tiga", "empat", "lima", "enam", "tujuh", "delapan", "sembilan"],
   join: " ",
   decimalPoint: " koma ",

@@ -1,5 +1,5 @@
+import { DecimalSeparator, GroupSeparator, LetterCase } from "../constants";
 import type { DigitWords } from "../types";
-import { LetterCase } from "../constants";
 
 export const enOnesPlace = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"] as const;
 
@@ -141,6 +141,7 @@ export const enLargeUnits: Readonly<Record<number, string>> = {
 export const enDigitWords: DigitWords = {
   name: "English",
   locales: ["en-digits", "english-digits"],
+  separators: { decimal: DecimalSeparator.period, group: GroupSeparator.comma },
   digits: enOnesPlace,
   join: " ",
   decimalPoint: " point ",

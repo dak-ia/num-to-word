@@ -1,9 +1,10 @@
+import { DecimalSeparator, GroupSeparator, LetterCase } from "../constants";
 import type { DigitWords } from "../types";
-import { LetterCase } from "../constants";
 
 export const nlDigitWords: DigitWords = {
   name: "Dutch",
   locales: ["nl-digits", "dutch-digits"],
+  separators: { decimal: DecimalSeparator.comma, group: GroupSeparator.period },
   digits: ["nul", "een", "twee", "drie", "vier", "vijf", "zes", "zeven", "acht", "negen"],
   join: " ",
   decimalPoint: " komma ",
