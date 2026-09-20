@@ -10,7 +10,7 @@ import { replaceDigits } from "../../utils";
  * @returns Dutch words representing each digit
  * @example
  * numToDutchDigits("0123") // "Nul een twee drie"
- * numToDutchDigits("1.500") // "Een komma vijf nul nul"
+ * numToDutchDigits("1,500") // "Een komma vijf nul nul"
  * numToDutchDigits(Infinity) // "Oneindig"
  */
 export const numToDutchDigits = (number: number | string, letterCase?: LetterCase): string =>

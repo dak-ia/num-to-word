@@ -10,7 +10,7 @@ import { replaceDigits } from "../../utils";
  * @returns French words representing each digit
  * @example
  * numToFrenchDigits("0123") // "Zéro un deux trois"
- * numToFrenchDigits("1.500") // "Un virgule cinq zéro zéro"
+ * numToFrenchDigits("1,500") // "Un virgule cinq zéro zéro"
  * numToFrenchDigits(Infinity) // "Infini"
  */
 export const numToFrenchDigits = (number: number | string, letterCase?: LetterCase): string =>

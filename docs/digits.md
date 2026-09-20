@@ -13,6 +13,8 @@ numToArabicDigits(Infinity); // "لانهاية"
 numToWord("ar-digits", "0123"); // "صفر واحد اثنان ثلاثة"
 ```
 
+- 小数点 / Decimal point: `.`
+- 桁区切り / Group separator: `,`
 - ロケール / Locale: `ar-digits`, `arabic-digits`
 - 大文字小文字 / Letter case: 非対応 / Not supported
 
@@ -25,6 +27,8 @@ numToBengaliDigits(Infinity); // "অসীম"
 numToWord("bn-digits", "0123"); // "শূন্য এক দুই তিন"
 ```
 
+- 小数点 / Decimal point: `.`
+- 桁区切り / Group separator: `,`
 - ロケール / Locale: `bn-digits`, `bengali-digits`
 - 大文字小文字 / Letter case: 非対応 / Not supported
 
@@ -37,6 +41,8 @@ numToChineseDigits(Infinity); // "无穷"
 numToWord("zh-digits", "0123"); // "零一二三"
 ```
 
+- 小数点 / Decimal point: `.`
+- 桁区切り / Group separator: `,`
 - ロケール / Locale: `zh-digits`, `chinese-digits`
 - 大文字小文字 / Letter case: 非対応 / Not supported
 
@@ -44,11 +50,13 @@ numToWord("zh-digits", "0123"); // "零一二三"
 
 ```js
 numToDutchDigits("0123"); // "Nul een twee drie"
-numToDutchDigits("1.500"); // "Een komma vijf nul nul"
+numToDutchDigits("1,500"); // "Een komma vijf nul nul"
 numToDutchDigits(Infinity); // "Oneindig"
 numToWord("nl-digits", "0123"); // "Nul een twee drie"
 ```
 
+- 小数点 / Decimal point: `,`
+- 桁区切り / Group separator: `.`
 - ロケール / Locale: `nl-digits`, `dutch-digits`
 - 大文字小文字 / Letter case: `capitalize`（既定）, `upper`, `lower`
 
@@ -61,6 +69,8 @@ numToEnglishDigits(Infinity); // "Infinity"
 numToWord("en-digits", "0123"); // "Zero one two three"
 ```
 
+- 小数点 / Decimal point: `.`
+- 桁区切り / Group separator: `,`
 - ロケール / Locale: `en-digits`, `english-digits`
 - 大文字小文字 / Letter case: `capitalize`（既定）, `upper`, `lower`
 
@@ -68,11 +78,13 @@ numToWord("en-digits", "0123"); // "Zero one two three"
 
 ```js
 numToFrenchDigits("0123"); // "Zéro un deux trois"
-numToFrenchDigits("1.500"); // "Un virgule cinq zéro zéro"
+numToFrenchDigits("1,500"); // "Un virgule cinq zéro zéro"
 numToFrenchDigits(Infinity); // "Infini"
 numToWord("fr-digits", "0123"); // "Zéro un deux trois"
 ```
 
+- 小数点 / Decimal point: `,`
+- 桁区切り / Group separator: 空白 / space
 - ロケール / Locale: `fr-digits`, `french-digits`
 - 大文字小文字 / Letter case: `capitalize`（既定）, `upper`, `lower`
 
@@ -80,11 +92,13 @@ numToWord("fr-digits", "0123"); // "Zéro un deux trois"
 
 ```js
 numToGermanDigits("0123"); // "Null eins zwei drei"
-numToGermanDigits("1.500"); // "Eins Komma fünf null null"
+numToGermanDigits("1,500"); // "Eins Komma fünf null null"
 numToGermanDigits(Infinity); // "Unendlich"
 numToWord("de-digits", "0123"); // "Null eins zwei drei"
 ```
 
+- 小数点 / Decimal point: `,`
+- 桁区切り / Group separator: `.`
 - ロケール / Locale: `de-digits`, `german-digits`
 - 大文字小文字 / Letter case: `capitalize`（既定）, `upper`, `lower`
 
@@ -92,11 +106,13 @@ numToWord("de-digits", "0123"); // "Null eins zwei drei"
 
 ```js
 numToGreekDigits("0123"); // "Μηδέν ένα δύο τρία"
-numToGreekDigits("1.500"); // "Ένα κόμμα πέντε μηδέν μηδέν"
+numToGreekDigits("1,500"); // "Ένα κόμμα πέντε μηδέν μηδέν"
 numToGreekDigits(Infinity); // "Άπειρο"
 numToWord("el-digits", "0123"); // "Μηδέν ένα δύο τρία"
 ```
 
+- 小数点 / Decimal point: `,`
+- 桁区切り / Group separator: `.`
 - ロケール / Locale: `el-digits`, `greek-digits`
 - 大文字小文字 / Letter case: `capitalize`（既定）, `upper`, `lower`
 
@@ -109,6 +125,8 @@ numToHindiDigits(Infinity); // "अनंत"
 numToWord("hi-digits", "0123"); // "शून्य एक दो तीन"
 ```
 
+- 小数点 / Decimal point: `.`
+- 桁区切り / Group separator: `,`
 - ロケール / Locale: `hi-digits`, `hindi-digits`
 - 大文字小文字 / Letter case: 非対応 / Not supported
 
@@ -116,11 +134,13 @@ numToWord("hi-digits", "0123"); // "शून्य एक दो तीन"
 
 ```js
 numToIndonesianDigits("0123"); // "Nol satu dua tiga"
-numToIndonesianDigits("1.500"); // "Satu koma lima nol nol"
+numToIndonesianDigits("1,500"); // "Satu koma lima nol nol"
 numToIndonesianDigits(Infinity); // "Tak hingga"
 numToWord("id-digits", "0123"); // "Nol satu dua tiga"
 ```
 
+- 小数点 / Decimal point: `,`
+- 桁区切り / Group separator: `.`
 - ロケール / Locale: `id-digits`, `indonesian-digits`
 - 大文字小文字 / Letter case: `capitalize`（既定）, `upper`, `lower`
 
@@ -128,11 +148,13 @@ numToWord("id-digits", "0123"); // "Nol satu dua tiga"
 
 ```js
 numToItalianDigits("0123"); // "Zero uno due tre"
-numToItalianDigits("1.500"); // "Uno virgola cinque zero zero"
+numToItalianDigits("1,500"); // "Uno virgola cinque zero zero"
 numToItalianDigits(Infinity); // "Infinito"
 numToWord("it-digits", "0123"); // "Zero uno due tre"
 ```
 
+- 小数点 / Decimal point: `,`
+- 桁区切り / Group separator: `.`
 - ロケール / Locale: `it-digits`, `italian-digits`
 - 大文字小文字 / Letter case: `capitalize`（既定）, `upper`, `lower`
 
@@ -145,6 +167,8 @@ numToJapaneseDigits(Infinity); // "無限"
 numToWord("jp-digits", "0123"); // "〇一二三"
 ```
 
+- 小数点 / Decimal point: `.`
+- 桁区切り / Group separator: `,`
 - ロケール / Locale: `jp-digits`, `japanese-digits`, `kanji-digits`
 - 大文字小文字 / Letter case: 非対応 / Not supported
 
@@ -157,6 +181,8 @@ numToDaijiDigits(Infinity); // "無限"
 numToWord("jpdaiji-digits", "0123"); // "零壱弐参"
 ```
 
+- 小数点 / Decimal point: `.`
+- 桁区切り / Group separator: `,`
 - ロケール / Locale: `jpdaiji-digits`, `daiji-digits`
 - 大文字小文字 / Letter case: 非対応 / Not supported
 
@@ -169,6 +195,8 @@ numToKoreanDigits(Infinity); // "무한"
 numToWord("ko-digits", "0123"); // "영일이삼"
 ```
 
+- 小数点 / Decimal point: `.`
+- 桁区切り / Group separator: `,`
 - ロケール / Locale: `ko-digits`, `korean-digits`
 - 大文字小文字 / Letter case: 非対応 / Not supported
 
@@ -176,11 +204,13 @@ numToWord("ko-digits", "0123"); // "영일이삼"
 
 ```js
 numToPolishDigits("0123"); // "Zero jeden dwa trzy"
-numToPolishDigits("1.500"); // "Jeden przecinek pięć zero zero"
+numToPolishDigits("1,500"); // "Jeden przecinek pięć zero zero"
 numToPolishDigits(Infinity); // "Nieskończoność"
 numToWord("pl-digits", "0123"); // "Zero jeden dwa trzy"
 ```
 
+- 小数点 / Decimal point: `,`
+- 桁区切り / Group separator: 空白 / space
 - ロケール / Locale: `pl-digits`, `polish-digits`
 - 大文字小文字 / Letter case: `capitalize`（既定）, `upper`, `lower`
 
@@ -188,12 +218,28 @@ numToWord("pl-digits", "0123"); // "Zero jeden dwa trzy"
 
 ```js
 numToPortugueseDigits("0123"); // "Zero um dois três"
-numToPortugueseDigits("1.500"); // "Um vírgula cinco zero zero"
+numToPortugueseDigits("1,500"); // "Um vírgula cinco zero zero"
 numToPortugueseDigits(Infinity); // "Infinito"
 numToWord("pt-digits", "0123"); // "Zero um dois três"
 ```
 
+- 小数点 / Decimal point: `,`
+- 桁区切り / Group separator: 空白 / space
 - ロケール / Locale: `pt-digits`, `portuguese-digits`
+- 大文字小文字 / Letter case: `capitalize`（既定）, `upper`, `lower`
+
+## Portuguese words (Brazil)
+
+```js
+numToBrazilianPortugueseDigits("0123"); // "Zero um dois três"
+numToBrazilianPortugueseDigits("1,500"); // "Um vírgula cinco zero zero"
+numToBrazilianPortugueseDigits(Infinity); // "Infinito"
+numToWord("pt-br-digits", "0123"); // "Zero um dois três"
+```
+
+- 小数点 / Decimal point: `,`
+- 桁区切り / Group separator: `.`
+- ロケール / Locale: `pt-br-digits`, `brazilian-portuguese-digits`
 - 大文字小文字 / Letter case: `capitalize`（既定）, `upper`, `lower`
 
 ## Roman numerals
@@ -205,6 +251,8 @@ numToRomanDigits(Infinity); // "∞"
 numToWord("roman-digits", "0123"); // "N I II III"
 ```
 
+- 小数点 / Decimal point: `.`
+- 桁区切り / Group separator: `,`
 - ロケール / Locale: `roman-digits`
 - 大文字小文字 / Letter case: `capitalize`, `upper`（既定）, `lower`
 
@@ -212,11 +260,13 @@ numToWord("roman-digits", "0123"); // "N I II III"
 
 ```js
 numToRussianDigits("0123"); // "Ноль один два три"
-numToRussianDigits("1.500"); // "Один запятая пять ноль ноль"
+numToRussianDigits("1,500"); // "Один запятая пять ноль ноль"
 numToRussianDigits(Infinity); // "Бесконечность"
 numToWord("ru-digits", "0123"); // "Ноль один два три"
 ```
 
+- 小数点 / Decimal point: `,`
+- 桁区切り / Group separator: 空白 / space
 - ロケール / Locale: `ru-digits`, `russian-digits`
 - 大文字小文字 / Letter case: `capitalize`（既定）, `upper`, `lower`
 
@@ -224,12 +274,28 @@ numToWord("ru-digits", "0123"); // "Ноль один два три"
 
 ```js
 numToSpanishDigits("0123"); // "Cero uno dos tres"
-numToSpanishDigits("1.500"); // "Uno coma cinco cero cero"
+numToSpanishDigits("1,500"); // "Uno coma cinco cero cero"
 numToSpanishDigits(Infinity); // "Infinito"
 numToWord("es-digits", "0123"); // "Cero uno dos tres"
 ```
 
+- 小数点 / Decimal point: `,`
+- 桁区切り / Group separator: `.`
 - ロケール / Locale: `es-digits`, `spanish-digits`
+- 大文字小文字 / Letter case: `capitalize`（既定）, `upper`, `lower`
+
+## Spanish words (Mexico)
+
+```js
+numToMexicanSpanishDigits("0123"); // "Cero uno dos tres"
+numToMexicanSpanishDigits("1.500"); // "Uno punto cinco cero cero"
+numToMexicanSpanishDigits(Infinity); // "Infinito"
+numToWord("es-mx-digits", "0123"); // "Cero uno dos tres"
+```
+
+- 小数点 / Decimal point: `.`
+- 桁区切り / Group separator: `,`
+- ロケール / Locale: `es-mx-digits`, `mexican-spanish-digits`
 - 大文字小文字 / Letter case: `capitalize`（既定）, `upper`, `lower`
 
 ## Thai words
@@ -241,6 +307,8 @@ numToThaiDigits(Infinity); // "อนันต์"
 numToWord("th-digits", "0123"); // "ศูนย์หนึ่งสองสาม"
 ```
 
+- 小数点 / Decimal point: `.`
+- 桁区切り / Group separator: `,`
 - ロケール / Locale: `th-digits`, `thai-digits`
 - 大文字小文字 / Letter case: 非対応 / Not supported
 
@@ -248,11 +316,13 @@ numToWord("th-digits", "0123"); // "ศูนย์หนึ่งสองส�
 
 ```js
 numToTurkishDigits("0123"); // "Sıfır bir iki üç"
-numToTurkishDigits("1.500"); // "Bir virgül beş sıfır sıfır"
+numToTurkishDigits("1,500"); // "Bir virgül beş sıfır sıfır"
 numToTurkishDigits(Infinity); // "Sonsuz"
 numToWord("tr-digits", "0123"); // "Sıfır bir iki üç"
 ```
 
+- 小数点 / Decimal point: `,`
+- 桁区切り / Group separator: `.`
 - ロケール / Locale: `tr-digits`, `turkish-digits`
 - 大文字小文字 / Letter case: `capitalize`（既定）, `upper`, `lower`
 
@@ -260,10 +330,12 @@ numToWord("tr-digits", "0123"); // "Sıfır bir iki üç"
 
 ```js
 numToVietnameseDigits("0123"); // "Không một hai ba"
-numToVietnameseDigits("1.500"); // "Một phẩy năm không không"
+numToVietnameseDigits("1,500"); // "Một phẩy năm không không"
 numToVietnameseDigits(Infinity); // "Vô cực"
 numToWord("vi-digits", "0123"); // "Không một hai ba"
 ```
 
+- 小数点 / Decimal point: `,`
+- 桁区切り / Group separator: `.`
 - ロケール / Locale: `vi-digits`, `vietnamese-digits`
 - 大文字小文字 / Letter case: `capitalize`（既定）, `upper`, `lower`

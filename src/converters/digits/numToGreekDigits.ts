@@ -10,7 +10,7 @@ import { replaceDigits } from "../../utils";
  * @returns Greek words representing each digit
  * @example
  * numToGreekDigits("0123") // "Μηδέν ένα δύο τρία"
- * numToGreekDigits("1.500") // "Ένα κόμμα πέντε μηδέν μηδέν"
+ * numToGreekDigits("1,500") // "Ένα κόμμα πέντε μηδέν μηδέν"
  * numToGreekDigits(Infinity) // "Άπειρο"
  */
 export const numToGreekDigits = (number: number | string, letterCase?: LetterCase): string =>

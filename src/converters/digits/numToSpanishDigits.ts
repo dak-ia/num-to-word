@@ -10,7 +10,7 @@ import { replaceDigits } from "../../utils";
  * @returns Spanish words representing each digit
  * @example
  * numToSpanishDigits("0123") // "Cero uno dos tres"
- * numToSpanishDigits("1.500") // "Uno coma cinco cero cero"
+ * numToSpanishDigits("1,500") // "Uno coma cinco cero cero"
  * numToSpanishDigits(Infinity) // "Infinito"
  */
 export const numToSpanishDigits = (number: number | string, letterCase?: LetterCase): string =>

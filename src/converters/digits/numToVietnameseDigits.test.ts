@@ -1,15 +1,19 @@
+// このファイルはnpm run generateからの自動生成のため手動編集禁止
 import { numToVietnameseDigits } from "./numToVietnameseDigits";
 
 describe("numToVietnameseDigits", () => {
   test("converts each digit", () => {
-    expect(numToVietnameseDigits("123")).toBe("Một hai ba");
+    expect(numToVietnameseDigits("0123456789")).toBe("Không một hai ba bốn năm sáu bảy tám chín");
     expect(numToVietnameseDigits(123)).toBe("Một hai ba");
     expect(numToVietnameseDigits("0")).toBe("Không");
-    expect(numToVietnameseDigits("0123456789")).toBe("Không một hai ba bốn năm sáu bảy tám chín");
   });
 
   test("keeps trailing zeros in the decimal part", () => {
-    expect(numToVietnameseDigits("1.50")).toBe("Một phẩy năm không");
+    expect(numToVietnameseDigits("1,50")).toBe("Một phẩy năm không");
+  });
+
+  test("reads the group separator", () => {
+    expect(numToVietnameseDigits("1.500")).toBe("Một năm không không");
   });
 
   test("converts negative numbers", () => {
@@ -24,8 +28,10 @@ describe("numToVietnameseDigits", () => {
 
   test("changes letter case", () => {
     expect(numToVietnameseDigits("12", "capitalize")).toBe("Một hai");
+    expect(numToVietnameseDigits(-Infinity, "capitalize")).toBe("Âm vô cực");
     expect(numToVietnameseDigits("12", "upper")).toBe("MỘT HAI");
-    expect(numToVietnameseDigits("12", "lower")).toBe("một hai");
     expect(numToVietnameseDigits(-Infinity, "upper")).toBe("ÂM VÔ CỰC");
+    expect(numToVietnameseDigits("12", "lower")).toBe("một hai");
+    expect(numToVietnameseDigits(-Infinity, "lower")).toBe("âm vô cực");
   });
 });

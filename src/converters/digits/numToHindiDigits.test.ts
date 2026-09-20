@@ -1,15 +1,19 @@
+// このファイルはnpm run generateからの自動生成のため手動編集禁止
 import { numToHindiDigits } from "./numToHindiDigits";
 
 describe("numToHindiDigits", () => {
   test("converts each digit", () => {
-    expect(numToHindiDigits("123")).toBe("एक दो तीन");
+    expect(numToHindiDigits("0123456789")).toBe("शून्य एक दो तीन चार पाँच छह सात आठ नौ");
     expect(numToHindiDigits(123)).toBe("एक दो तीन");
     expect(numToHindiDigits("0")).toBe("शून्य");
-    expect(numToHindiDigits("0123456789")).toBe("शून्य एक दो तीन चार पाँच छह सात आठ नौ");
   });
 
   test("keeps trailing zeros in the decimal part", () => {
     expect(numToHindiDigits("1.50")).toBe("एक दशमलव पाँच शून्य");
+  });
+
+  test("reads the group separator", () => {
+    expect(numToHindiDigits("1,500")).toBe("एक पाँच शून्य शून्य");
   });
 
   test("converts negative numbers", () => {

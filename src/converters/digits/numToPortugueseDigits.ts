@@ -10,7 +10,7 @@ import { replaceDigits } from "../../utils";
  * @returns Portuguese words representing each digit
  * @example
  * numToPortugueseDigits("0123") // "Zero um dois três"
- * numToPortugueseDigits("1.500") // "Um vírgula cinco zero zero"
+ * numToPortugueseDigits("1,500") // "Um vírgula cinco zero zero"
  * numToPortugueseDigits(Infinity) // "Infinito"
  */
 export const numToPortugueseDigits = (number: number | string, letterCase?: LetterCase): string =>

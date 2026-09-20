@@ -1,15 +1,19 @@
+// このファイルはnpm run generateからの自動生成のため手動編集禁止
 import { numToGreekDigits } from "./numToGreekDigits";
 
 describe("numToGreekDigits", () => {
   test("converts each digit", () => {
-    expect(numToGreekDigits("123")).toBe("Ένα δύο τρία");
+    expect(numToGreekDigits("0123456789")).toBe("Μηδέν ένα δύο τρία τέσσερα πέντε έξι επτά οκτώ εννέα");
     expect(numToGreekDigits(123)).toBe("Ένα δύο τρία");
     expect(numToGreekDigits("0")).toBe("Μηδέν");
-    expect(numToGreekDigits("0123456789")).toBe("Μηδέν ένα δύο τρία τέσσερα πέντε έξι επτά οκτώ εννέα");
   });
 
   test("keeps trailing zeros in the decimal part", () => {
-    expect(numToGreekDigits("1.50")).toBe("Ένα κόμμα πέντε μηδέν");
+    expect(numToGreekDigits("1,50")).toBe("Ένα κόμμα πέντε μηδέν");
+  });
+
+  test("reads the group separator", () => {
+    expect(numToGreekDigits("1.500")).toBe("Ένα πέντε μηδέν μηδέν");
   });
 
   test("converts negative numbers", () => {
@@ -22,15 +26,12 @@ describe("numToGreekDigits", () => {
     expect(numToGreekDigits(-Infinity)).toBe("Μείον άπειρο");
   });
 
-  test("drops accents in upper case", () => {
-    expect(numToGreekDigits("1", "capitalize")).toBe("Ένα");
-    expect(numToGreekDigits("1", "upper")).toBe("ΕΝΑ");
-  });
-
   test("changes letter case", () => {
     expect(numToGreekDigits("12", "capitalize")).toBe("Ένα δύο");
+    expect(numToGreekDigits(-Infinity, "capitalize")).toBe("Μείον άπειρο");
     expect(numToGreekDigits("12", "upper")).toBe("ΕΝΑ ΔΥΟ");
-    expect(numToGreekDigits("12", "lower")).toBe("ένα δύο");
     expect(numToGreekDigits(-Infinity, "upper")).toBe("ΜΕΙΟΝ ΑΠΕΙΡΟ");
+    expect(numToGreekDigits("12", "lower")).toBe("ένα δύο");
+    expect(numToGreekDigits(-Infinity, "lower")).toBe("μείον άπειρο");
   });
 });
