@@ -139,6 +139,7 @@ Convert a number using the specified locale.
   - `locale` (string) - ロケール識別子 / Locale identifier: `"si"`, `"en"`, `"english"`, `"jp"`, `"japanese"`, `"kanji"`, `"jpdaiji"`, `"daiji"`
     - 末尾に`-digits`を付けると1桁ずつ変換します（`"en-digits"`, `"jp-digits"`, `"daiji-digits"`など）。`"si"`に桁読みはありません / Append `-digits` to convert digit by digit. Not available for `"si"`
     - 桁読みのロケールの一覧は[docs/digits.md](https://github.com/dak-ia/num-to-word/blob/main/docs/digits.md) / The full list of digit-by-digit locales is in [docs/digits.md](https://github.com/dak-ia/num-to-word/blob/main/docs/digits.md)
+    - ロケールは`locales`としてexportしています / The locales are exported as `locales`
   - `number` (number | string) - 変換する数字 / The number to convert
   - `letterCase` (`"capitalize"` | `"upper"` | `"lower"`) - 大文字小文字の指定 / Letter case
 - **戻り値 / Returns**: string - ロケール対応表現 / Localized representation

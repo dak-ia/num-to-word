@@ -13,7 +13,7 @@ describe("converters", () => {
   test("every converter but the dispatcher answers to a locale of numToWord", () => {
     const mapped = new Set<unknown>(localeMap.map((entry) => entry.fn));
     const missing = Object.entries(converters)
-      .filter(([name, fn]) => name !== "numToWord" && !mapped.has(fn))
+      .filter(([name, exported]) => typeof exported === "function" && name !== "numToWord" && !mapped.has(exported))
       .map(([name]) => name);
     expect(missing).toEqual([]);
   });

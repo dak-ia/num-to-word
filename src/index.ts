@@ -1,4 +1,5 @@
 export {
+  locales,
   numToArabicDigits,
   numToBengaliDigits,
   numToBrazilianPortugueseDigits,

@@ -122,3 +122,5 @@ export const localeMap: LocaleEntry[] = [
   { keys: viDigitWords.locales, fn: numToVietnameseDigits },
   { keys: romanDigitWords.locales, fn: numToRomanDigits },
 ];
+
+export const locales: readonly string[] = localeMap.flatMap((entry) => entry.keys);
