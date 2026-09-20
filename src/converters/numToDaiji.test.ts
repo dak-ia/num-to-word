@@ -146,6 +146,10 @@ describe("numToDaiji", () => {
     expect(numToDaiji("0.001")).toBe("零・零零壱");
   });
 
+  test("reads the comma as the group separator", () => {
+    expect(numToDaiji("1,234")).toBe("壱阡弐陌参拾肆");
+  });
+
   test("negative numbers", () => {
     expect(numToDaiji("-1")).toBe("負の壱");
     expect(numToDaiji("-123")).toBe("負の壱陌弐拾参");

@@ -146,6 +146,10 @@ describe("numToJapanese", () => {
     expect(numToJapanese("0.001")).toBe("〇・〇〇一");
   });
 
+  test("reads the comma as the group separator", () => {
+    expect(numToJapanese("1,234")).toBe("千二百三十四");
+  });
+
   test("negative numbers", () => {
     expect(numToJapanese("-1")).toBe("負の一");
     expect(numToJapanese("-123")).toBe("負の百二十三");

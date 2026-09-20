@@ -41,6 +41,10 @@ describe("numToSi", () => {
     expect(numToSi("0.00010")).toBe("0.0001");
   });
 
+  test("reads the comma as the group separator", () => {
+    expect(numToSi("1,234")).toBe("1.234K");
+  });
+
   test("negative numbers", () => {
     expect(numToSi("-1234")).toBe("-1.234K");
     expect(numToSi("-1234567")).toBe("-1.234567M");
