@@ -71,7 +71,7 @@ Convert a number to SI prefix notation.
 - **例 / Example**:
   ```javascript
   numToSi(1234); // "1.234K"
-  numToSi(1234567); // "1.235M"
-  numToSi("1234567890"); // "1.235G"
+  numToSi(1234567); // "1.234567M"
+  numToSi("1234567890"); // "1.23456789G"
   numToSi(-1234); // "-1.234K"
   ```
