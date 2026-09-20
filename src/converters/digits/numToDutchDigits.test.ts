@@ -1,15 +1,19 @@
+// このファイルはnpm run generateからの自動生成のため手動編集禁止
 import { numToDutchDigits } from "./numToDutchDigits";
 
 describe("numToDutchDigits", () => {
   test("converts each digit", () => {
-    expect(numToDutchDigits("123")).toBe("Een twee drie");
+    expect(numToDutchDigits("0123456789")).toBe("Nul een twee drie vier vijf zes zeven acht negen");
     expect(numToDutchDigits(123)).toBe("Een twee drie");
     expect(numToDutchDigits("0")).toBe("Nul");
-    expect(numToDutchDigits("0123456789")).toBe("Nul een twee drie vier vijf zes zeven acht negen");
   });
 
   test("keeps trailing zeros in the decimal part", () => {
-    expect(numToDutchDigits("1.50")).toBe("Een komma vijf nul");
+    expect(numToDutchDigits("1,50")).toBe("Een komma vijf nul");
+  });
+
+  test("reads the group separator", () => {
+    expect(numToDutchDigits("1.500")).toBe("Een vijf nul nul");
   });
 
   test("converts negative numbers", () => {
@@ -24,8 +28,10 @@ describe("numToDutchDigits", () => {
 
   test("changes letter case", () => {
     expect(numToDutchDigits("12", "capitalize")).toBe("Een twee");
+    expect(numToDutchDigits(-Infinity, "capitalize")).toBe("Min oneindig");
     expect(numToDutchDigits("12", "upper")).toBe("EEN TWEE");
-    expect(numToDutchDigits("12", "lower")).toBe("een twee");
     expect(numToDutchDigits(-Infinity, "upper")).toBe("MIN ONEINDIG");
+    expect(numToDutchDigits("12", "lower")).toBe("een twee");
+    expect(numToDutchDigits(-Infinity, "lower")).toBe("min oneindig");
   });
 });

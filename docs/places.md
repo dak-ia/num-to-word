@@ -1,4 +1,4 @@
-# APIリファレンス / API Reference
+# 位取り変換 / Place-value Conversion
 
 数を位取りのある表記に変換する関数です。1桁ずつの変換は[docs/digits.md](https://github.com/dak-ia/num-to-word/blob/main/docs/digits.md)にまとめています。
 
@@ -71,7 +71,7 @@ Convert a number to SI prefix notation.
 - **例 / Example**:
   ```javascript
   numToSi(1234); // "1.234K"
-  numToSi(1234567); // "1.235M"
-  numToSi("1234567890"); // "1.235G"
+  numToSi(1234567); // "1.234567M"
+  numToSi("1234567890"); // "1.23456789G"
   numToSi(-1234); // "-1.234K"
   ```

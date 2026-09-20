@@ -1,3 +1,4 @@
+import { DecimalSeparator, GroupSeparator } from "../constants";
 import type { DigitWords } from "../types";
 
 export const jpOnesPlace = ["〇", "一", "二", "三", "四", "五", "六", "七", "八", "九"] as const;
@@ -35,6 +36,7 @@ export const jpDigitWords: DigitWords = {
   name: "Japanese",
   label: "Japanese kanji",
   locales: ["jp-digits", "japanese-digits", "kanji-digits"],
+  separators: { decimal: DecimalSeparator.period, group: GroupSeparator.comma },
   digits: jpOnesPlace,
   join: "",
   decimalPoint: "・",

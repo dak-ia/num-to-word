@@ -1,17 +1,19 @@
+// このファイルはnpm run generateからの自動生成のため手動編集禁止
 import { numToDaijiDigits } from "./numToDaijiDigits";
 
 describe("numToDaijiDigits", () => {
   test("converts each digit", () => {
-    expect(numToDaijiDigits("123")).toBe("壱弐参");
+    expect(numToDaijiDigits("0123456789")).toBe("零壱弐参肆伍陸漆捌玖");
     expect(numToDaijiDigits(123)).toBe("壱弐参");
     expect(numToDaijiDigits("0")).toBe("零");
-    expect(numToDaijiDigits("9876543210")).toBe("玖捌漆陸伍肆参弐壱零");
   });
 
   test("keeps trailing zeros in the decimal part", () => {
-    expect(numToDaijiDigits("12.34")).toBe("壱弐・参肆");
-    expect(numToDaijiDigits("1.500")).toBe("壱・伍零零");
-    expect(numToDaijiDigits("1.0")).toBe("壱・零");
+    expect(numToDaijiDigits("1.50")).toBe("壱・伍零");
+  });
+
+  test("reads the group separator", () => {
+    expect(numToDaijiDigits("1,500")).toBe("壱伍零零");
   });
 
   test("converts negative numbers", () => {

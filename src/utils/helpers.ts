@@ -1,15 +1,17 @@
+import { DecimalSeparator, GroupSeparator } from "../constants";
 import { InvalidArgumentError, InvalidInputError, OverflowError } from "../errors";
+import type { NumArray, Separators } from "../types/index";
 import { ResultOverflowError, expandExponential } from "expand-exponential";
-import type { NumArray } from "../types/index";
 
 /**
  * Preprocesses a number input: validates, normalizes, and splits into components.
  * @param number - The number to preprocess
+ * @param separators - How the language writes the decimal point and the group separator
  * @returns An object with integer, decimal, isNegative, and isInfinity properties
  * @throws {InvalidArgumentError} If not a number or string
  * @throws {InvalidInputError} If empty, or not a valid number or exponential notation
  */
-export const preprocessNumber = (number: number | string): NumArray => {
+export const preprocessNumber = (number: number | string, separators?: Separators): NumArray => {
   if (typeof number !== "number" && typeof number !== "string") {
     throw new InvalidArgumentError();
   }
@@ -19,13 +21,31 @@ export const preprocessNumber = (number: number | string): NumArray => {
     return infinityResult;
   }
 
-  const strNumber = convertToNumericString(number);
+  const localized = typeof number === "string" ? toPeriodSystem(number, separators) : number;
+  const strNumber = convertToNumericString(localized);
   const isNegative = strNumber.startsWith("-");
   const absNumber = isNegative ? strNumber.slice(1) : strNumber;
   const numberParts: NumArray = { integer: "", decimal: "", isNegative, isInfinity: false };
   numberParts.integer = absNumber.split(".")[0];
   numberParts.decimal = absNumber.split(".")[1] || "";
   return numberParts;
+};
+
+/**
+ * Rewrites the separators of the language into the period system.
+ * @internal
+ * @throws {InvalidInputError} If the input uses a character the language does not use as a separator
+ */
+const toPeriodSystem = (number: string, separators?: Separators): string => {
+  const { decimal, group } = separators ?? { decimal: DecimalSeparator.period, group: GroupSeparator.comma };
+  if (decimal === DecimalSeparator.period) {
+    return number;
+  }
+  const halfWidth = number.replace(/．/g, ".").replace(/，/g, ",");
+  if (group !== GroupSeparator.period && halfWidth.includes(".")) {
+    throw new InvalidInputError();
+  }
+  return halfWidth.replace(/[.,]/g, (c) => (c === "." ? "," : "."));
 };
 
 /**

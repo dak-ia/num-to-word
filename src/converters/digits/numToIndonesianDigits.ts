@@ -10,7 +10,7 @@ import { replaceDigits } from "../../utils";
  * @returns Indonesian words representing each digit
  * @example
  * numToIndonesianDigits("0123") // "Nol satu dua tiga"
- * numToIndonesianDigits("1.500") // "Satu koma lima nol nol"
+ * numToIndonesianDigits("1,500") // "Satu koma lima nol nol"
  * numToIndonesianDigits(Infinity) // "Tak hingga"
  */
 export const numToIndonesianDigits = (number: number | string, letterCase?: LetterCase): string =>

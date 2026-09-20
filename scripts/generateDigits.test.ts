@@ -1,16 +1,18 @@
+import { DecimalSeparator, GroupSeparator, LetterCase } from "../src/constants/index.ts";
 import {
   buildEntries,
   findStale,
   main,
   prettify,
   renderBarrel,
+  renderBarrelTest,
   renderConverter,
   renderDigitsDoc,
+  renderTest,
 } from "./generateDigits.ts";
 import { mkdtemp, readFile, readdir, rm, writeFile } from "node:fs/promises";
 import type { DigitWords } from "../src/types/index.ts";
 import type { FormatSource } from "./generateDigits.ts";
-import { LetterCase } from "../src/constants/index.ts";
 import { join } from "node:path";
 
 // prettierの設定はファイルの位置から引かれるので、リポジトリ内に作業ディレクトリを作る
@@ -25,6 +27,7 @@ const withTempDir = async <T>(run: (_dir: string) => Promise<T>): Promise<T> => 
 
 const base = {
   digits: ["ze", "on", "tw", "th", "fo", "fi", "si", "se", "ei", "ni"] as const,
+  separators: { decimal: DecimalSeparator.period, group: GroupSeparator.comma } as const,
   join: "-",
   decimalPoint: " dot ",
   minus: "neg ",
@@ -64,7 +67,6 @@ describe("renderConverter", () => {
       wordsExport: "enDigitWords",
       label: "English",
       letterCase: LetterCase.capitalize,
-      locales: ["en-digits"],
       examples: [{ input: "0123", output: "Ze-on-tw-th" }],
     });
     expect(source).toContain("letterCase?: LetterCase");
@@ -78,7 +80,6 @@ describe("renderConverter", () => {
       fn: "numToJapaneseDigits",
       wordsExport: "jpDigitWords",
       label: "Japanese kanji",
-      locales: ["jp-digits"],
       examples: [{ input: "0123", output: "ze-on-tw-th" }],
     });
     expect(source).toContain("(number: number | string): string =>\n  replaceDigits(number, jpDigitWords);");
@@ -94,7 +95,6 @@ describe("renderConverter", () => {
         wordsExport,
         label: "l",
         letterCase: LetterCase.capitalize,
-        locales: ["x-digits"],
         examples: [],
       });
       return ['from "../../constants"', 'from "../../dictionaries"', 'from "../../utils"'].map((from) =>
@@ -114,7 +114,6 @@ describe("renderConverter", () => {
       fn: "f",
       wordsExport: "enDigitWords",
       label: "l",
-      locales: ["x-digits"],
       examples: [],
     });
     expect(source).not.toContain("@example");
@@ -127,7 +126,6 @@ describe("renderConverter", () => {
       wordsExport: "enDigitWords",
       label: "English words",
       letterCase: LetterCase.capitalize,
-      locales: ["en-digits"],
       examples: [
         { input: "1.500", output: "on dot fi" },
         { input: Infinity, output: "inf" },
@@ -147,6 +145,21 @@ describe("renderBarrel", () => {
   });
 });
 
+describe("renderBarrelTest", () => {
+  const source = renderBarrelTest([{ fn: "numToAaaDigits" }, { fn: "numToBbbDigits" }]);
+
+  test("says the file is generated", () => {
+    expect(source).toContain("// このファイルはnpm run generateからの自動生成のため手動編集禁止");
+  });
+
+  test("expects the barrel to hold every generated converter", () => {
+    expect(source).toContain('import * as digits from "./index";');
+    expect(source).toContain("expect(Object.keys(digits).sort()).toEqual([");
+    expect(source).toContain('"numToAaaDigits"');
+    expect(source).toContain('"numToBbbDigits"');
+  });
+});
+
 describe("renderDigitsDoc", () => {
   const letterCases = Object.values(LetterCase);
   const entries = [
@@ -156,10 +169,12 @@ describe("renderDigitsDoc", () => {
       label: "English words",
       letterCase: LetterCase.capitalize,
       locales: ["en-digits", "english-digits"],
+      separators: { decimal: DecimalSeparator.period, group: GroupSeparator.comma } as const,
       examples: [
         { input: "0123", output: "Ze-on-tw-th" },
         { input: Infinity, output: "inf" },
       ],
+      tests: [],
     },
     {
       fn: "numToJapaneseDigits",
@@ -167,7 +182,9 @@ describe("renderDigitsDoc", () => {
       label: "Japanese kanji",
       letterCase: undefined,
       locales: ["jp-digits"],
+      separators: { decimal: DecimalSeparator.period, group: GroupSeparator.comma } as const,
       examples: [{ input: "0123", output: "ze-on-tw-th" }],
+      tests: [],
     },
   ];
 
@@ -187,6 +204,17 @@ describe("renderDigitsDoc", () => {
     };
     const doc = renderDigitsDoc([daiji, kanji], letterCases);
     expect(doc.indexOf("## Japanese kanji")).toBeLessThan(doc.indexOf("## Japanese daiji"));
+    expect(renderDigitsDoc([kanji, daiji], letterCases)).toBe(doc);
+  });
+
+  test("puts the base language before its regional variant", () => {
+    const spanish = { ...entries[0], label: "Spanish words", locales: ["es-digits"] };
+    const mexican = { ...entries[0], label: "Spanish words (Mexico)", locales: ["es-mx-digits"] };
+    const portuguese = { ...entries[0], label: "Portuguese words", locales: ["pt-digits"] };
+    const brazilian = { ...entries[0], label: "Portuguese words (Brazil)", locales: ["pt-br-digits"] };
+    const doc = renderDigitsDoc([mexican, spanish, brazilian, portuguese], letterCases);
+    expect(doc.indexOf("## Spanish words\n")).toBeLessThan(doc.indexOf("## Spanish words (Mexico)"));
+    expect(doc.indexOf("## Portuguese words\n")).toBeLessThan(doc.indexOf("## Portuguese words (Brazil)"));
   });
 
   test("orders the sections by heading, not by function name", () => {
@@ -208,6 +236,17 @@ describe("renderDigitsDoc", () => {
 
   test("shows how to reach the conversion through numToWord", () => {
     expect(renderDigitsDoc(entries, letterCases)).toContain('numToWord("en-digits", "0123"); // "Ze-on-tw-th"');
+  });
+
+  test("shows how the language writes the decimal point and the group separator", () => {
+    const doc = renderDigitsDoc(entries, letterCases);
+    expect(doc).toContain("- 小数点 / Decimal point: `.`");
+    expect(doc).toContain("- 桁区切り / Group separator: `,`");
+  });
+
+  test("spells out a group separator that is whitespace", () => {
+    const spaced = { ...entries[0], separators: { decimal: DecimalSeparator.comma, group: GroupSeparator.space } };
+    expect(renderDigitsDoc([spaced], letterCases)).toContain("- 桁区切り / Group separator: 空白 / space");
   });
 
   test("lists every locale the conversion answers to", () => {
@@ -250,6 +289,45 @@ describe("buildEntries", () => {
     expect(entries[0].locales).toEqual(["en-digits", "english-digits"]);
   });
 
+  test("carries the separators of the dictionary", () => {
+    const entries = buildEntries({ enDigitWords }, exampleOf);
+    expect(entries[0].separators).toEqual({ decimal: DecimalSeparator.period, group: GroupSeparator.comma });
+  });
+
+  test("builds the test inputs from the separators of the dictionary", () => {
+    const comma: DigitWords = {
+      ...enDigitWords,
+      separators: { decimal: DecimalSeparator.comma, group: GroupSeparator.period },
+    };
+    const inputs = (words: DigitWords, name: string): (number | string)[] => {
+      const entry = buildEntries({ someDigitWords: words }, exampleOf)[0];
+      return entry.tests.find((test) => test.name === name)?.cases.map(({ input }) => input) ?? [];
+    };
+    expect(inputs(enDigitWords, "keeps trailing zeros in the decimal part")).toEqual(["1.50"]);
+    expect(inputs(comma, "keeps trailing zeros in the decimal part")).toEqual(["1,50"]);
+    expect(inputs(enDigitWords, "reads the group separator")).toEqual(["1,500"]);
+    expect(inputs(comma, "reads the group separator")).toEqual(["1.500"]);
+  });
+
+  test("expects a rejection only where neither the period nor the comma is a separator", () => {
+    const rejects = (group: GroupSeparator): boolean => {
+      const words: DigitWords = { ...enDigitWords, separators: { decimal: DecimalSeparator.comma, group } };
+      const entry = buildEntries({ someDigitWords: words }, exampleOf)[0];
+      return entry.tests.some(({ cases }) => cases.some(({ output }) => output === undefined));
+    };
+    expect(rejects(GroupSeparator.space)).toBe(true);
+    expect(rejects(GroupSeparator.period)).toBe(false);
+  });
+
+  test("adds the letter case cases only for a dictionary that has one", () => {
+    const named = (words: Record<string, DigitWords>): string[] => {
+      const entry = buildEntries(words, exampleOf, [LetterCase.upper])[0];
+      return entry.tests.map(({ name }) => name);
+    };
+    expect(named({ enDigitWords })).toContain("changes letter case");
+    expect(named({ jpDigitWords })).not.toContain("changes letter case");
+  });
+
   test("rejects a dictionary without a locale", () => {
     const words = { ...enDigitWords, locales: [] };
     expect(() => buildEntries({ emptyDigitWords: words }, exampleOf)).toThrow("emptyDigitWordsにロケールが無い");
@@ -272,6 +350,13 @@ describe("buildEntries", () => {
   test("rejects a dictionary that is not shaped like one", () => {
     expect(() => buildEntries({ brokenDigitWords: { name: "Broken" } }, exampleOf)).toThrow(
       "brokenDigitWordsがDigitWordsの形をしていない"
+    );
+  });
+
+  test("rejects a dictionary without separators", () => {
+    const words = { ...enDigitWords, separators: undefined };
+    expect(() => buildEntries({ looseDigitWords: words }, exampleOf)).toThrow(
+      "looseDigitWordsがDigitWordsの形をしていない"
     );
   });
 
@@ -299,6 +384,15 @@ describe("buildEntries", () => {
     expect(() => buildEntries({ siSymbols: {} }, exampleOf)).toThrow("辞書が1つも見つからない");
   });
 
+  test("writes the decimal example with the separator of the dictionary", () => {
+    const comma: DigitWords = {
+      ...enDigitWords,
+      separators: { decimal: DecimalSeparator.comma, group: GroupSeparator.period },
+    };
+    const entry = buildEntries({ commaDigitWords: comma }, exampleOf)[0];
+    expect(entry.examples.map(({ input }) => input)).toEqual(["0123", "1,500", Infinity]);
+  });
+
   test("builds every example by converting through the dictionary", () => {
     const entry = buildEntries({ enDigitWords }, exampleOf)[0];
     expect(entry.examples).toEqual([
@@ -306,6 +400,55 @@ describe("buildEntries", () => {
       { input: "1.500", output: "<English:1.500>" },
       { input: Infinity, output: "<English:Infinity>" },
     ]);
+  });
+});
+
+describe("renderTest", () => {
+  const tests = [
+    {
+      name: "converts each digit",
+      cases: [
+        { input: "0123", output: "Ze-on-tw-th" },
+        { input: 12, output: "on-tw" },
+      ],
+    },
+    { name: "changes letter case", cases: [{ input: "12", letterCase: LetterCase.upper, output: "ON-TW" }] },
+  ];
+
+  test("says the file is generated", () => {
+    expect(renderTest({ fn: "numToEnglishDigits", tests })).toContain(
+      "// このファイルはnpm run generateからの自動生成のため手動編集禁止"
+    );
+  });
+
+  test("describes the converter and names every test", () => {
+    const source = renderTest({ fn: "numToEnglishDigits", tests });
+    expect(source).toContain('describe("numToEnglishDigits", () => {');
+    expect(source).toContain('test("converts each digit", () => {');
+    expect(source).toContain('test("changes letter case", () => {');
+  });
+
+  test("writes the expected output of every case", () => {
+    const source = renderTest({ fn: "numToEnglishDigits", tests });
+    expect(source).toContain('expect(numToEnglishDigits("0123")).toBe("Ze-on-tw-th");');
+    expect(source).toContain('expect(numToEnglishDigits(12)).toBe("on-tw");');
+  });
+
+  test("passes the letter case as a second argument", () => {
+    expect(renderTest({ fn: "numToEnglishDigits", tests })).toContain(
+      'expect(numToEnglishDigits("12", "upper")).toBe("ON-TW");'
+    );
+  });
+
+  test("expects a throw when the case has no output", () => {
+    const rejecting = [{ name: "rejects the period", cases: [{ input: "1.500" }] }];
+    const source = renderTest({ fn: "numToFrenchDigits", tests: rejecting });
+    expect(source).toContain('expect(() => numToFrenchDigits("1.500")).toThrow(InvalidInputError);');
+    expect(source).toContain('import { InvalidInputError } from "../../errors";');
+  });
+
+  test("leaves out the error import when nothing throws", () => {
+    expect(renderTest({ fn: "numToEnglishDigits", tests })).not.toContain("InvalidInputError");
   });
 });
 
@@ -318,8 +461,8 @@ describe("findStale", () => {
     expect(findStale(["numToEnglishDigits.ts"], ["numToEnglishDigits.ts"])).toEqual([]);
   });
 
-  test("keeps tests, which are written by hand", () => {
-    expect(findStale(["numToGoneDigits.test.ts"], ["numToEnglishDigits.ts"])).toEqual([]);
+  test("reports a generated test that no dictionary asks for", () => {
+    expect(findStale(["numToGoneDigits.test.ts"], ["numToEnglishDigits.test.ts"])).toEqual(["numToGoneDigits.test.ts"]);
   });
 
   test("keeps files that are not TypeScript", () => {
@@ -340,7 +483,7 @@ describe("main", () => {
     });
   });
 
-  test("writes a converter per dictionary plus a barrel", async () => {
+  test("writes a converter and a test per dictionary plus a barrel", async () => {
     await withTempDir(async (dir) => {
       const { log, error } = io();
       expect(
@@ -348,12 +491,16 @@ describe("main", () => {
       ).toBe(0);
       expect((await readdir(dir)).sort()).toEqual([
         "digits.md",
+        "index.test.ts",
         "index.ts",
+        "numToEnglishDigits.test.ts",
         "numToEnglishDigits.ts",
+        "numToJapaneseDigits.test.ts",
         "numToJapaneseDigits.ts",
+        "numToRomanDigits.test.ts",
         "numToRomanDigits.ts",
       ]);
-      expect(log).toHaveBeenCalledWith("生成5件（3種類、うち大文字小文字あり2）");
+      expect(log).toHaveBeenCalledWith("生成9件（3種類、うち大文字小文字あり2）");
       expect(error).not.toHaveBeenCalled();
     });
   });

@@ -10,7 +10,7 @@ import { replaceDigits } from "../../utils";
  * @returns Polish words representing each digit
  * @example
  * numToPolishDigits("0123") // "Zero jeden dwa trzy"
- * numToPolishDigits("1.500") // "Jeden przecinek pięć zero zero"
+ * numToPolishDigits("1,500") // "Jeden przecinek pięć zero zero"
  * numToPolishDigits(Infinity) // "Nieskończoność"
  */
 export const numToPolishDigits = (number: number | string, letterCase?: LetterCase): string =>

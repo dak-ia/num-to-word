@@ -7,6 +7,7 @@ import {
   OverflowError,
   numToArabicDigits,
   numToBengaliDigits,
+  numToBrazilianPortugueseDigits,
   numToChineseDigits,
   numToDaiji,
   numToDaijiDigits,
@@ -22,6 +23,7 @@ import {
   numToJapanese,
   numToJapaneseDigits,
   numToKoreanDigits,
+  numToMexicanSpanishDigits,
   numToPolishDigits,
   numToPortugueseDigits,
   numToRomanDigits,
@@ -80,6 +82,11 @@ describe("index", () => {
     expect(numToBengaliDigits("0123")).toBe("শূন্য এক দুই তিন");
   });
 
+  test("exports numToBrazilianPortugueseDigits function", () => {
+    expect(typeof numToBrazilianPortugueseDigits).toBe("function");
+    expect(numToBrazilianPortugueseDigits("0123")).toBe("Zero um dois três");
+  });
+
   test("exports numToChineseDigits function", () => {
     expect(typeof numToChineseDigits).toBe("function");
     expect(numToChineseDigits("0123")).toBe("零一二三");
@@ -123,6 +130,11 @@ describe("index", () => {
   test("exports numToKoreanDigits function", () => {
     expect(typeof numToKoreanDigits).toBe("function");
     expect(numToKoreanDigits("0123")).toBe("영일이삼");
+  });
+
+  test("exports numToMexicanSpanishDigits function", () => {
+    expect(typeof numToMexicanSpanishDigits).toBe("function");
+    expect(numToMexicanSpanishDigits("0123")).toBe("Cero uno dos tres");
   });
 
   test("exports numToPolishDigits function", () => {

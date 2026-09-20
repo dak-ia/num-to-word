@@ -1,3 +1,4 @@
+import { DecimalSeparator, GroupSeparator } from "../constants";
 import { InvalidArgumentError, InvalidInputError, NumToWordError, OverflowError } from "../errors";
 import { preprocessNumber, splitTo1Digit, splitTo3Digits, splitTo4Digits } from "./helpers";
 
@@ -364,6 +365,78 @@ describe("preprocessNumber", () => {
     expect(() => preprocessNumber("1.23ee5")).toThrow("Expected a valid number format.");
     expect(() => preprocessNumber("1.23e+")).toThrow("Expected a valid number format.");
     expect(() => preprocessNumber("1.23e-")).toThrow("Expected a valid number format.");
+  });
+});
+
+const period = { decimal: DecimalSeparator.period, group: GroupSeparator.comma } as const;
+const commaGroupPeriod = { decimal: DecimalSeparator.comma, group: GroupSeparator.period } as const;
+const commaGroupSpace = { decimal: DecimalSeparator.comma, group: GroupSeparator.space } as const;
+
+const NARROW_NO_BREAK_SPACE = String.fromCharCode(0x202f);
+const NO_BREAK_SPACE = String.fromCharCode(0x00a0);
+
+describe("preprocessNumber with separators", () => {
+  test("reads the period system when no separators are given", () => {
+    expect(preprocessNumber("1.5")).toMatchObject({ integer: "1", decimal: "5" });
+    expect(preprocessNumber("1,234")).toMatchObject({ integer: "1234", decimal: "" });
+  });
+
+  test("reads the comma as the decimal point", () => {
+    expect(preprocessNumber("1,5", commaGroupPeriod)).toMatchObject({ integer: "1", decimal: "5" });
+    expect(preprocessNumber(",5", commaGroupPeriod)).toMatchObject({ integer: "0", decimal: "5" });
+    expect(preprocessNumber("5,", commaGroupPeriod)).toMatchObject({ integer: "5", decimal: "0" });
+  });
+
+  test("drops the period when it is the group separator", () => {
+    expect(preprocessNumber("1.500", commaGroupPeriod)).toMatchObject({ integer: "1500", decimal: "" });
+    expect(preprocessNumber("1.234.567", commaGroupPeriod)).toMatchObject({ integer: "1234567", decimal: "" });
+    expect(preprocessNumber("1.234,5", commaGroupPeriod)).toMatchObject({ integer: "1234", decimal: "5" });
+    expect(preprocessNumber(".5", commaGroupPeriod)).toMatchObject({ integer: "5", decimal: "" });
+  });
+
+  test("rejects a character that is neither the decimal point nor the group separator", () => {
+    expect(() => preprocessNumber("1.5", commaGroupSpace)).toThrow(InvalidInputError);
+    expect(() => preprocessNumber("１．５", commaGroupSpace)).toThrow(InvalidInputError);
+  });
+
+  test("reports the period as an invalid number format", () => {
+    expect(() => preprocessNumber("1.5", commaGroupSpace)).toThrow("Expected a valid number format.");
+  });
+
+  test("reads the comma as the decimal point where whitespace groups the digits", () => {
+    expect(preprocessNumber("1,5", commaGroupSpace)).toMatchObject({ integer: "1", decimal: "5" });
+  });
+
+  test("reads whitespace as the group separator", () => {
+    expect(preprocessNumber("1 234,5", commaGroupSpace)).toMatchObject({ integer: "1234", decimal: "5" });
+    expect(preprocessNumber(`1${NARROW_NO_BREAK_SPACE}234,5`, commaGroupSpace)).toMatchObject({
+      integer: "1234",
+      decimal: "5",
+    });
+    expect(preprocessNumber(`1${NO_BREAK_SPACE}234,5`, commaGroupSpace)).toMatchObject({
+      integer: "1234",
+      decimal: "5",
+    });
+  });
+
+  test("applies the separators to full-width input as well", () => {
+    expect(preprocessNumber("１，５", commaGroupPeriod)).toMatchObject({ integer: "1", decimal: "5" });
+    expect(preprocessNumber("１．５", period)).toMatchObject({ integer: "1", decimal: "5" });
+  });
+
+  test("keeps the sign and the exponential notation", () => {
+    expect(preprocessNumber("-1,5", commaGroupPeriod)).toMatchObject({ integer: "1", decimal: "5", isNegative: true });
+    expect(preprocessNumber("1,5e3", commaGroupPeriod)).toMatchObject({ integer: "1500", decimal: "" });
+  });
+
+  test("rejects a decimal point that appears twice", () => {
+    expect(() => preprocessNumber("1,234,5", commaGroupPeriod)).toThrow(InvalidInputError);
+    expect(() => preprocessNumber("1,234,567", commaGroupPeriod)).toThrow(InvalidInputError);
+  });
+
+  test("leaves a number argument alone", () => {
+    expect(preprocessNumber(1.5, commaGroupPeriod)).toMatchObject({ integer: "1", decimal: "5" });
+    expect(preprocessNumber(1.5, commaGroupSpace)).toMatchObject({ integer: "1", decimal: "5" });
   });
 });
 

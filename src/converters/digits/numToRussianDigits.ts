@@ -10,7 +10,7 @@ import { ruDigitWords } from "../../dictionaries";
  * @returns Russian words representing each digit
  * @example
  * numToRussianDigits("0123") // "Ноль один два три"
- * numToRussianDigits("1.500") // "Один запятая пять ноль ноль"
+ * numToRussianDigits("1,500") // "Один запятая пять ноль ноль"
  * numToRussianDigits(Infinity) // "Бесконечность"
  */
 export const numToRussianDigits = (number: number | string, letterCase?: LetterCase): string =>

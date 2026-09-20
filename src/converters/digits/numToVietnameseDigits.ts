@@ -10,7 +10,7 @@ import { viDigitWords } from "../../dictionaries";
  * @returns Vietnamese words representing each digit
  * @example
  * numToVietnameseDigits("0123") // "Không một hai ba"
- * numToVietnameseDigits("1.500") // "Một phẩy năm không không"
+ * numToVietnameseDigits("1,500") // "Một phẩy năm không không"
  * numToVietnameseDigits(Infinity) // "Vô cực"
  */
 export const numToVietnameseDigits = (number: number | string, letterCase?: LetterCase): string =>

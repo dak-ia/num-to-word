@@ -1,6 +1,7 @@
 // このファイルはnpm run generateからの自動生成のため手動編集禁止
 export { numToArabicDigits } from "./numToArabicDigits";
 export { numToBengaliDigits } from "./numToBengaliDigits";
+export { numToBrazilianPortugueseDigits } from "./numToBrazilianPortugueseDigits";
 export { numToChineseDigits } from "./numToChineseDigits";
 export { numToDaijiDigits } from "./numToDaijiDigits";
 export { numToDutchDigits } from "./numToDutchDigits";
@@ -13,6 +14,7 @@ export { numToIndonesianDigits } from "./numToIndonesianDigits";
 export { numToItalianDigits } from "./numToItalianDigits";
 export { numToJapaneseDigits } from "./numToJapaneseDigits";
 export { numToKoreanDigits } from "./numToKoreanDigits";
+export { numToMexicanSpanishDigits } from "./numToMexicanSpanishDigits";
 export { numToPolishDigits } from "./numToPolishDigits";
 export { numToPortugueseDigits } from "./numToPortugueseDigits";
 export { numToRomanDigits } from "./numToRomanDigits";

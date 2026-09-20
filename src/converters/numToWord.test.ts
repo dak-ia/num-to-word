@@ -13,8 +13,10 @@ const APPLIES_LETTER_CASE = [
   "it-digits",
   "pl-digits",
   "pt-digits",
+  "pt-br-digits",
   "ru-digits",
   "es-digits",
+  "es-mx-digits",
   "tr-digits",
   "vi-digits",
   "roman-digits",
@@ -106,10 +108,14 @@ describe("numToWord", () => {
     expect(numToWord("polish-digits", "0123")).toBe("Zero jeden dwa trzy");
     expect(numToWord("pt-digits", "0123")).toBe("Zero um dois três");
     expect(numToWord("portuguese-digits", "0123")).toBe("Zero um dois três");
+    expect(numToWord("pt-br-digits", "0123")).toBe("Zero um dois três");
+    expect(numToWord("brazilian-portuguese-digits", "0123")).toBe("Zero um dois três");
     expect(numToWord("ru-digits", "0123")).toBe("Ноль один два три");
     expect(numToWord("russian-digits", "0123")).toBe("Ноль один два три");
     expect(numToWord("es-digits", "0123")).toBe("Cero uno dos tres");
     expect(numToWord("spanish-digits", "0123")).toBe("Cero uno dos tres");
+    expect(numToWord("es-mx-digits", "0123")).toBe("Cero uno dos tres");
+    expect(numToWord("mexican-spanish-digits", "0123")).toBe("Cero uno dos tres");
     expect(numToWord("th-digits", "0123")).toBe("ศูนย์หนึ่งสองสาม");
     expect(numToWord("thai-digits", "0123")).toBe("ศูนย์หนึ่งสองสาม");
     expect(numToWord("tr-digits", "0123")).toBe("Sıfır bir iki üç");

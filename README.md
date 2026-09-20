@@ -101,9 +101,9 @@ Convert a number with place values. They use unit words such as "hundred" or 万
   numToSi(1234); // "1.234K"
   ```
 
-関数ごとの上限や詳細は[docs/api.md](https://github.com/dak-ia/num-to-word/blob/main/docs/api.md)にまとめています。
+関数ごとの上限や詳細は[docs/places.md](https://github.com/dak-ia/num-to-word/blob/main/docs/places.md)にまとめています。
 
-The upper limit and the details of each function are in [docs/api.md](https://github.com/dak-ia/num-to-word/blob/main/docs/api.md).
+The upper limit and the details of each function are in [docs/places.md](https://github.com/dak-ia/num-to-word/blob/main/docs/places.md).
 
 ### `numTo***Digits(number, letterCase?)`
 
@@ -129,7 +129,7 @@ Convert a number digit by digit. Use these when the digits themselves matter, su
 
 The full list, with function names, locales and examples, is in [docs/digits.md](https://github.com/dak-ia/num-to-word/blob/main/docs/digits.md).
 
-### `numToWord(locale, number)`
+### `numToWord(locale, number, letterCase?)`
 
 指定したロケールで数字を変換します。
 
@@ -140,6 +140,7 @@ Convert a number using the specified locale.
     - 末尾に`-digits`を付けると1桁ずつ変換します（`"en-digits"`, `"jp-digits"`, `"daiji-digits"`など）。`"si"`に桁読みはありません / Append `-digits` to convert digit by digit. Not available for `"si"`
     - 桁読みのロケールの一覧は[docs/digits.md](https://github.com/dak-ia/num-to-word/blob/main/docs/digits.md) / The full list of digit-by-digit locales is in [docs/digits.md](https://github.com/dak-ia/num-to-word/blob/main/docs/digits.md)
   - `number` (number | string) - 変換する数字 / The number to convert
+  - `letterCase` (`"capitalize"` | `"upper"` | `"lower"`) - 大文字小文字の指定 / Letter case
 - **戻り値 / Returns**: string - ロケール対応表現 / Localized representation
 - **負の数 / Negative numbers**: 全ロケールでサポート / Supported in all locales
 - **例 / Example**:
@@ -150,6 +151,7 @@ Convert a number using the specified locale.
   numToWord("en", -123); // "Minus one hundred twenty-three"
   numToWord("en-digits", "0123"); // "Zero one two three"
   numToWord("jp-digits", "0123"); // "〇一二三"
+  numToWord("en-digits", "0123", "upper"); // "ZERO ONE TWO THREE"
   ```
 
 ## 📝 入力形式 / Input Format
@@ -171,7 +173,7 @@ numToSi("0123.500"); // "123.5"
 - **string型（推奨）/ String type (recommended)**: `numToEnglish("123")`
 - **指数表記 / Exponential notation**: `numToEnglish("1.23e5")` → `"One hundred twenty-three thousand"`
 - **全角数字 / Full-width numbers**: `numToEnglish("123")` （自動変換 / converted automatically）
-- **カンマ区切り / With commas**: `numToEnglish("123,456,789")` （自動的に削除 / commas removed automatically）
+- **区切り文字 / Separators**: `numToEnglish("123,456,789")`, `numToGermanDigits("1.234,5")` （桁区切りは自動的に削除。小数点と桁区切りに使う文字は言語ごと / group separators are removed automatically, and which characters are used depends on the language）
 - **Infinity / 無限大**: `numToEnglish(Infinity)` → `"Infinity"`, `numToJapanese(Infinity)` → `"無限"`
 
 ### 指数表記について / About Exponential Notation

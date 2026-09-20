@@ -10,7 +10,7 @@ import { replaceDigits } from "../../utils";
  * @returns Italian words representing each digit
  * @example
  * numToItalianDigits("0123") // "Zero uno due tre"
- * numToItalianDigits("1.500") // "Uno virgola cinque zero zero"
+ * numToItalianDigits("1,500") // "Uno virgola cinque zero zero"
  * numToItalianDigits(Infinity) // "Infinito"
  */
 export const numToItalianDigits = (number: number | string, letterCase?: LetterCase): string =>

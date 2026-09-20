@@ -10,7 +10,7 @@ import { replaceDigits } from "../../utils";
  * @returns German words representing each digit
  * @example
  * numToGermanDigits("0123") // "Null eins zwei drei"
- * numToGermanDigits("1.500") // "Eins Komma fünf null null"
+ * numToGermanDigits("1,500") // "Eins Komma fünf null null"
  * numToGermanDigits(Infinity) // "Unendlich"
  */
 export const numToGermanDigits = (number: number | string, letterCase?: LetterCase): string =>

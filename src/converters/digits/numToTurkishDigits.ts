@@ -10,7 +10,7 @@ import { trDigitWords } from "../../dictionaries";
  * @returns Turkish words representing each digit
  * @example
  * numToTurkishDigits("0123") // "Sıfır bir iki üç"
- * numToTurkishDigits("1.500") // "Bir virgül beş sıfır sıfır"
+ * numToTurkishDigits("1,500") // "Bir virgül beş sıfır sıfır"
  * numToTurkishDigits(Infinity) // "Sonsuz"
  */
 export const numToTurkishDigits = (number: number | string, letterCase?: LetterCase): string =>

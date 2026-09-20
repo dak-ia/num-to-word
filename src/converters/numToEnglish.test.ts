@@ -155,6 +155,10 @@ describe("numToEnglish", () => {
     expect(numToEnglish("0.001")).toBe("Zero point zero zero one");
   });
 
+  test("reads the comma as the group separator", () => {
+    expect(numToEnglish("1,234")).toBe("One thousand two hundred thirty-four");
+  });
+
   test("negative numbers", () => {
     expect(numToEnglish("-1")).toBe("Minus one");
     expect(numToEnglish("-123")).toBe("Minus one hundred twenty-three");
