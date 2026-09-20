@@ -1,6 +1,7 @@
 export {
   numToArabicDigits,
   numToBengaliDigits,
+  numToBrazilianPortugueseDigits,
   numToChineseDigits,
   numToDaiji,
   numToDaijiDigits,
@@ -16,6 +17,7 @@ export {
   numToJapanese,
   numToJapaneseDigits,
   numToKoreanDigits,
+  numToMexicanSpanishDigits,
   numToPolishDigits,
   numToPortugueseDigits,
   numToRomanDigits,
