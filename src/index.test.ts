@@ -5,6 +5,7 @@ import {
   LetterCase,
   NumToWordError,
   OverflowError,
+  locales,
   numToArabicDigits,
   numToBengaliDigits,
   numToBrazilianPortugueseDigits,
@@ -185,6 +186,12 @@ describe("index", () => {
   test("exports numToWord function", () => {
     expect(typeof numToWord).toBe("function");
     expect(numToWord("en", "123")).toBe("One hundred twenty-three");
+  });
+
+  test("exports locales", () => {
+    expect(Array.isArray(locales)).toBe(true);
+    expect(locales).toContain("en");
+    expect(locales).toContain("en-digits");
   });
 
   test("exports LetterCase", () => {

@@ -1,5 +1,5 @@
 import { InvalidArgumentError, InvalidInputError, InvalidLocaleError } from "../errors";
-import { localeMap, numToWord } from "./numToWord";
+import { localeMap, locales, numToWord } from "./numToWord";
 import { LetterCase } from "../constants";
 
 // numToWordは引数の数で対応の有無を見分けるので、期待値をそこから作ると同じ壊れ方をして緑のままになる
@@ -205,5 +205,26 @@ describe("numToWord", () => {
     expect(Array.isArray(localeMap)).toBe(true);
     expect(localeMap.some((e) => e.keys.includes("en") && typeof e.fn === "function")).toBe(true);
     expect(localeMap.some((e) => e.keys.includes("jp") && typeof e.fn === "function")).toBe(true);
+  });
+
+  test("every exported locale converts", () => {
+    expect(locales.length).toBeGreaterThan(0);
+    for (const locale of locales) {
+      expect(numToWord(locale, "1")).toMatch(/\S/);
+    }
+  });
+
+  test("exported locales cover every conversion and its aliases", () => {
+    expect(locales).toEqual(
+      expect.arrayContaining([...APPLIES_LETTER_CASE, ...REJECTS_LETTER_CASE, "english", "japanese", "kanji", "daiji"])
+    );
+  });
+
+  test("exported locales have no duplicates", () => {
+    expect(new Set(locales).size).toBe(locales.length);
+  });
+
+  test("exported locales are lower case", () => {
+    expect(locales.filter((locale) => locale !== locale.toLowerCase())).toEqual([]);
   });
 });
