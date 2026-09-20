@@ -58,7 +58,7 @@
   },
   "files": [
     "dist",
-    "docs/api.md",
+    "docs/places.md",
     "docs/digits.md",
     "README.md",
     "LICENSE"
