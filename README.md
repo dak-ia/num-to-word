@@ -203,16 +203,12 @@ const result: string = numToEnglish(123);
 
 ## 🎨 Examples
 
-ブラウザでの動作を確認できるデモファイルが含まれています。
+[デモページ](https://dak-ia.github.io/num-to-word/)で動作を試せます。同じものがリポジトリにも含まれているので、手元で開くこともできます。
 
-An example HTML file is included to test the library in a browser.
+Try it on the [demo page](https://dak-ia.github.io/num-to-word/). The same page is included in the repository, so you can also open it locally.
 
 ```bash
-# ビルド後、ブラウザで開く / Build and open in browser
-npm run build
-open examples/index.html
-
-# または開発サーバーで確認 / Or use dev server
+# 開発サーバーで、手元のコードを試す / Try the local code with the dev server
 npm run dev
 # http://localhost:5173/
 ```
