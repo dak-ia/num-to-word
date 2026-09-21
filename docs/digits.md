@@ -1,6 +1,6 @@
 <!-- このファイルはnpm run generateからの自動生成のため手動編集禁止 -->
 
-# 桁読み変換 / Digit-by-digit Conversion
+# 1桁ずつの変換（棒読み） / Digit-by-digit Conversion
 
 `@dak-ia/num-to-word`で数字を1桁ずつ各言語の語に変換した一覧です。使い方は[README](https://github.com/dak-ia/num-to-word#readme)を参照してください。
 

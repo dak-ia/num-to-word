@@ -5,9 +5,9 @@
 [![Node.js for development](<https://img.shields.io/badge/node%20(dev)-%3E%3D22.18.0-brightgreen.svg>)](https://nodejs.org/)
 [![Coverage](https://img.shields.io/badge/dynamic/json?url=https://gist.githubusercontent.com/dak-ia/1bf4a4df60ed549dfd9a42b24c72045e/raw/num-to-word-coverage.json&label=coverage&query=$.coverage&suffix=%25&color=brightgreen)](https://github.com/dak-ia/num-to-word/actions/workflows/jest-check.yml)
 
-数字を各言語の単語に変換します。1桁ずつの表記は多くの言語に対応していて、位取りのある表記は今のところ英語と日本語だけです。ローマ数字・大字・SI接頭語にも変換できます。
+数字を各言語の単語に変換します。1桁ずつの変換（棒読み）は多くの言語に対応していて、数としての変換は今のところ英語と日本語だけです。ローマ数字・大字・SI接頭語にも変換できます。
 
-Convert numbers to words. Digit-by-digit conversion covers many languages, while place-value conversion is currently English and Japanese only. Roman numerals, Japanese daiji and SI prefixes are supported too.
+Convert numbers to words. Digit-by-digit conversion covers many languages, while reading a number as a whole is currently English and Japanese only. Roman numerals, Japanese daiji and SI prefixes are supported too.
 
 ---
 
@@ -86,12 +86,12 @@ You can also use unpkg:
 
 ### `numToEnglish(number)` / `numToJapanese(number)` / `numToDaiji(number)` / `numToSi(number)`
 
-数を位取りのある表記に変換します。桁の単位語（hundred、万など）やSI接頭語を使うため、変換できる桁数に上限があります。
+数を読み方どおりに変換します。桁の単位語（hundred、万など）やSI接頭語を使うため、変換できる桁数に上限があります。
 
-Convert a number with place values. They use unit words such as "hundred" or 万, or SI prefixes, so the number of digits is capped.
+Convert a number the way it is read as a whole. They use scale words such as "hundred" or 万, or SI prefixes, so the number of digits is capped.
 
 - **引数 / Parameters**: `number` (number | string) - 変換する数字 / The number to convert
-- **戻り値 / Returns**: string - 位取りのある表現 / Place-value representation
+- **戻り値 / Returns**: string - 数としての読み / The number as it is read
 - **負の数 / Negative numbers**: サポート / Supported
 - **例 / Example**:
   ```javascript
@@ -107,15 +107,15 @@ The upper limit and the details of each function are in [docs/places.md](https:/
 
 ### `numTo***Digits(number, letterCase?)`
 
-数字を1桁ずつ変換します。IDなどのように、桁をそのまま表現したい場合に使います。多くの言語に対応し、ローマ数字と大字も同じ形で使えます。
+数字を1桁ずつ変換します（いわゆる棒読み）。IDなどのように、桁をそのまま表現したい場合に使います。多くの言語に対応し、ローマ数字と大字も同じ形で使えます。
 
 Convert a number digit by digit. Use these when the digits themselves matter, such as IDs. Many languages are supported, along with Roman numerals and Japanese daiji.
 
 - **引数 / Parameters**:
   - `number` (number | string) - 変換する数字 / The number to convert
   - `letterCase` (`"capitalize"` | `"upper"` | `"lower"`) - 大文字小文字の指定 / Letter case
-- **戻り値 / Returns**: string - 1桁ずつの表現 / Digit-by-digit representation
-- **範囲 / Range**: 上限なし（桁の単位語を使わないため）/ No limit, because no unit words are used
+- **戻り値 / Returns**: string - 1桁ずつの読み（棒読み） / Digit-by-digit representation
+- **範囲 / Range**: 上限なし（桁の単位語を使わないため）/ No limit, because no scale words are used
 - **例 / Example**:
   ```javascript
   numToEnglishDigits("0123"); // "Zero one two three"
@@ -137,12 +137,12 @@ Convert a number using the specified locale.
 
 - **引数 / Parameters**:
   - `locale` (string) - ロケール識別子 / Locale identifier: `"si"`, `"en"`, `"english"`, `"jp"`, `"japanese"`, `"kanji"`, `"jpdaiji"`, `"daiji"`
-    - 末尾に`-digits`を付けると1桁ずつ変換します（`"en-digits"`, `"jp-digits"`, `"daiji-digits"`など）。`"si"`に桁読みはありません / Append `-digits` to convert digit by digit. Not available for `"si"`
-    - 桁読みのロケールの一覧は[docs/digits.md](https://github.com/dak-ia/num-to-word/blob/main/docs/digits.md) / The full list of digit-by-digit locales is in [docs/digits.md](https://github.com/dak-ia/num-to-word/blob/main/docs/digits.md)
+    - 末尾に`-digits`を付けると1桁ずつ変換します（`"en-digits"`, `"jp-digits"`, `"daiji-digits"`など）。`"si"`は1桁ずつの変換がありません / Append `-digits` to convert digit by digit. Not available for `"si"`
+    - 1桁ずつの変換（棒読み）に使えるロケールの一覧は[docs/digits.md](https://github.com/dak-ia/num-to-word/blob/main/docs/digits.md) / The full list of digit-by-digit locales is in [docs/digits.md](https://github.com/dak-ia/num-to-word/blob/main/docs/digits.md)
     - ロケールは`locales`としてexportしています / The locales are exported as `locales`
   - `number` (number | string) - 変換する数字 / The number to convert
   - `letterCase` (`"capitalize"` | `"upper"` | `"lower"`) - 大文字小文字の指定 / Letter case
-- **戻り値 / Returns**: string - ロケール対応表現 / Localized representation
+- **戻り値 / Returns**: string - 指定したロケールでの読み / Localized representation
 - **負の数 / Negative numbers**: 全ロケールでサポート / Supported in all locales
 - **例 / Example**:
   ```javascript
@@ -159,8 +159,8 @@ Convert a number using the specified locale.
 
 ### 変換ルール / Conversion Policy
 
-- **言語への変換 / To words**: 数値としての読み方に変換します。整数部の先頭のゼロや小数部の末尾のゼロは値に影響しないため取り除きます。 / converted as a numeral. Leading zeros in the integer part and trailing zeros in the decimal part are removed because they do not affect the value.
-- **単位への変換 / To units**: SI接頭辞として適切な形式に整えます。末尾のゼロやゼロの符号など、表記として不要なものは取り除きます。 / formatted as a proper SI prefix notation. Anything unnecessary for the notation, such as trailing zeros and the sign of zero, is removed.
+- **言語への変換 / To words**: 数としての読み方に変換します。整数部の先頭のゼロや小数部の末尾のゼロは値に影響しないため取り除きます。 / converted as a numeral. Leading zeros in the integer part and trailing zeros in the decimal part are removed because they do not affect the value.
+- **単位への変換 / To units**: SI接頭語として適切な形式に整えます。末尾のゼロやゼロの符号など、表記として不要なものは取り除きます。 / formatted as a proper SI prefix notation. Anything unnecessary for the notation, such as trailing zeros and the sign of zero, is removed.
 
 ```javascript
 numToEnglish("0123.500"); // "One hundred twenty-three point five"
@@ -179,7 +179,7 @@ numToSi("0123.500"); // "123.5"
 
 ### 指数表記について / About Exponential Notation
 
-指数表記（例: `1.23e5`、`5.67e-3`）がサポートされています。入力時に自動的に展開されます。
+指数表記（例: `1.23e5`、`5.67e-3`）がサポートされています。入力時に自動で展開します。
 
 Exponential notation (e.g., `1.23e5`, `5.67e-3`) is supported and automatically expanded.
 
@@ -203,16 +203,12 @@ const result: string = numToEnglish(123);
 
 ## 🎨 Examples
 
-ブラウザでの動作を確認できるデモファイルが含まれています。
+[デモページ](https://dak-ia.github.io/num-to-word/)で動作を試せます。同じものがリポジトリにも含まれているので、手元で開くこともできます。
 
-An example HTML file is included to test the library in a browser.
+Try it on the [demo page](https://dak-ia.github.io/num-to-word/). The same page is included in the repository, so you can also open it locally.
 
 ```bash
-# ビルド後、ブラウザで開く / Build and open in browser
-npm run build
-open examples/index.html
-
-# または開発サーバーで確認 / Or use dev server
+# 開発サーバーで、手元のコードを試す / Try the local code with the dev server
 npm run dev
 # http://localhost:5173/
 ```
@@ -233,14 +229,14 @@ npm run test:watch    # ウォッチモードでテストを実行 / Run tests i
 npm run test:coverage # カバレッジレポート付きでテストを実行 / Run tests with coverage report
 ```
 
-### 桁読み変換の生成 / Generating the Digit Converters
+### 1桁ずつの変換（棒読み）の生成 / Generating the Digit Converters
 
 `src/converters/digits/`以下の`numTo***Digits`と一覧の`docs/digits.md`は`src/dictionaries/`の辞書から自動生成しています。
 
 The `numTo***Digits` functions under `src/converters/digits/` and the list in `docs/digits.md` are generated from the dictionaries in `src/dictionaries/`.
 
 ```bash
-npm run generate       # 辞書から桁読み変換を生成 / Generate the converters from the dictionaries
+npm run generate       # 辞書から1桁ずつの変換を生成 / Generate the converters from the dictionaries
 npm run generate:check # 生成物が辞書と一致するか確認 / Check the generated files match the dictionaries
 ```
 
