@@ -1,70 +1,175 @@
 <!doctype html>
 <html lang="ja">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>num-to-word Test Page</title>
-    <script type="module">
-      if (location.protocol === "file:") {
-        // Load from dist when opening HTML file directly
-        const script = document.createElement("script");
-        script.src = "../dist/index.umd.js";
-        script.onerror = () => console.error("Failed to load UMD build");
-        document.head.appendChild(script);
-      } else {
-        // Load from source with HMR when using dev server
-        import("../src/index.ts")
-          .then((module) => {
-            window.NumToWord = module;
-          })
-          .catch((error) => console.error("Failed to load module:", error));
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>num-to-word demo</title>
+    <style>
+      :root {
+        --border: #ccc;
+        --error: #b00;
+        --muted: #666;
       }
-    </script>
+
+      body {
+        margin: 0 auto;
+        max-width: 48rem;
+        padding: 0 1rem;
+      }
+
+      .note {
+        color: var(--muted);
+        font-size: 1.5rem;
+      }
+
+      .field {
+        align-items: center;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-bottom: 0.8rem;
+      }
+
+      .field[hidden] {
+        display: none;
+      }
+
+      label {
+        min-width: 7rem;
+      }
+
+      input,
+      select {
+        font-size: 1rem;
+        padding: 0.3rem 0.4rem;
+      }
+
+      #input {
+        flex: 1;
+        min-width: 12rem;
+      }
+
+      #output {
+        border: 1px solid var(--border);
+        display: block;
+        padding: 1rem;
+        word-break: break-word;
+      }
+
+      #output.error {
+        border-color: var(--error);
+        color: var(--error);
+      }
+    </style>
   </head>
 
   <body>
-    <input type="number" id="text" style="width: 100em" autofocus />
-    <br />
-    <input type="button" onclick="pressSi()" value="数字をSiへ" />
-    <input type="button" onclick="pressEn()" value="数字を英語へ" />
-    <input type="button" onclick="pressJp()" value="数字を漢字へ" />
-    <input type="button" onclick="pressJpDaiji()" value="数字を大字へ" />
-    <br />
-    <input type="button" onclick="pressEnDigits()" value="数字を英語の桁読みへ" />
-    <input type="button" onclick="pressJpDigits()" value="数字を漢字の桁読みへ" />
-    <input type="button" onclick="pressJpDaijiDigits()" value="数字を大字の桁読みへ" />
-    <br /><br />
-    <span id="output"></span>
+    <h1>num-to-word</h1>
+    <p class="note">
+      version <span id="version">-</span> · <a href="https://github.com/dak-ia/num-to-word">GitHub</a> ·
+      <a href="https://www.npmjs.com/package/@dak-ia/num-to-word">npm</a> ·
+      <a href="https://github.com/dak-ia/num-to-word/pkgs/npm/num-to-word">GitHub Packages</a>
+    </p>
+
+    <div class="field">
+      <label for="input">数字</label>
+      <input id="input" type="text" value="1234.5" autocomplete="off" spellcheck="false" autofocus />
+    </div>
+    <div class="field">
+      <label for="converter">変換</label>
+      <select id="converter"></select>
+    </div>
+    <div class="field" id="locale-field" hidden>
+      <label for="locale">ロケール</label>
+      <select id="locale"></select>
+    </div>
+    <div class="field">
+      <label for="letter-case">大文字小文字</label>
+      <select id="letter-case">
+        <option value="">指定なし</option>
+        <option value="capitalize">capitalize</option>
+        <option value="upper">upper</option>
+        <option value="lower">lower</option>
+      </select>
+    </div>
+
+    <output id="output" for="input converter locale letter-case">読み込み中</output>
+
+    <script type="module">
+      const input = document.getElementById("input");
+      const converterSelect = document.getElementById("converter");
+      const localeField = document.getElementById("locale-field");
+      const localeSelect = document.getElementById("locale");
+      const letterCaseSelect = document.getElementById("letter-case");
+      const output = document.getElementById("output");
+
+      const loadUmd = (src, message) =>
+        new Promise((resolve, reject) => {
+          const script = document.createElement("script");
+          script.src = src;
+          script.onload = () => resolve(window.NumToWord);
+          script.onerror = () => reject(new Error(message));
+          document.head.appendChild(script);
+        });
+
+      const loadLibrary = () => {
+        if (import.meta.env?.DEV) return import("../src/index.ts");
+        if (location.protocol === "file:") {
+          return loadUmd("../dist/index.umd.js", "ビルド結果がありません。");
+        }
+        return loadUmd(
+          "https://cdn.jsdelivr.net/npm/@dak-ia/num-to-word/dist/index.umd.js",
+          "CDNからライブラリを読み込めませんでした。"
+        );
+      };
+
+      const showResult = (text, isError) => {
+        output.textContent = text;
+        output.classList.toggle("error", isError);
+      };
+
+      const init = async () => {
+        const lib = await loadLibrary();
+        document.getElementById("version").textContent = lib.version;
+
+        const converters = Object.keys(lib)
+          .filter((name) => name.startsWith("numTo") && name !== "numToWord" && typeof lib[name] === "function")
+          .sort();
+        for (const name of ["numToWord", ...converters]) {
+          converterSelect.append(new Option(name, name));
+        }
+        for (const locale of [...(lib.locales ?? [])].sort()) {
+          localeSelect.append(new Option(locale, locale));
+        }
+        localeSelect.value = "jp";
+
+        const convert = () => {
+          const name = converterSelect.value;
+          localeField.hidden = name !== "numToWord";
+          letterCaseSelect.disabled = lib[name].length < 2;
+          if (input.value === "") {
+            showResult("", false);
+            return;
+          }
+          const letterCase = letterCaseSelect.disabled ? undefined : letterCaseSelect.value || undefined;
+          try {
+            const result =
+              name === "numToWord"
+                ? lib.numToWord(localeSelect.value, input.value, letterCase)
+                : lib[name](input.value, letterCase);
+            showResult(result, false);
+          } catch (error) {
+            showResult(`${error.name}: ${error.message}`, true);
+          }
+        };
+
+        for (const element of [input, converterSelect, localeSelect, letterCaseSelect]) {
+          element.addEventListener("input", convert);
+        }
+        convert();
+      };
+
+      init().catch((error) => showResult(error.message, true));
+    </script>
   </body>
-  <script>
-    let input = document.getElementById("text");
-    let output = document.getElementById("output");
-
-    function pressSi() {
-      output.innerText = NumToWord.numToSi(Number(input.value));
-    }
-
-    function pressEn() {
-      output.innerText = NumToWord.numToEnglish(Number(input.value));
-    }
-
-    function pressJp() {
-      output.innerText = NumToWord.numToJapanese(Number(input.value));
-    }
-
-    function pressJpDaiji() {
-      output.innerText = NumToWord.numToDaiji(Number(input.value));
-    }
-
-    function pressEnDigits() {
-      output.innerText = NumToWord.numToEnglishDigits(input.value);
-    }
-
-    function pressJpDigits() {
-      output.innerText = NumToWord.numToJapaneseDigits(input.value);
-    }
-
-    function pressJpDaijiDigits() {
-      output.innerText = NumToWord.numToDaijiDigits(input.value);
-    }
-  </script>
 </html>
