@@ -35,6 +35,7 @@ export default defineConfig(({ command }) => {
             if (format === "es") return "index.mjs";
             if (format === "cjs") return "index.cjs";
             if (format === "umd") return "index.umd.js";
+            throw new Error(`Unknown library format: ${format}`);
           },
         },
         outDir: "dist",
