@@ -5,7 +5,7 @@
     "emitDeclarationOnly": false,
     "declaration": false,
     "allowImportingTsExtensions": true,
-    "types": ["node", "jest"],
+    "types": ["node", "vitest/globals"],
     "erasableSyntaxOnly": true
   },
   "include": ["scripts/**/*"],

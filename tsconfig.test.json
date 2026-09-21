@@ -4,7 +4,7 @@
     "noEmit": true,
     "emitDeclarationOnly": false,
     "declaration": false,
-    "types": ["jest"]
+    "types": ["node", "vitest/globals"]
   },
   "include": ["src/**/*"],
   "exclude": []
