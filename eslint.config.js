@@ -39,14 +39,6 @@ export default [
     },
   },
   {
-    files: ["**/*.test.js", "**/*.spec.js", "**/*.test.ts", "**/*.spec.ts"],
-    languageOptions: {
-      globals: {
-        ...globals.jest,
-      },
-    },
-  },
-  {
-    ignores: ["dist/", "node_modules/", "coverage/", ".jest-cache/"],
+    ignores: ["dist/", "node_modules/", "coverage/"],
   },
 ];

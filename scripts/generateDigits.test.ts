@@ -58,7 +58,7 @@ const load = async () => ({
   romanDigitWords,
 });
 const formatSource: FormatSource = async (_path, text) => `${text}// formatted\n`;
-const io = () => ({ log: jest.fn(), error: jest.fn() });
+const io = () => ({ log: vi.fn(), error: vi.fn() });
 
 describe("renderConverter", () => {
   test("takes a letter case when the dictionary has one", () => {
@@ -547,7 +547,7 @@ describe("main", () => {
           load,
           formatSource,
           log,
-          error: jest.fn(),
+          error: vi.fn(),
         })
       ).toBe(0);
       expect(log).toHaveBeenCalledWith("変更なし（3種類、うち大文字小文字あり2）");
@@ -567,7 +567,7 @@ describe("main", () => {
           load,
           formatSource,
           log,
-          error: jest.fn(),
+          error: vi.fn(),
         })
       ).toBe(0);
       expect(await readdir(dir)).not.toContain("numToGoneDigits.ts");
@@ -651,7 +651,7 @@ describe("main", () => {
           docPath: join(dir, "digits.md"),
           load,
           formatSource,
-          log: jest.fn(),
+          log: vi.fn(),
           error,
         })
       ).toBe(1);
